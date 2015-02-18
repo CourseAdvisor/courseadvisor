@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+    @section('page_title')
+    Course Advisor
+    @show
+    </title>
+    {{ HTML::style('css/style.css') }}
+    {{ HTML::style('//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css')}}
+
+    <meta charset="UTF-8">
+  </head>
+  <body>
+
+    <div class="navbar">
+      <div class="container navbar-inner">
+        <a href="/" class="brand">logo</a>
+        <ul class="nav-list">
+          <li>
+            <a href="/">
+              Home
+            </a>
+          </li>
+          <li>
+            <a href="{{{ action('CourseController@index') }}}">
+              Courses
+            </a>
+          </li>
+          <li>
+            <a href="{{{ action('StudentController@index') }}}">
+              Students
+            </a>
+          </li>
+          <li>
+            <a href="/restricted">Members only</a>
+          </li>
+        </ul>
+        <ul class="nav-list pull-right">
+          @if(Tequila::isLoggedIn())
+            <li><span>{{{ Tequila::get('firstname') }}}</span></li>
+            <li><a href="{{{ action('AuthController@logout', ['next' => Request::url()]) }}}">logout</a></li>
+          @else
+            <li><a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}">login</a></li>
+          @endif
+          <!--<li><span>John Doe  </span></li>-->
+          <!--<li><a href="#" data-dropdown="d-notifications"><i class="fa fa-bell-o"></i></a>
+            <ul class="dropdown nav-dropdown" id="d-notifications">
+              <li>You have no notifications</li>
+              <li><a class="notif-icon"><i class="fa fa-circle-o"></i></a><a href="#">Someone answered your question in Theory of Computation</a></li>
+              <li><a href="#">There are 5 new questions in courses you took</a></li>
+            </ul>
+          </li>
+          <li><a href="#"><i class="fa fa-sign-out"></i></a></li>
+          </li>!-->
+        </ul>
+
+      </div>
+    </div>
+    <div class="container">
+      <div id="page">
+        @include('sidebar')
+      
+        <div class="main">
+          @yield('content')
+        </div>
+      </div>
+    </div>
+
+    @include('footer')
+    
+
+    {{ HTML::script('js/less-1.7.0.js') }}
+    {{ HTML::script('js/dropdown.js') }}
+  </body>
+</html>
