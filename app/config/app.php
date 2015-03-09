@@ -1,6 +1,7 @@
 <?php
 
 return array(
+	'nbReviewsPerPage' => 10,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -96,8 +97,8 @@ return array(
 	'providers' => array(
 
 		// Tequila auth
-		'Tequila\TequilaServiceProvider', 
-		
+		'Tequila\TequilaServiceProvider',
+
 		// Laravel debug bar
 		'Barryvdh\Debugbar\ServiceProvider',
 

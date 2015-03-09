@@ -6,7 +6,7 @@ class CourseController extends Controller {
 		$sections = $this->groupCoursesBySemester($sections);
 
 		return View::make('courses.list', [
-			'sections'	=> $sections	
+			'sections'	=> $sections
 		]);
 	}
 
@@ -16,7 +16,7 @@ class CourseController extends Controller {
 		foreach($sections as $i => $section) {
 			$courses = $section['courses'];
 			unset($section['courses']);
-			
+
 			$data = $section;
 			$data['semesters'] = [];
 
@@ -41,22 +41,25 @@ class CourseController extends Controller {
 		})->get();
 
 		return View::make('courses.suggestions', [
-			'courses'	=> $courses	
+			'courses'	=> $courses
 		]);
 	}
 
 	public function show($slug, $id) {
 		$course = Course::with('reviews.student')
 					->findOrFail($id);
-		
+
 		$hasAlreadyReviewed = false;
 		if(Tequila::isLoggedIn()) {
 			$hasAlreadyReviewed = $course->alreadyReviewedBy(Session::get('student_id'));
 		}
 
+		$reviewsPerPage = Config::get('app.nbReviewsPerPage');
+
 		return View::make('courses.show', [
-			'course' => $course, 
+			'course' => $course,
 			'slug' 	=> $slug,
+			'reviews' => $course->reviews()->paginate($reviewsPerPage),
 			'hasAlreadyReviewed' => $hasAlreadyReviewed,
 			'nbReviews' => count($course->reviews),
 			'isLoggedIn' => Tequila::isLoggedIn()
@@ -83,7 +86,7 @@ class CourseController extends Controller {
 
 		// Create the review
 		$data = ['course_id' => intval($courseId), 'student_id' => $studentId];
-		
+
 		$newReview = new Review(Input::all());
 		$newReview->course_id = $courseId;
 		$newReview->student_id = $studentId;
@@ -94,7 +97,7 @@ class CourseController extends Controller {
 		}
 
 		$newReview->save();
-		
+
 		Event::fire('course.newReview', [$course]);
 
 		return $goToCourse->with('message', ['success', 'Your review was successfuly posted. Thank you!']);

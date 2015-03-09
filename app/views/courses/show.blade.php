@@ -20,7 +20,7 @@
   <dt>Sections</dt>
   <dd>
   	@foreach($course->sections as $section)
-  		<a href="#">{{{ $section->string_id }}} - {{{ $section->pivot->semester }}} &nbsp;</a> 
+  		<a href="#">{{{ $section->string_id }}} - {{{ $section->pivot->semester }}} &nbsp;</a>
   	@endforeach
   </dd>
 </dl>
@@ -43,7 +43,7 @@ Distributions tempérées sur la droite réelle: définition, exemples, calcul s
         <dd>
         @include('courses.starbar', ['grade' => $course->avg_teacher_grade])
         </dd>
-        
+
         <dt>Contents</dt>
         <dd>
         @include('courses.starbar', ['grade' => $course->avg_content_grade])
@@ -73,14 +73,14 @@ Distributions tempérées sur la droite réelle: définition, exemples, calcul s
 @if($nbReviews == 0)
   <p>No review has been posted for this course yet. Review this course!</p>
 @else
-  @foreach($course->reviews as $review)
+  @foreach($reviews as $review)
   	<div class="review">
   	  @include('courses.starbar', ['grade' => $review->avg_grade])
 
 
   	  <span class="starbar-comment">{{{ $review->title}}}</span>
   	  <div class="clearfix"></div>
-  	  <div class="review-author">by 
+  	  <div class="review-author">by
   	  	<a href="#">
   	  		{{{ $review->is_anonymous == 1 ? "Anonymous student" : $review->student->fullname }}}
   	  	</a>
@@ -90,6 +90,7 @@ Distributions tempérées sur la droite réelle: définition, exemples, calcul s
   	<hr>
   @endforeach
 @endif
+{{ $reviews->fragment('reviews')->links()}}
 </div>
 </div>
 </section>
@@ -118,7 +119,7 @@ Distributions tempérées sur la droite réelle: définition, exemples, calcul s
     </div>
   @endif
 {{ Form::open([
-	'class' => 'row form-horizontal', 
+	'class' => 'row form-horizontal',
 	'action' => ['CourseController@createReview', $slug, $course->id]
 	]) }}
 
@@ -156,20 +157,20 @@ Distributions tempérées sur la droite réelle: définition, exemples, calcul s
     <dl class="dl-horizontal">
       <dt>lectures</dt>
       <dd>
-        <div class="pull-left" data-starbar="lectures_grade" data-value="{{ Input::old('lectures_grade') }}" 
-        data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" 
+        <div class="pull-left" data-starbar="lectures_grade" data-value="{{ Input::old('lectures_grade') }}"
+        data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right"
         data-content="{{ Config::get('content.reviews.tip_lectures_grade') }}">
       </dd>
       <dt>exercises</dt>
       <dd>
-        <div class="pull-left" data-starbar="exercises_grade"  data-value="{{ Input::old('exercises_grade') }}" 
-        data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" 
+        <div class="pull-left" data-starbar="exercises_grade"  data-value="{{ Input::old('exercises_grade') }}"
+        data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right"
         data-content="{{ Config::get('content.reviews.tip_exercises_grade') }}">
       </dd>
       <dt>content</dt>
       <dd>
-        <div class="pull-left" data-starbar="content_grade"  data-value="{{ Input::old('content_grade') }}" 
-        data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" 
+        <div class="pull-left" data-starbar="content_grade"  data-value="{{ Input::old('content_grade') }}"
+        data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right"
         data-content="{{ Config::get('content.reviews.tip_content_grade') }}">
       </dd>
     </dl>
@@ -184,12 +185,12 @@ Distributions tempérées sur la droite réelle: définition, exemples, calcul s
       <div class="checkbox">
         <label>
           <input type="checkbox" name="anonymous" value="true" {{ Input::old('anonymous') ? 'checked' : '' }}> Post anonymously
-          <i class="fa fa-question-circle" data-html="true" data-trigger="click" data-toggle="popover" data-placement="right" 
-          data-content='Your name will not be displayed in your review if you choose this option.<br /> 
+          <i class="fa fa-question-circle" data-html="true" data-trigger="click" data-toggle="popover" data-placement="right"
+          data-content='Your name will not be displayed in your review if you choose this option.<br />
           {{ link_to_action("StaticController@faq", "Read more.") }}'></i>
         </label>
-        
-        
+
+
       </div>
     </div>
   </div>
