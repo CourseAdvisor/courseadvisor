@@ -1,8 +1,0 @@
-Fix la redirection aprés le login
-
-Actuellement, quand la session est détruite et qu'il ne reste plus que le cookie avec le token, on ne parvient
-pas à recréer la session. Voir si bug ou tequila ne renvoie les infos qu'une seule fois
-
-Check fillable
-
-Custom errors

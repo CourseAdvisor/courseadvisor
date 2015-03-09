@@ -9,3 +9,7 @@ Thumbs.db
 
 app/config/database.php
 *.bak
+
+# js stuff
+bower_components
+node_modules

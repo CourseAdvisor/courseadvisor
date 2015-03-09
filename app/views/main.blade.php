@@ -11,9 +11,8 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    {{ HTML::style("css/bootstrap.min.css") }}
+    {{ HTML::style("css/courseadvisor.css") }}
     {{ HTML::style("css/font-awesome.min.css") }}
-    {{ HTML::style("css/style-additionnal.css") }}
   </head>
   <body>
     <div class="navbar navbar-default navbar-static-top">

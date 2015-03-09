@@ -1,0 +1,9 @@
+{
+  "name": "courseadvisor-client",
+  "description": "client-side assets for courseadvisor",
+  "version": "0.0.0",
+  "dependencies": {
+    "bootstrap": "~3.3.2",
+    "font-awesome": "~4.0.0"
+  }
+}

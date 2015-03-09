@@ -205,7 +205,6 @@ Distributions tempérées sur la droite réelle: définition, exemples, calcul s
 
 </div>
 </div>
-</section><div style="height: 300px;"></div>
 
 
 @stop
