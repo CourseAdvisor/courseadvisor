@@ -16,8 +16,10 @@ class DatabaseSeeder extends Seeder {
 		$this->call('StudentsTableSeeder');
 		$this->command->info("Fixtures for students installed");
 
-		$this->call('CoursesTableSeeder');
-		$this->command->info("Fixtures for courses installed");
+		DB::table('courses')->delete();
+
+		/*$this->call('CoursesTableSeeder');
+		$this->command->info("Fixtures for courses installed");*/
 
 		/*$this->call('CoursesRegistrationsTableSeeder');
 		$this->command->info("Fixtures for courses registrations installed");*/
@@ -42,8 +44,13 @@ class SectionsTableSeeder extends Seeder {
 		]);
 
 		Section::create([
-			'string_id' => 'PSY', 
-			'name'		=> 'Psychologie',
+			'string_id' => 'MT', 
+			'name'		=> 'Microtechnique',
+		]);
+
+		Section::create([
+			'string_id' => 'SV', 
+			'name'		=> 'Sciences de la vie',
 		]);
 	}
 }
@@ -54,16 +61,17 @@ class StudentsTableSeeder extends Seeder {
 		DB::table('students')->delete();
 
 		$in = Section::where('string_id', '=', 'IN')->first();
-		$psy = Section::where('string_id', '=', 'PSY')->first();
+		$sc = Section::where('string_id', '=', 'SC')->first();
+		$mt = Section::where('string_id', '=', 'MT')->first();
 
-		/*Student::create(array(
+		Student::create(array(
 			'firstname' => 'Christophe',
 			'lastname'	=> 'Tafani-Dereeper',
 			'sciper'	=> '223529',
 			'semester'	=> 'BA6',
 			'email'		=> 'me@xtof.fr', 
 			'section_id'=> $in->id
-		))->save();*/
+		))->save();
 
 		$hadrien = Student::create(array(
 			'firstname'	=> 'Hadrien',
@@ -71,7 +79,7 @@ class StudentsTableSeeder extends Seeder {
 			'sciper'	=> '224340',
 			'semester'	=> 'BA6',
 			'email'		=> 'me@hmil.fr', 
-			'section_id'=> $in->id
+			'section_id'=> $sc->id
 		))->save();
 
 
@@ -81,13 +89,13 @@ class StudentsTableSeeder extends Seeder {
 			'sciper'	=> '123345',
 			'semester'	=> 'BA5',
 			'email'		=> 'me@emilierinsoz.ch', 
-			'section_id'=> $psy->id
+			'section_id'=> $mt->id
 		))->save();
 	}
 }
 
 
-class CoursesTableSeeder extends Seeder {
+/*class CoursesTableSeeder extends Seeder {
 	public function run() {
 		DB::table('courses')->delete();
 		DB::table('course_section')->delete();
@@ -156,7 +164,7 @@ class CoursesTableSeeder extends Seeder {
 			'name' 		=> "Méthodologie"
 		]);	
 	}
-}
+}*/
 
 
 class CoursesRegistrationsTableSeeder extends Seeder {
@@ -193,9 +201,9 @@ class CoursesRegistrationsTableSeeder extends Seeder {
 
 class ReviewsTableSeeder extends Seeder {
 	public function run() {
-		DB::table('reviews')->delete();
+		/*DB::table('reviews')->delete();
 
 		$sweng = Course::where('string_id', '=', 'SWENG')->first()->id;
-		$quantique = Course::where('string_id', '=', 'WTF')->first()->id;
+		$quantique = Course::where('string_id', '=', 'WTF')->first()->id;*/
 	}
 }

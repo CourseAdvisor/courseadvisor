@@ -9,11 +9,15 @@ class Student extends Eloquent {
 		'firstname', 'lastname', 'email', 'semester', 'section_id', 'sciper'
 	);
 
-	public function courses() {
-		return $this->belongsToMany('Course');
-	}
-
 	public function section() {
 		return $this->belongsTo('Section');
+	}
+
+	public function reviews() {
+		return $this->hasMany('Review');
+	}
+
+	public function getFullnameAttribute() {
+		return $this->firstname . " " . $this->lastname;
 	}
 }

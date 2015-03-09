@@ -15,8 +15,8 @@
 Route::pattern('id', '\d+');
 Route::pattern('slug', '[a-zA-Z0-9_\-\.]+');
 
-Route::get('/', array('before' => 'force_login', 'uses' => 'CourseController@suggestions'));
-
+Route::get('/', 'CourseController@suggestions');
+Route::get('/faq', 'StaticController@faq');
 Route::get('/students', 'StudentController@index');
 Route::get('/students/{id}', 'StudentController@show');
 Route::get('/courses', 'CourseController@index');
@@ -32,9 +32,10 @@ Route::group(array('before' => 'logged_in'), function() {
 
 /* Routes forcing login */
 Route::group(array('before' => 'force_login'), function() {
-	Route::get('/private', function() { exit("You are logged in"); });
+	Route::post('/courses/{slug}-{id}/createReview', 'CourseController@createReview');
 });
 
+Route::when('*', 'csrf', array('post', 'put', 'delete'));
 
 Route::filter('logged_in', function() {
 	if(!Tequila::isLoggedIn())  {

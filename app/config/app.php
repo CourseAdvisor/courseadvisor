@@ -156,7 +156,9 @@ return array(
 	*/
 
 	'aliases' => array(
+		'NewCourseReviewEventHandler' => 'Events\NewCourseReviewEventHandler',
 		'StudentInfo'		=> 'Helpers\StudentInfo',
+		'MenuHelper'		=> 'Helpers\MenuHelper',
 		'Tequila'			=> 'Tequila\Facade',
 		'Debug' 			=> 'Barryvdh\Debugbar\Facade',
 		'App'               => 'Illuminate\Support\Facades\App',

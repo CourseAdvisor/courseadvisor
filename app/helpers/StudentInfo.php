@@ -24,4 +24,8 @@ class StudentInfo {
 			}
 		}
 	}
+
+	public static function getSciper() {
+		return Tequila::get('uniqueid');
+	}
 }

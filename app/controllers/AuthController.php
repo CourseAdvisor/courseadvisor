@@ -15,7 +15,9 @@ class AuthController extends Controller {
 
 		// First, check if the user is already in the database
 		$sciper = Tequila::get('uniqueid');
-		$count = Student::where('sciper', '=', $sciper)->count();
+		$student = Student::where('sciper', '=', $sciper);
+
+		$count = $student->count();
 
 		if($count == 0) {
 			$fullSection = explode(',', Tequila::get('unit'))[0]; // Of the form IN-BA6
@@ -26,20 +28,31 @@ class AuthController extends Controller {
 			// Check that the section exists
 			$section = Section::where('string_id', '=', $sectionId)->firstOrFail();
 
-			Student::create(array(
+			$student = Student::create(array(
 				'firstname' => Tequila::get('firstname'),
 				'lastname'	=> Tequila::get('name'),
 				'email'		=> Tequila::get('email'),
 				'sciper'	=> $sciper,
-				'semester'	=> 'BA6', 
+				'semester'	=> StudentInfo::getSemester(), 
 				'section_id'=> $section->id
 			));
 
-			Session::flash('message', array('type' => 'success', 'message' => 'Welcome on CourseAdvisor!'));
+			Session::put('student_id', $student->id);
+			Session::flash('message', ['success', 'Welcome on CourseAdvisor!']);
 
 		}
 		else {
-			Session::flash('message', array('type' => 'success', 'message' => 'Welcome back, ' . Tequila::get('firstname') . '!'));
+			// The student is already in the database, update him if needed
+			$student = $student->first();
+			$currentSemester = StudentInfo::getSemester();
+			$section = Section::where('string_id', '=', StudentInfo::getSection())->firstOrFail();
+			if($student->section_id != $section->id || $student->semester != $currentSemester) {
+				$student->semester = $currentSemester;
+				$student->section_id = $section->id;
+				$student->save();
+			}
+			Session::put('student_id', $student->id);
+			Session::flash('message', ['success', 'Welcome back, ' . Tequila::get('firstname') . '!']);
 		}
 
 

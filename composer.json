@@ -15,8 +15,9 @@
 			"app/models",
 			"app/database/migrations",
 			"app/database/seeds",
-			"app/tests/TestCase.php", 
-			"app/vendor/TequilaServiceProvider.php"
+			"app/helpers",
+			"app/vendor/",
+			"app/tests/TestCase.php"
 		]
 	},
 	"scripts": {

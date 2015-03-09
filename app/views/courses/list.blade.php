@@ -4,13 +4,25 @@
 @section('content')
 <h1>Courses list</h1>
 
-@foreach($courses as $course)
-<h3>{{{ $course->name }}}</h3>
+@foreach($sections as $section)
+	<h2>{{{ $section['name'] }}}</h2>
 
-<p>This course is given in :
-	@foreach($course->sections as $section)
-		{{{ $section->name . " (".$section->pivot->semester.")" }}}, 
+	@foreach($section['semesters'] as $semester => $courses)
+		<b>{{{ $semester }}}.</b>
+		<ul>
+		@foreach($courses as $course)
+			<li>
+			<a href="{{{ action('CourseController@show', [
+				'id' => $course['id'], 
+				'slug' => Str::slug($course['name'])
+				]) }}}">
+				{{{ $course['name'] }}}
+			</a>
+			</li>
+		@endforeach
+		</ul>
 	@endforeach
-</p>
+
 @endforeach
+
 @stop
