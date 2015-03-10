@@ -6,6 +6,7 @@ var less = require('gulp-less');
 var LessPluginCleanCSS = require('less-plugin-clean-css');
 var LessPluginAutoPrefix = require('less-plugin-autoprefix');
 
+gulp.task('default', ['watch']);
 
 gulp.task('style', function() {
   return gulp.src('assets/style/courseadvisor.less')
