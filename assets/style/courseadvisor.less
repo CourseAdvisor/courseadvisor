@@ -121,7 +121,7 @@ h3 {
 }
 
 .hint {
-    color: @gray;
+    color: @hint-color;
 }
 p.hint {
     margin-top: 10px;
@@ -134,7 +134,6 @@ p.hint {
 .form-control {
     box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.2);
 }
-
 // Navs =======================================================================
 
 nav {
@@ -153,7 +152,13 @@ nav {
     padding: 15px 45px;
 
     @media (max-width: @screen-sm-min) {
-        width: 98%;
+        padding: 5px 10px;
+        margin: 10 -10px;
+
+        .form-horizontal .form-group {
+            margin-left: 0;
+            margin-right: 0;
+        }
     }
 
     & > h1 {
@@ -193,16 +198,27 @@ dl {
 
 
 // Misc
+.clickable {
+    cursor: pointer;
+}
 
+.filling {
+    color: #f5df41;
+}
 .starbar {
     font-size: 13px;
-    .filling {
-        color: #f5df41;
+
+    &.disabled {
+        color: @gray-lighter;
     }
 }
 .starbar-comment {
     font-size: 18px;
-    margin-left: 12px;
+    margin-left: 8px;
+    // min-width: 35px;
+    display: block;
+    float: left;
+    text-align: right;
 }
 
 .nomargin {
@@ -225,12 +241,36 @@ hr {
     }
 }
 
+.reviews {
+    padding-top: 20px;
+}
+
 .review {
     .review-author {
         padding-left: 15px;
         margin-bottom: 5px;
     }
     // border-bottom: 1px @hr-border solid;
-    padding-bottom: 10px;
     margin-bottom: 10px;
 }
+
+.formula {
+    font-family: Georgia, serif;
+    color: @gray-light;
+    margin-left: 40px;
+}
+
+dl.course-stats {
+    color: @brand-primary;
+    margin-bottom: 10px;
+    dt, dd {
+        color: @brand-primary;
+        font-size: @font-size-base;
+    }
+    .progress {
+        width: 120px;
+        height: 10px;
+        margin: 5px 8px 0 0;
+    }
+}
+
