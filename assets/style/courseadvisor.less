@@ -53,6 +53,9 @@ footer {
 // Navbar =====================================================================
 
 .navbar {
+
+    margin-bottom: 0;
+
     .navbar-brand {
         font-size: 22px;
     }
@@ -110,6 +113,7 @@ h1 {
 
 h2 {
     color: @gray-darker;
+    text-transform: uppercase;
 }
 
 h3 {
@@ -159,14 +163,6 @@ nav {
             margin-left: 0;
             margin-right: 0;
         }
-    }
-
-    & > h1 {
-        // margin-left: 20px;
-    }
-
-    & > h2 {
-        text-transform: uppercase;
     }
 }
 
@@ -274,3 +270,64 @@ dl.course-stats {
     }
 }
 
+
+// Homepage  ==================================================================
+
+#splash {
+    height: 600px;
+
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    // Serve an adapted bg image
+    @media (max-width: @screen-xs-max) {
+        background-image: url('/img/background1-xs.jpg');
+    }
+    @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+        background-image: url('/img/background1-sm.jpg');
+    }
+    @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+        background-image: url('/img/background1-md.jpg');
+    }
+    @media (min-width: @screen-lg-min) {
+        background-image: url('/img/background1-lg.jpg');
+    }
+
+    text-align: center;
+    color: white;
+
+    strong {
+        color: @brand-primary;
+    }
+
+    .container {
+        max-width: 800px;
+    }
+
+    h1 {
+        font-size: 55px;
+        text-transform: uppercase;
+        margin-top: 0;
+        margin-bottom: 40px;
+    }
+
+    p {
+        font-size: 25px;
+        text-align: left;
+    }
+
+    .hero-search {
+        margin-top: 45px;
+        height: 120px;
+        padding-top: 40px;
+        background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,0.33) 37%,rgba(255,255,255,0.33) 61%,rgba(255,255,255,0) 100%); /* W3C */
+    }
+
+    .overlay {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        padding-top: 85px;
+    }
+}

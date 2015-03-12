@@ -63,9 +63,9 @@
         </div>
       </section>
       @endif
-
-      @yield('content')
     </div>
+
+    @yield('content')
 
 
     <footer class="footer">

@@ -24,7 +24,7 @@ class AuthController extends Controller {
 			$splitted = explode('-', $fullSection);
 			$sectionId = $splitted[0];
 			$semester = $splitted[1];
-			
+
 			// Check that the section exists
 			$section = Section::where('string_id', '=', $sectionId)->firstOrFail();
 
@@ -33,7 +33,7 @@ class AuthController extends Controller {
 				'lastname'	=> Tequila::get('name'),
 				'email'		=> Tequila::get('email'),
 				'sciper'	=> $sciper,
-				'semester'	=> StudentInfo::getSemester(), 
+				'semester'	=> StudentInfo::getSemester(),
 				'section_id'=> $section->id
 			));
 

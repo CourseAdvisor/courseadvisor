@@ -15,6 +15,7 @@
 Route::pattern('id', '\d+');
 Route::pattern('slug', '[a-zA-Z0-9_\-\.]+');
 
+Route::get('/', 'StaticController@homepage');
 Route::get('/faq', 'StaticController@faq');
 Route::get('/students', 'StudentController@index');
 Route::get('/students/{id}', 'StudentController@show');
@@ -31,7 +32,7 @@ Route::group(array('before' => 'logged_in'), function() {
 
 /* Routes forcing login */
 Route::group(array('before' => 'force_login'), function() {
-	Route::get('/', 'CourseController@suggestions');
+	Route::get('/courses/suggestions', 'CourseController@suggestions');
 	Route::post('/courses/{slug}-{id}/createReview', 'CourseController@createReview');
 });
 
