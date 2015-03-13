@@ -172,9 +172,9 @@ class DumpCourses extends Command {
 				$existing = Teacher::where('sciper', '=', $courseData['teacher']['sciper'])->first();
 
 				if ($existing) {
-					$courseData['teacher'] = $existing->id;
+					$courseData['teacher_id'] = $existing->id;
 				} else {
-					$courseData['teacher'] = Teacher::create($courseData['teacher'])->id;
+					$courseData['teacher_id'] = Teacher::create($courseData['teacher'])->id;
 				}
 			}
 
@@ -183,9 +183,10 @@ class DumpCourses extends Command {
 				$existing = Course::where('string_id', '=', $courseData['string_id'])->first();
 			}
 			else {
-				$existing = Course::where('string_id', '=', md5($courseData['teacher'].$courseData['name']));
+				$existing = Course::where('string_id', '=', md5($courseData['teacher_id'].$courseData['name']));
 			}
 
+			unset($courseData['teacher']);
 			if($existing) {
 				$courseId = $existing->id;
 				$existing->fill($courseData);

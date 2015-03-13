@@ -22,7 +22,10 @@
       <div class="clearfix"></div>
       <dl class="dl-horizontal course-attrs">
         <dt>Difficulty</dt><dd>Todo</dd>
-        <dt>Teacher</dt><dd><a href="#">{{{ $course->teacher->fullname() }}}</a></dd>
+        <dt>Teacher</dt><dd><a href="{{{ action('CourseController@showTeacher', [
+                'id' => $course->teacher['id'],
+                'slug' => Str::slug($course->teacher->fullname)
+                ]) }}}">{{{ $course->teacher->fullname }}}</a></dd>
         <dt>Sections</dt>
         <dd>
         	@foreach($course->sections as $section)
@@ -165,7 +168,7 @@
       <div class="page">
         <h2 id="my-review">Your review</h2>
 
-        @if(!$isLoggedIn)
+        @if(!Tequila::isLoggedIn())
           <div class="alert alert-danger" role="alert">
             You need to be {{ link_to_action('AuthController@login', 'logged in', ['next' => Request::url()]) }} to post a review.
           </div>

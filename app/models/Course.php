@@ -3,8 +3,11 @@ class Course extends Eloquent {
 	protected $table = 'courses';
 	public $timestamps = false;
 
+	// Cache reviews count
+	private $_reviewsCount = null;
+
 	protected $fillable = [
-		'name', 'string_id', 'teacher'
+		'name', 'string_id', 'teacher_id'
 	];
 
 	public function sections() {
@@ -46,5 +49,12 @@ class Course extends Eloquent {
 		$this->avg_content_grade = $averages->content;
 
 		$this->save();
+	}
+
+	public function getReviewsCountAttribute() {
+		if ($this->_reviewsCount == null)
+			$this->_reviewsCount = $this->reviews()->selectRaw('count(*) as count')->first()->count;
+
+		return $this->_reviewsCount;
 	}
 }

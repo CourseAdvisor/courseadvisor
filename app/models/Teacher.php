@@ -6,7 +6,7 @@ class Teacher extends Eloquent {
     return $this->hasMany('Course');
   }
 
-  public function fullname() {
+  public function getFullnameAttribute() {
     return $this->firstname . " " . $this->lastname;
   }
 }

@@ -17,10 +17,13 @@ Route::pattern('slug', '[a-zA-Z0-9_\-\.]+');
 
 Route::get('/', 'StaticController@homepage');
 Route::get('/faq', 'StaticController@faq');
+
 Route::get('/students', 'StudentController@index');
 Route::get('/students/{id}', 'StudentController@show');
+
 Route::get('/courses', 'CourseController@index');
 Route::get('/courses/{slug}-{id}', 'CourseController@show');
+Route::get('/teacher/{slug}-{id}', 'CourseController@showTeacher');
 
 Route::get('/login', array('before' => 'logged_out', 'uses' => 'AuthController@login'));
 Route::get('/login_redirect', 'AuthController@loginRedirect');

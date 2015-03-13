@@ -72,8 +72,20 @@ class CourseController extends Controller {
 			'distribution' => $distribution,
 			'reviews' =>$course->reviews()->with('student')->paginate($reviewsPerPage),
 			'hasAlreadyReviewed' => $hasAlreadyReviewed,
-			'nbReviews' => $course->reviews->count(),
-			'isLoggedIn' => Tequila::isLoggedIn()
+			'nbReviews' => $course->reviews->count()
+		]);
+	}
+
+	/**
+	 *	Shows a teacher's courses and maybe some stats for that teacher
+	 */
+	public function showTeacher($slug, $id) {
+		$teacher = Teacher::with('courses')->findOrFail($id);
+
+		return View::make('courses.teacher', [
+			'slug' => $slug,
+			'teacher' => $teacher,
+			'courses' => $teacher->courses
 		]);
 	}
 
