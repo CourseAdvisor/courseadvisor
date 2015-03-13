@@ -10,7 +10,6 @@ class CourseController extends Controller {
 		]);
 	}
 
-
 	protected function groupCoursesBySemester($sections) {
 		$result = [];
 		foreach($sections as $i => $section) {
@@ -46,8 +45,7 @@ class CourseController extends Controller {
 	}
 
 	public function show($slug, $id) {
-		$course = Course::with('reviews.student')
-					->findOrFail($id);
+		$course = Course::findOrFail($id);
 
 		$hasAlreadyReviewed = false;
 		if(Tequila::isLoggedIn()) {
@@ -56,12 +54,14 @@ class CourseController extends Controller {
 
 		$reviewsPerPage = Config::get('app.nbReviewsPerPage');
 
+
+
 		return View::make('courses.show', [
 			'course' => $course,
 			'slug' 	=> $slug,
-			'reviews' => $course->reviews()->paginate($reviewsPerPage),
+			'reviews' =>$course->reviews()->with('student')->paginate($reviewsPerPage),
 			'hasAlreadyReviewed' => $hasAlreadyReviewed,
-			'nbReviews' => count($course->reviews),
+			'nbReviews' => $course->reviews->count(),
 			'isLoggedIn' => Tequila::isLoggedIn()
 		]);
 	}
@@ -97,8 +97,7 @@ class CourseController extends Controller {
 		}
 
 		$newReview->save();
-
-		Event::fire('course.newReview', [$course]);
+		$course->updateAverages();
 
 		return $goToCourse->with('message', ['success', 'Your review was successfuly posted. Thank you!']);
 	}

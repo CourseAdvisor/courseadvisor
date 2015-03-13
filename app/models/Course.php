@@ -25,4 +25,22 @@ class Course extends Eloquent {
 
 		return $review;
 	}
+
+	public function updateAverages() {
+		$sql  = "AVG(avg_grade) as total";
+		$sql .= ", AVG(lectures_grade) as lectures";
+		$sql .= ", AVG(exercises_grade) as exercises";
+		$sql .= ", AVG(content_grade) as content";
+
+		$averages = DB::table('reviews')
+					->select(DB::raw($sql))
+					->where('course_id', $this->id)->first();
+
+		$this->avg_overall_grade = $averages->total;
+		$this->avg_lectures_grade = $averages->lectures;
+		$this->avg_exercises_grade = $averages->exercises;
+		$this->avg_content_grade = $averages->content;
+
+		$this->save();
+	}
 }
