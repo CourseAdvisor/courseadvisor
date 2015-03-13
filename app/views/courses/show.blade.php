@@ -22,7 +22,7 @@
       <div class="clearfix"></div>
       <dl class="dl-horizontal course-attrs">
         <dt>Difficulty</dt><dd>Todo</dd>
-        <dt>Teacher</dt><dd><a href="#">{{{ $course->teacher }}}</a></dd>
+        <dt>Teacher</dt><dd><a href="#">{{{ $course->teacher->fullname() }}}</a></dd>
         <dt>Sections</dt>
         <dd>
         	@foreach($course->sections as $section)

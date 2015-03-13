@@ -15,6 +15,10 @@ class Course extends Eloquent {
 		return $this->hasMany('Review');
 	}
 
+	public function teacher() {
+		return $this->belongsTo('Teacher');
+	}
+
 	public function alreadyReviewedBy($student_id) {
 		if(Config::get('app.debug')) {
 			return false;

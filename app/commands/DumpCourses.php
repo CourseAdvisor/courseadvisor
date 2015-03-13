@@ -83,7 +83,7 @@ class DumpCourses extends Command {
 		print "Done in ".round($timeEnd - $timeStart, 1)." seconds\n";
 
 		list($courses, $skipped) = $this->parse($xml);
-		
+
 		$nbSkipped = sizeof($skipped);
 		if($nbSkipped > 0) {
 			print "[Warning] $nbSkipped courses were ignored (not enough info): \n";
@@ -130,13 +130,17 @@ class DumpCourses extends Command {
 				$data = [];
 				$data['name'] = "".$course->title;
 				$prof = $course->classes->class[0]->instructors->professors;
-				$data['teacher'] = $prof->{'first-name'}." ".$prof->{'last-name'};
+				$data['teacher'] = [
+					'firstname' => $prof->{'first-name'},
+					'lastname' => $prof->{'last-name'},
+					'sciper' => $prof->{'sciper'}
+				];
 				$data['string_id'] = "".$course->code;
 
 
 				// A course is defined by its id. But in some cases, we only have its name
 				// and teacher name
-				$hash = md5($data['teacher'].$data['name']);
+				$hash = md5($data['teacher']['sciper'].$data['name']);
 
 				if(!strlen(trim($data['string_id']))) {
 					$data['string_id'] = $hash;
@@ -147,7 +151,7 @@ class DumpCourses extends Command {
 				}
 				$inserted[] = $hash;
 				$courses[] = $data;
-			}			
+			}
 		}
 
 		return [$courses, $skipped];
@@ -159,9 +163,20 @@ class DumpCourses extends Command {
 		if(!$section) {
 			exit("[Error] Section '".$this->option('section'). "'' does not exist in database.");
 		}
-		
+
 		// Insert courses in db
 		foreach($courses as $courseData) {
+
+			// Check if the teacher exists
+			if (!empty($courseData['teacher'])) {
+				$existing = Teacher::where('sciper', '=', $courseData['teacher']['sciper'])->first();
+
+				if ($existing) {
+					$courseData['teacher'] = $existing->id;
+				} else {
+					$courseData['teacher'] = Teacher::create($courseData['teacher'])->id;
+				}
+			}
 
 			// Check if the course exists
 			if(!empty($courseData['string_id'])) {
@@ -173,18 +188,20 @@ class DumpCourses extends Command {
 
 			if($existing) {
 				$courseId = $existing->id;
+				$existing->fill($courseData);
+				$existing->save();
 				$action = 'updated';
 			}
 			else {
 				$courseId = Course::create($courseData)->id;
-				$action = 'created';				
+				$action = 'created';
 			}
 
 
 			// Insert relationship if it does not exist : [course] is given in semester [semester] of section [section]
 			$relation = [
-				'section_id' 	=> $section->id, 
-				'course_id'		=> $courseId, 
+				'section_id' 	=> $section->id,
+				'course_id'		=> $courseId,
 				'semester'		=> $this->option('semester')
 			];
 
@@ -206,8 +223,8 @@ class DumpCourses extends Command {
 
 	private function makeUrl() {
 		$replacements = [
-			'%period%' 		=> '2014-2015', 
-			'%semester%'	=> $this->option('semester'), 
+			'%period%' 		=> '2014-2015',
+			'%semester%'	=> $this->option('semester'),
 			'%section%'		=> $this->option('section')
 		];
 		return strtr(self::ISA_URL, $replacements);
@@ -231,7 +248,7 @@ class DumpCourses extends Command {
 
 		curl_setopt_array($ch, $options);
  	    $response = curl_exec ($ch);
-		
+
 		$status = curl_getinfo ($ch, CURLINFO_HTTP_CODE);
  	    if ($status != 200) {
  	      exit("Error trying to access to $url (status code $status)");

@@ -45,7 +45,7 @@ class CourseController extends Controller {
 	}
 
 	public function show($slug, $id) {
-		$course = Course::findOrFail($id);
+		$course = Course::with('teacher')->findOrFail($id);
 
 		$hasAlreadyReviewed = false;
 		if(Tequila::isLoggedIn()) {
