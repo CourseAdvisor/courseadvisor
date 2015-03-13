@@ -61,7 +61,7 @@ class CourseController extends Controller {
 				return round($review->avg_grade) == 1 + $i;
 			})->count();
 			$distribution[$i] = [
-				'percentage' => 100 * $nbFilteredReviews / $course->reviews->count(),
+				'percentage' => ($course->reviews->count() > 0) ? 100 * $nbFilteredReviews / $course->reviews->count() : 0,
 				'total' => $nbFilteredReviews
 			];
 		}
