@@ -102,7 +102,7 @@
 
 
     {{ HTML::script("https://code.jquery.com/jquery-1.10.2.min.js") }}
-    {{ HTML::script("js/bootstrap.min.js") }}
+    {{ HTML::script("js/vendor/bootstrap.min.js") }}
     {{ HTML::script("js/starbar.js") }}
 
     <script>
