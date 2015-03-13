@@ -16,3 +16,16 @@ node_modules
 # IDEs
 .idea
 _ide_helper.php
+
+
+#####################################
+##           Assets files          ##
+##  empty on deployment branches   ##
+#####################################
+
+public/css/*
+public/js/vendor/*
+public/img/*
+public/fonts/*
+
+## END assets
