@@ -54,11 +54,22 @@ class CourseController extends Controller {
 
 		$reviewsPerPage = Config::get('app.nbReviewsPerPage');
 
-
+		// Build distribution
+		$distribution = [];
+		foreach(range(0, 4) as $i) {
+			$nbFilteredReviews = $course->reviews->filter(function($review) use ($i, $course) {
+				return round($review->avg_grade) == 1 + $i;
+			})->count();
+			$distribution[$i] = [
+				'percentage' => 100 * $nbFilteredReviews / $course->reviews->count(),
+				'total' => $nbFilteredReviews
+			];
+		}
 
 		return View::make('courses.show', [
 			'course' => $course,
 			'slug' 	=> $slug,
+			'distribution' => $distribution,
 			'reviews' =>$course->reviews()->with('student')->paginate($reviewsPerPage),
 			'hasAlreadyReviewed' => $hasAlreadyReviewed,
 			'nbReviews' => $course->reviews->count(),

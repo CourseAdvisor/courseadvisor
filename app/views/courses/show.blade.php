@@ -45,51 +45,51 @@
               <dt>Excellent</dt>
               <dd>
                 <div class="progress pull-left">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;">
-                    <span class="sr-only">2 votes</span>
+                  <div class="progress-bar" role="progressbar" style="width: {{{ $distribution[4]['percentage']}}}%;">
+                    <span class="sr-only">{{{ $distribution[4]['total']}}} votes</span>
                   </div>
                 </div>
-                <div class="pull-left">2</div>
+                <div class="pull-left">{{{ $distribution[4]['total']}}} votes</div>
               </dd>
 
               <dt>Good</dt>
               <dd>
                 <div class="progress pull-left">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">
-                    <span class="sr-only">5 votes</span>
+                  <div class="progress-bar" role="progressbar" style="width: {{{ $distribution[3]['percentage']}}}%;">
+                    <span class="sr-only">{{{ $distribution[3]['total']}}} votes</span>
                   </div>
                 </div>
-                <div class="pull-left">5</div>
+                <div class="pull-left">{{{ $distribution[3]['total'] }}} votes</div>
               </dd>
 
               <dt>Okay</dt>
               <dd>
                 <div class="progress pull-left">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;">
-                    <span class="sr-only">2 votes</span>
+                  <div class="progress-bar" role="progressbar" style="width: {{{ $distribution[2]['percentage']}}}%;">
+                    <span class="sr-only">{{{ $distribution[2]['total']}}} votes</span>
                   </div>
                 </div>
-                <div class="pull-left">2</div>
+                <div class="pull-left">{{{ $distribution[2]['total']}}} votes</div>
               </dd>
 
               <dt>Bad</dt>
               <dd>
                 <div class="progress pull-left">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-                    <span class="sr-only">0 votes</span>
+                  <div class="progress-bar" role="progressbar" style="width: {{{ $distribution[1]['percentage']}}}%;">
+                    <span class="sr-only">{{{ $distribution[1]['total']}}} votes</span>
                   </div>
                 </div>
-                <div class="pull-left">0</div>
+                <div class="pull-left">{{{ $distribution[1]['total']}}} votes</div>
               </dd>
 
               <dt>Terrible</dt>
               <dd>
                 <div class="progress pull-left">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%;">
-                    <span class="sr-only">1 votes</span>
+                  <div class="progress-bar" role="progressbar" style="width: {{{ $distribution[0]['percentage']}}}%;">
+                    <span class="sr-only">{{{ $distribution[0]['total']}}} votes</span>
                   </div>
                 </div>
-                <div class="pull-left">1</div>
+                <div class="pull-left">{{{ $distribution[0]['total'] }}} votes</div>
               </dd>
             </dl>
             <p class="formula">s²=1.344 <span class="overline">x</span>=3.7 x̃=4 Q1=3</p>
@@ -97,9 +97,9 @@
           <div class="col-xs-5 col-sm-6">
             <h2>Rating</h2>
             <dl class="dl-horizontal">
-              <dt>Teacher</dt>
+              <dt>Lectures</dt>
               <dd>
-              @include('global.starbar', ['grade' => $course->avg_teacher_grade])
+              @include('global.starbar', ['grade' => $course->avg_lectures_grade])
               </dd>
 
               <dt>Contents</dt>
