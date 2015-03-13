@@ -92,6 +92,11 @@ class CourseController extends Controller {
 		$newReview->student_id = $studentId;
 		$newReview->updateAverage();
 
+		// Check if we should use 'mobile_difficulty'
+		if(empty($newReview->difficulty)) {
+			$newReview->difficulty = Input::get('difficulty_mobile');
+		}
+
 		if(Input::get('anonymous') == true) {
 			$newReview->is_anonymous = 1;
 		}
