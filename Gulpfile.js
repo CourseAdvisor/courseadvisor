@@ -17,7 +17,7 @@ gulp.task('clean', ['clean:style', 'clean:thirdparty', 'clean:images']);
 
 gulp.task('watch', function() {
   gulp.watch('./assets/img/**/*', ['publish:images'])
-  return gulp.watch('./assets/style/*.less', ['publish:style']);  // Watch all the .less files, then run the less task
+  return gulp.watch('./assets/style/*.less', ['build:style']);  // Watch all the .less files, then run the less task
 });
 
 
