@@ -7,9 +7,23 @@ var LessPluginCleanCSS = require('less-plugin-clean-css');
 var LessPluginAutoPrefix = require('less-plugin-autoprefix');
 var imagemin = require('gulp-imagemin');
 
-gulp.task('default', ['watch']);
 
-gulp.task('images', function() {
+/* meta tasks */
+
+gulp.task('default', ['watch']);
+gulp.task('publish', ['build:style', 'publish:thirdparty', 'publish:images']);
+gulp.task('clean', ['clean:style', 'clean:thirdparty', 'clean:images']);
+
+
+gulp.task('watch', function() {
+  gulp.watch('./assets/img/**/*', ['publish:images'])
+  return gulp.watch('./assets/style/*.less', ['publish:style']);  // Watch all the .less files, then run the less task
+});
+
+
+/* source related tasks */
+
+gulp.task('publish:images', ['clean:images'], function() {
   return gulp.src('assets/img/**/*')
     .pipe(imagemin({
       progressive: true
@@ -17,7 +31,7 @@ gulp.task('images', function() {
     .pipe(gulp.dest('./public/img'));
 });
 
-gulp.task('style', function() {
+gulp.task('build:style', ['clean:style'], function() {
   return gulp.src('assets/style/courseadvisor.less')
     .pipe(less({
       plugins: [
@@ -28,47 +42,65 @@ gulp.task('style', function() {
     .pipe(gulp.dest('./public/css'));
 });
 
-gulp.task('watch', function() {
-  gulp.watch('./assets/img/**/*', ['images'])
-  return gulp.watch('./assets/style/*.less', ['style']);  // Watch all the .less files, then run the less task
-});
 
-gulp.task('publish-thirdparty', ['clean-thirdparty'], function() {
-  var deferred = Q.defer();
-  var callbacks = 2;
+/* 3rd party assets */
 
-  function collect() {
-    if (--callbacks <= 0) {
-      deferred.resolve();
-    }
-  }
+gulp.task('publish:thirdparty', ['clean:thirdparty'], function() {
+  var collector = task_collector();
 
   gulp.src('assets/bower_components/font-awesome/css/font-awesome.min.css')
     .pipe(gulp.dest('./public/css'))
-    .on('finish', collect);
+    .on('finish', collector());
 
   gulp.src('assets/bower_components/font-awesome/fonts/*')
     .pipe(gulp.dest('./public/fonts'))
-    .on('finish', collect);
+    .on('finish', collector());
 
-  return deferred.promise;
+  gulp.src('assets/bower_components/bootstrap/dist/js/bootstrap.min.js')
+    .pipe(gulp.dest('./public/js/vendor'))
+    .on('finish', collector());
+
+  return collector.promise;
 });
 
-gulp.task('clean', ['clean-thirdparty', 'clean-style', 'clean-images']);
 
-gulp.task('clean-images', function() {
+/* cleaning */
+
+gulp.task('clean:images', function() {
   return gulp.src('public/img/**/*')
     .pipe(clean());
 });
 
-gulp.task('clean-style', function() {
+gulp.task('clean:style', function() {
   return gulp.src('public/css/courseadvisor.*', {read: false})
       .pipe(clean());
 });
 
-gulp.task('clean-thirdparty', function() {
+gulp.task('clean:thirdparty', function() {
+  var collector = task_collector();
+
+  gulp.src('public/css/font-awesome.*', {read: false})
+      .pipe(clean())
+      .on('finish', collector());
+
+  gulp.src('public/fonts/*', {read: false})
+      .pipe(clean())
+      .on('finish', collector());
+
+  gulp.src('public/js/vendor/*', {read: false})
+      .pipe(clean())
+      .on('finish', collector());
+
+  return collector.promise;
+});
+
+
+/**
+ *  A defer for multiple tasks
+ */
+var task_collector = function() {
+  var callbacks = 0;
   var deferred = Q.defer();
-  var callbacks = 2;
 
   function collect() {
     if (--callbacks <= 0) {
@@ -76,13 +108,11 @@ gulp.task('clean-thirdparty', function() {
     }
   }
 
-  gulp.src('public/css/font-awesome.*', {read: false})
-      .pipe(clean())
-      .on('finish', collect);
+  var collector = function() {
+    ++callbacks;
+    return collect;
+  }
+  collector.promise = deferred.promise;
 
-  gulp.src('public/fonts/*', {read: false})
-      .pipe(clean())
-      .on('finish', collect);
-
-  return deferred.promise;
-});
+  return collector;
+};
