@@ -2,35 +2,11 @@
 class CourseController extends Controller {
 
 	public function index() {
-		$sections = Section::with('courses')->get()->toArray();
-		$sections = $this->groupCoursesBySemester($sections);
+		$coursesPerPage = Config::get('app.nbCoursesPerPage');
 
 		return View::make('courses.list', [
-			'sections'	=> $sections
+			'courses'	=> Course::with('sections')->paginate($coursesPerPage)
 		]);
-	}
-
-	protected function groupCoursesBySemester($sections) {
-		$result = [];
-		foreach($sections as $i => $section) {
-			$courses = $section['courses'];
-			unset($section['courses']);
-
-			$data = $section;
-			$data['semesters'] = [];
-
-			foreach($courses as $course) {
-				$semester = $course['pivot']['semester'];
-				if(!isset($data['semesters'][$semester])) {
-					$data['semesters'][$semester] = [];
-				}
-				$data['semesters'][$semester][] = $course;
-			}
-			ksort($data['semesters']);
-			$result[] = $data;
-		}
-
-		return $result;
 	}
 
 	public function suggestions() {
