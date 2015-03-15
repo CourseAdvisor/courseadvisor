@@ -1,0 +1,65 @@
+{{--
+  Displays a list of courses.
+
+  parameters:
+  - (REQUIRED) collection $courses : the courses to display
+  - boolean $paginate : if the list should be paginated or not (default: yes)
+  - array $pagination_links_appendings : An array to be passed to the 'appends' method.
+    See http://laravel.com/docs/4.2/pagination#appending-to-pagination-links
+--}}
+<div class="list-group" id="course_list">
+@foreach($courses as $course)
+  <?php $reviewsCount = $course->reviewsCount ?>
+
+  <a href="{{{ action('CourseController@show', [
+    'id' => $course['id'],
+    'slug' => Str::slug($course['name'])
+    ]) }}}" class="list-group-item">
+
+    <!-- desktop only -->
+    <div class="pull-right hidden-xs">
+      @include('global.starbar', [
+        'grade' => $course->avg_overall_grade,
+        'disabled' => $reviewsCount == 0,
+        'comment_unsafe' => $reviewsCount.' <i class="fa fa-bookmark"></i>'
+      ])
+      <hr class="nomargin">
+      <span class="sections pull-right">
+        @foreach($course->sections as $section)
+          {{{ $section->string_id }}}-{{{ $section->pivot->semester }}}
+        @endforeach
+      </span>
+    </div>
+
+    <!-- mobile only -->
+    <div class="pull-right visible-xs">
+      @include('global.starbar', [
+        'grade' => $course->avg_overall_grade,
+        'disabled' => $reviewsCount == 0,
+        'compact' => TRUE,
+      ])
+    </div>
+
+    <!-- all platforms -->
+    <h2>{{{ $course['name'] }}}</h2>
+    <h3>{{{ $course['teacher']->fullname }}}</h3>
+    <!-- except this -->
+    <h4 class="sections visible-xs">
+      @foreach($course->sections as $section)
+        {{{ $section->string_id }}}-{{{ $section->pivot->semester }}}
+      @endforeach
+    </h4>
+
+  </a>
+@endforeach
+</div>
+
+@if(!isset($paginate) || $paginate)
+<nav>
+  @if(isset($pagination_links_appendings))
+    {{ $courses->appends($pagination_links_appendings)->links() }}
+  @else
+    {{ $courses->links() }}
+  @endif
+</nav>
+@endif
