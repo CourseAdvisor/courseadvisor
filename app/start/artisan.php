@@ -12,3 +12,4 @@
 */
 
 Artisan::add(new DumpCourses());
+Artisan::add(new CreateSections());

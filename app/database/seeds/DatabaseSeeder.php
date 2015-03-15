@@ -30,28 +30,11 @@ class DatabaseSeeder extends Seeder {
 }
 
 class SectionsTableSeeder extends Seeder {
+
 	public function run() {
 		DB::table('sections')->delete();
 
-		Section::create([
-			'string_id' => 'IN',
-			'name'		=> 'Informatique'
-		]);
-
-		Section::create([
-			'string_id' => 'SC',
-			'name'		=> 'Systèmes de communication'
-		]);
-
-		Section::create([
-			'string_id' => 'MT', 
-			'name'		=> 'Microtechnique',
-		]);
-
-		Section::create([
-			'string_id' => 'SV', 
-			'name'		=> 'Sciences de la vie',
-		]);
+		Artisan::call('courseadvisor:create-sections');
 	}
 }
 
@@ -69,7 +52,7 @@ class StudentsTableSeeder extends Seeder {
 			'lastname'	=> 'Tafani-Dereeper',
 			'sciper'	=> '223529',
 			'semester'	=> 'BA6',
-			'email'		=> 'me@xtof.fr', 
+			'email'		=> 'me@xtof.fr',
 			'section_id'=> $in->id
 		))->save();
 
@@ -78,7 +61,7 @@ class StudentsTableSeeder extends Seeder {
 			'lastname'	=> 'Milano',
 			'sciper'	=> '224340',
 			'semester'	=> 'BA6',
-			'email'		=> 'me@hmil.fr', 
+			'email'		=> 'me@hmil.fr',
 			'section_id'=> $sc->id
 		))->save();
 
@@ -88,7 +71,7 @@ class StudentsTableSeeder extends Seeder {
 			'lastname'	=> 'Rinsoz',
 			'sciper'	=> '123345',
 			'semester'	=> 'BA5',
-			'email'		=> 'me@emilierinsoz.ch', 
+			'email'		=> 'me@emilierinsoz.ch',
 			'section_id'=> $mt->id
 		))->save();
 	}
@@ -110,14 +93,14 @@ class StudentsTableSeeder extends Seeder {
 		]);
 		// Algorithms is given in SC and IN
 		DB::table('course_section')->insert(array(
-			'course_id' => $algo->id, 
-			'section_id'=> $in->id, 
+			'course_id' => $algo->id,
+			'section_id'=> $in->id,
 			'semester'	=> 'BA3'
 		));
 
 		DB::table('course_section')->insert(array(
-			'course_id' => $algo->id, 
-			'section_id'=> $sc->id, 
+			'course_id' => $algo->id,
+			'section_id'=> $sc->id,
 			'semester'	=> 'BA3'
 		));
 
@@ -127,8 +110,8 @@ class StudentsTableSeeder extends Seeder {
 		]);
 		// Algebra is given in SC
 		DB::table('course_section')->insert(array(
-			'course_id' => $algebra->id, 
-			'section_id'=> $sc->id, 
+			'course_id' => $algebra->id,
+			'section_id'=> $sc->id,
 			'semester'	=> 'BA5'
 		));
 
@@ -138,8 +121,8 @@ class StudentsTableSeeder extends Seeder {
 		]);
 		// Sweng is given in IN
 		DB::table('course_section')->insert(array(
-			'course_id' => $sweng->id, 
-			'section_id'=> $in->id, 
+			'course_id' => $sweng->id,
+			'section_id'=> $in->id,
 			'semester'	=> 'BA5'
 		));
 
@@ -149,8 +132,8 @@ class StudentsTableSeeder extends Seeder {
 		]);
 		// Psycho sociale is given in psycho
 		DB::table('course_section')->insert(array(
-			'course_id' => $psychoSoc->id, 
-			'section_id'=> $psy->id, 
+			'course_id' => $psychoSoc->id,
+			'section_id'=> $psy->id,
 			'semester'	=> 'BA1'
 		));
 
@@ -162,7 +145,7 @@ class StudentsTableSeeder extends Seeder {
 		Course::create([
 			'string_id' => "METH",
 			'name' 		=> "Méthodologie"
-		]);	
+		]);
 	}
 }*/
 

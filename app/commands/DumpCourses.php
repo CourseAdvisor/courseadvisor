@@ -12,7 +12,7 @@ class DumpCourses extends Command {
 	 *
 	 * @var string
 	 */
-	protected $name = 'courses:dump';
+	protected $name = 'courseadvisor:dump-courses';
 
 	/**
 	 * The console command description.
@@ -20,6 +20,10 @@ class DumpCourses extends Command {
 	 * @var string
 	 */
 	protected $description = 'Retrieve courses from is-academia';
+
+	private $dump_all = false;
+
+	private $semesters = ['BA1', 'BA2', 'BA3', 'BA4', 'BA5', 'BA6', 'MA1', 'MA2', 'MA3', 'MA4'];
 
 	/**
 	 * Create a new command instance.
@@ -40,14 +44,22 @@ class DumpCourses extends Command {
 	{
 		return array(
 			array('section', null, InputOption::VALUE_REQUIRED, 'The section from which retrieve courses (e.g. IN)', null),
-			array('semester', null, InputOption::VALUE_REQUIRED, 'The semester from which retrieve courses (e.g. BA4)', null),
+			array('semester', null, InputOption::VALUE_REQUIRED, 'The semester from which retrieve courses (e.g. BA4)', null)
 		);
 	}
 
 	protected function checkOptions() {
-		$semesters = ['BA1', 'BA2', 'BA3', 'BA4', 'BA5', 'BA6', 'MA1', 'MA2', 'MA3', 'MA4'];
 		$error = false;
-		if(!in_array($this->option('semester'), $semesters)) {
+
+		if(is_null($this->option('semester')) && is_null($this->option('section'))) {
+			if(!$this->confirm("Dumping ALL courses for ALL sections in database. Do you want to continue (Y/n)", true)) {
+				exit;
+			}
+			$this->dump_all = true;
+			return;
+		}
+
+		if(!in_array($this->option('semester'), $this->semesters)) {
 			print "Invalid semester '".$this->option('semester')."'\n";
 			$error = true;
 		}
@@ -70,19 +82,41 @@ class DumpCourses extends Command {
 	 */
 	public function fire()
 	{
-		$this->checkOptions();
-
 		print "==================================\n";
 		print "====== DUMP COURSES FROM ISA =====\n";
 		print "==================================\n\n";
-		print "Downloading courses data for ".$this->option('section')."-".$this->option('semester')." from IS-Academia...\n";
-		$url = $this->makeUrl();
+
+		$this->checkOptions();
+
+		if ($this->dump_all) {
+			$sections = DB::table('sections')
+						->select('string_id')
+						->get();
+			foreach($sections as $section) {
+				foreach($this->semesters as $semester) {
+					$this->dump($section->string_id, $semester);
+				}
+			}
+		}
+		else {
+			$this->dump($this->option('section'), $this->option('semester'));
+		}
+	}
+
+	private function dump($section, $semester) {
+		print "Downloading courses data for ".$section."-".$semester." from IS-Academia...\n";
+		$url = $this->makeUrl($section, $semester);
+		print "\tGET $url\n";
 		$timeStart = microtime(true);
 		$xml = $this->curlGet($url);
 		$timeEnd = microtime(true);
 		print "Done in ".round($timeEnd - $timeStart, 1)." seconds\n";
 
-		list($courses, $skipped) = $this->parse($xml);
+		$parseResult = $this->parse($xml);
+		if ($parseResult === false) {
+			return;
+		}
+		list($courses, $skipped) = $parseResult;
 
 		$nbSkipped = sizeof($skipped);
 		if($nbSkipped > 0) {
@@ -103,10 +137,8 @@ class DumpCourses extends Command {
 		}
 
 		print "Importing into database...\n";
-		$this->insert($courses);
+		$this->insert($courses, $section, $semester);
 		print "Done!\n";
-
-
 	}
 
 	private function parse($xml) {
@@ -116,7 +148,8 @@ class DumpCourses extends Command {
 
 		$doc = simplexml_load_string($xml);
 		if(!$doc->cursus) {
-			exit("IS-Academia did not provide any data for this semester.");
+			print ("[WARNING] IS-Academia did not provide any data for this semester.\t");
+			return false;
 		}
 
 		foreach($doc->cursus->plans->plan as $plan) {
@@ -157,11 +190,11 @@ class DumpCourses extends Command {
 		return [$courses, $skipped];
 	}
 
-	private function insert(array $courses) {
+	private function insert(array $courses, $section, $semester) {
 		// Retrieve section id
-		$section = Section::where('string_id', '=', $this->option('section'))->first();
-		if(!$section) {
-			exit("[Error] Section '".$this->option('section'). "'' does not exist in database.");
+		$s = Section::where('string_id', '=', $section)->first();
+		if(!$s) {
+			exit("[Error] Section '$section' does not exist in database.");
 		}
 
 		// Insert courses in db
@@ -201,9 +234,9 @@ class DumpCourses extends Command {
 
 			// Insert relationship if it does not exist : [course] is given in semester [semester] of section [section]
 			$relation = [
-				'section_id' 	=> $section->id,
+				'section_id' 	=> $s->id,
 				'course_id'		=> $courseId,
-				'semester'		=> $this->option('semester')
+				'semester'		=> $semester
 			];
 
 			$count = DB::table('course_section')
@@ -222,11 +255,11 @@ class DumpCourses extends Command {
 	}
 
 
-	private function makeUrl() {
+	private function makeUrl($section, $semester) {
 		$replacements = [
 			'%period%' 		=> '2014-2015',
-			'%semester%'	=> $this->option('semester'),
-			'%section%'		=> $this->option('section')
+			'%semester%'	=> $semester,
+			'%section%'		=> $section
 		];
 		return strtr(self::ISA_URL, $replacements);
 	}
