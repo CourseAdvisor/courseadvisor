@@ -21,8 +21,9 @@ Route::get('/faq', 'StaticController@faq');
 Route::get('/students', 'StudentController@index');
 Route::get('/students/{id}', 'StudentController@show');
 
-Route::get('/courses', 'CourseController@index');
-Route::get('/courses/{slug}-{id}', 'CourseController@show');
+Route::get('/sections', 'CourseController@sections');
+Route::get('/courses/{string_id}-{section}', 'CourseController@bySection');
+Route::get('/course/{slug}-{id}', 'CourseController@show');
 Route::get('/teacher/{slug}-{id}', 'CourseController@showTeacher');
 
 Route::get('/login', array('before' => 'logged_out', 'uses' => 'AuthController@login'));

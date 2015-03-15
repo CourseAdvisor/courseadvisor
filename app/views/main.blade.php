@@ -32,7 +32,7 @@
             </li>
             <li class="sep"></li>
             <li {{ MenuHelper::active_if_controller("course") }}>
-              <a href="{{{ action('CourseController@index') }}}">
+              <a href="{{{ action('CourseController@sections') }}}">
                 Courses
               </a>
             </li>
@@ -74,8 +74,8 @@
           <div class="col-sm-4 col-xs-6">
             <h2><span class="logo-course">Course</span>Advisor</h2>
             <ul>
-              <li><a href="#">All courses</a></li>
-              <li><a href="#">Log in</a></li>
+              <li><a href="{{{ action('CourseController@sections') }}}">Browse courses</a></li>
+              <li><a href="{{{ action('AuthController@login') }}}">Log in</a></li>
               <li><a href="#">About</a></li>
             </ul>
           </div>

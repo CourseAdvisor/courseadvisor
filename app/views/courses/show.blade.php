@@ -149,9 +149,13 @@
             	  <div class="clearfix"></div>
             	  <div class="review-author">
                   by
-            	  	<a href="#">
-            	  		{{{ $review->is_anonymous == 1 ? "Anonymous student" : $review->student->fullname }}}
-            	  	</a>
+                  @if($review->is_anonymous)
+                    <a href="#">Anonymous student</a>
+                  @else
+                    <a target="_blank" href="http://people.epfl.ch/{{{ $review->student->firstname.".".$review->student->lastname }}}">
+                      {{{ $review->student->fullname }}}
+                    </a>
+                  @endif
             	  </div>
             	  <p>{{{ $review->comment }}}</p>
             	</div>
