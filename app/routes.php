@@ -18,6 +18,8 @@ Route::pattern('slug', '[a-zA-Z0-9_\-\.]+');
 Route::get('/', 'StaticController@homepage');
 Route::get('/faq', 'StaticController@faq');
 
+Route::get('/search', 'SearchController@search');
+
 Route::get('/students', 'StudentController@index');
 Route::get('/students/{id}', 'StudentController@show');
 

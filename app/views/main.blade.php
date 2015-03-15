@@ -49,6 +49,15 @@
             @endif
           </ul>
 
+          <form class="navbar-form navbar-right" action="{{{ action('SearchController@search')}}}" method="GET" role="search" id="search-form">
+            <div class="input-group">
+                <input type="text" class="form-control input-sm" name="q" id="search-box" placeholder="Search courses" value="{{{ Input::get('q') }}}"/>
+                <span class="input-group-addon">
+                    <a class="fa fa-search" id="search-button" style="color: black;" href="#" onclick="document.getElementById('search-form').submit()"></a>
+                </span>
+            </div>
+          </form>
+
         </div>
       </div>
     </div>
