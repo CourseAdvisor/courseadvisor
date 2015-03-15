@@ -9,22 +9,21 @@
 		<h1>Search results for '<i>{{{ Input::get('q') }}}'</i></h1>
 
 		<section class="row">
-		<h3>Filter</h3>
+		<h2><a href="#advancedFilters" data-toggle="collapse">Advanced filters</a></h2>
 
-		<form action="{{{ Request::URL() }}}" method="GET">
-		  <input type="hidden" name="q" value="{{{ Input::get('q') }}}" />
-  		  <div class="form-group">
-  		    <div class="checkbox">
-  		  	  <label>
-  		  	    <input type="checkbox" value="true" name="only_reviewed" {{{ Input::get('only_reviewed') ? 'checked' : '' }}} >
-  		  	      Show only courses that have at least one review
-	  	  	  </label>
-	  	  	</div>
-  		  </div>
-		  <div class="form-group">
-		  	<a href="#collapseFilterSection" data-toggle="collapse">Filter by section</a>
-
-		  	<div class="container collapse {{{ !empty($sectionIds) ? 'in' : '' }}} " id="collapseFilterSection">
+		<div class="container collapse {{{ $filtered ? 'in' : '' }}}" id="advancedFilters">
+			<form action="{{{ Request::URL() }}}" method="GET">
+			  <input type="hidden" name="q" value="{{{ Input::get('q') }}}" />
+	  		  <div class="form-group">
+	  		    <div class="checkbox">
+	  		  	  <label>
+	  		  	    <input type="checkbox" value="true" name="only_reviewed" {{{ Input::get('only_reviewed') ? 'checked' : '' }}} >
+	  		  	      Show only courses that have at least one review
+		  	  	  </label>
+		  	  	</div>
+	  		  </div>
+			  <fieldset>
+			  	<legend>Filter by section</legend>
 		  		@foreach($sections as $section)
 				<div class="checkbox">
 	  		  	  <label>
@@ -33,16 +32,20 @@
 		  	  	  </label>
 		  	  	</div>
 		  	  	@endforeach
-		  	</div>
-  		  </div>
-  		  <button type="submit" class="btn btn-default">Apply</button>
-  		</form>
+		  		</fieldset>
+	  		  <button type="submit" class="btn btn-default">Apply</button>
+	  		</form>
+	  	</div>
 		</section>
 
 		@include('global.course_list', [
 			'courses' => $courses,
 			'pagination_links_appendings' 	=> Input::all()
 		])
+
+		@if(sizeof($courses) == 0)
+			<h2>No results</h2>
+		@endif
 
       </div>
     </div>

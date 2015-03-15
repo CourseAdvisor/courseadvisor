@@ -33,7 +33,8 @@ class SearchController extends Controller {
 		return View::make('courses.search', [
 			'courses' => $courses,
 			'sections' => Section::all(),
-			'sectionIds' => $sectionIds
+			'sectionIds' => $sectionIds,
+			'filtered' 	=> sizeof(Input::all()) > 1
 		]);
 	}
 }
