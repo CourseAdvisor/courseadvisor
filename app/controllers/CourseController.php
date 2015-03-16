@@ -1,11 +1,21 @@
 <?php
 class CourseController extends Controller {
 
-	public function index() {
+	public function bySection($string_id, $section) {
 		$coursesPerPage = Config::get('app.nbCoursesPerPage');
+		$courses = Course::whereHas('sections', function($q) use ($string_id) {
+			$q->where('string_id', '=', $string_id);
+		})->paginate($coursesPerPage);
 
 		return View::make('courses.list', [
-			'courses'	=> Course::with('sections')->paginate($coursesPerPage)
+			'courses'	=> $courses,
+			'section' => $section
+		]);
+	}
+
+	public function sections() {
+		return View::make('courses.sections', [
+			'sections' => Section::get()
 		]);
 	}
 
