@@ -22,8 +22,8 @@ class SearchController extends Controller {
 		}
 
 		$sectionIds = [];
-		if(Input::has('only_sections')) {
-			$sectionIds = array_map('intval', array_keys(Input::get('only_sections')));
+		if(Input::has('sections')) {
+			$sectionIds = array_map('intval', array_keys(Input::get('sections')));
 			$sectionIdsStr = implode(", ", $sectionIds);
 			$sqlWhere .= "AND (select count(*) from `course_section` where `course_id` = `courses`.`id` and `section_id` IN ($sectionIdsStr)) >= 1";
 		}
@@ -34,7 +34,7 @@ class SearchController extends Controller {
 			'courses' => $courses,
 			'sections' => Section::all(),
 			'sectionIds' => $sectionIds,
-			'filtered' 	=> sizeof(Input::all()) > 1
+			'was_filtered' => sizeof(Input::all()) > 1
 		]);
 	}
 }

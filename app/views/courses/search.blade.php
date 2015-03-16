@@ -6,12 +6,15 @@
   <section class="row">
     <div class="col-xs-12">
       <div class="page">
-		<h1>Search results for '<i>{{{ Input::get('q') }}}'</i></h1>
+		<h1>Search results for '<i>{{{ Input::get('q') }}}</i>'</h1>
 
 		<section class="row">
 		<h2><a href="#advancedFilters" data-toggle="collapse">Advanced filters</a></h2>
 
-		<div class="container collapse {{{ $filtered ? 'in' : '' }}}" id="advancedFilters">
+		{{--
+			The 'advanced filters' panel is expanded only if a filter has been applied
+		--}}
+		<div class="container collapse {{{ $was_filtered ? 'in' : '' }}}" id="advancedFilters">
 			<form action="{{{ Request::URL() }}}" method="GET">
 			  <input type="hidden" name="q" value="{{{ Input::get('q') }}}" />
 	  		  <div class="form-group">
@@ -27,7 +30,7 @@
 		  		@foreach($sections as $section)
 				<div class="checkbox">
 	  		  	  <label>
-	  		  	    <input type="checkbox" value="true" {{{ in_array($section->id, $sectionIds) || empty($sectionIds) ? 'checked' : '' }}} name="only_sections[{{{ $section->id }}}]">
+	  		  	    <input type="checkbox" value="true" {{{ in_array($section->id, $sectionIds) || empty($sectionIds) ? 'checked' : '' }}} name="sections[{{{ $section->id }}}]">
 						{{{ $section->name }}}
 		  	  	  </label>
 		  	  	</div>
