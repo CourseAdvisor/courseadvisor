@@ -29,7 +29,12 @@
         <dt>Sections</dt>
         <dd>
         	@foreach($course->sections as $section)
-        		<a href="#">{{{ $section->string_id }}}-{{{ $section->pivot->semester }}}</a>
+        		<a href="{{{ action('CourseController@listBySectionSemester', [
+              'section_id' => $section->string_id,
+              'semester' => $section->pivot->semester
+            ])}}}">
+              {{{ $section->string_id }}}-{{{ $section->pivot->semester }}}
+            </a>
         	@endforeach
         </dd>
       </dl>

@@ -1,21 +1,34 @@
 <?php
 class CourseController extends Controller {
 
-	public function bySection($string_id, $section) {
+	public function listBySectionSemester($section_id = null, $semester = null) {
 		$coursesPerPage = Config::get('app.nbCoursesPerPage');
-		$courses = Course::whereHas('sections', function($q) use ($string_id) {
-			$q->where('string_id', '=', $string_id);
+
+		$courses = Course::whereHas('sections', function($q) use ($section_id, $semester) {
+			if (!is_null($section_id))
+				$q->where('string_id', '=', $section_id);
+			if (!is_null($semester))
+				$q->where('semester', '=', $semester);
 		})->paginate($coursesPerPage);
 
+		$section_name = is_null($section_id) ? null : Section::where('string_id', '=', $section_id)->firstOrFail()->name;
+
 		return View::make('courses.list', [
-			'courses'	=> $courses,
-			'section' => $section
+			'courses' => $courses,
+			'section' => $section_name
 		]);
 	}
 
 	public function sections() {
 		return View::make('courses.sections', [
 			'sections' => Section::get()
+		]);
+	}
+
+	public function sectionSemester($section_id) {
+		return View::make('courses.sectionSemester', [
+			'section' => Section::where('string_id', '=', $section_id)->firstOrFail(),
+			'semesters' => DB::table('course_section')->select('semester')->distinct()->get()
 		]);
 	}
 

@@ -22,7 +22,9 @@ Route::get('/students', 'StudentController@index');
 Route::get('/students/{id}', 'StudentController@show');
 
 Route::get('/sections', 'CourseController@sections');
-Route::get('/courses/{string_id}-{section}', 'CourseController@bySection');
+Route::get('/sections/{section_id}', 'CourseController@sectionSemester');
+// Route::get('/courses', 'CourseController@list');
+Route::get('/courses/{section_id?}/{semester?}', 'CourseController@listBySectionSemester');
 Route::get('/course/{slug}-{id}', 'CourseController@show');
 Route::get('/teacher/{slug}-{id}', 'CourseController@showTeacher');
 

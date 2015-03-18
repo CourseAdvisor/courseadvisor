@@ -12,9 +12,8 @@
         <div class="list-group" id="course_list">
         @foreach($sections as $section)
 
-          <a href="{{{ action('CourseController@bySection', [
-            'section' => $section['name'],
-            'string_id' => $section['string_id']
+          <a href="{{{ action('CourseController@sectionSemester', [
+            'section_id' => $section['string_id']
           ]) }}}" class="list-group-item">
             <h3 class="pull-right">{{{ $section['string_id'] }}}</h3>
             <h2>{{{ $section['name'] }}}</h2>
