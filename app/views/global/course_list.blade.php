@@ -23,7 +23,7 @@
           @include('global.starbar', [
             'grade' => $course->avg_overall_grade,
             'disabled' => $reviewsCount == 0,
-            'comment_unsafe' => $reviewsCount.' <i class="fa fa-bookmark"></i>'
+            'comment_unsafe' => $reviewsCount.' <i class="fa fa-comments"></i>'
           ])
         </div>
         <hr class="nomargin">

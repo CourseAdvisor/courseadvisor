@@ -18,7 +18,7 @@ parameters:
   }
 ?>
 
-<div class="starbar pull-left{{{ isset($disabled) && $disabled == TRUE ? ' disabled' : '' }}}" >
+<div class="starbar pull-left {{{ isset($disabled) && $disabled == TRUE ? 'disabled' : '' }}}" >
 @if(isset($compact) && $compact == TRUE)
   <span class="fa-stack">
     @if($grade >= 3.5)
@@ -47,5 +47,5 @@ parameters:
 </div>
 
 @if(isset($comment_unsafe))
-  <span class="starbar-comment">{{ $comment_unsafe }}</span>
+  <span class="starbar-comment {{{ isset($disabled) && $disabled == TRUE ? 'disabled' : '' }}}">{{ $comment_unsafe }}</span>
 @endif
