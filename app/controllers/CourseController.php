@@ -28,7 +28,7 @@ class CourseController extends Controller {
 	public function sectionSemester($section_id) {
 		return View::make('courses.sectionSemester', [
 			'section' => Section::where('string_id', '=', $section_id)->firstOrFail(),
-			'semesters' => DB::table('course_section')->select('semester')->distinct()->get()
+			'semesters' => DB::table('course_section')->select('semester')->distinct()->orderBy('semester')->get()
 		]);
 	}
 
