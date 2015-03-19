@@ -14,7 +14,7 @@
 		{{--
 			The 'advanced filters' panel is expanded only if a filter has been applied
 		--}}
-		<div class="container collapse {{{ $was_filtered ? 'in' : '' }}}" id="advancedFilters">
+		<div class="well well-lg collapse {{{ $was_filtered ? 'in' : '' }}}" id="advancedFilters">
 			<form action="{{{ Request::URL() }}}" method="GET">
 			  <input type="hidden" name="q" value="{{{ Input::get('q') }}}" />
 	  		  <div class="form-group">
