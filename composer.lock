@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a0be57a9a4c69f62d57b0c25c57e8658",
+    "hash": "6c4c96102154294a78edc3766ef01386",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -169,6 +169,99 @@
                 "preload"
             ],
             "time": "2014-03-12 00:05:31"
+        },
+        {
+            "name": "creitive/breadcrumbs",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/creitive/breadcrumbs.git",
+                "reference": "c85a23b54c3fb85a607dfcf6970046170413708e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/creitive/breadcrumbs/zipball/c85a23b54c3fb85a607dfcf6970046170413708e",
+                "reference": "c85a23b54c3fb85a607dfcf6970046170413708e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.4",
+                "symfony/css-selector": "~2.0",
+                "symfony/dom-crawler": "~2.0",
+                "way/laravel-test-helpers": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Creitive\\Breadcrumbs\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT License"
+            ],
+            "authors": [
+                {
+                    "name": "Luka Macun",
+                    "email": "luka.macun@creitive.rs"
+                },
+                {
+                    "name": "Miloš Levačić",
+                    "email": "milos.levacic@creitive.rs"
+                }
+            ],
+            "description": "Simple breadcrumbs class",
+            "homepage": "https://github.com/creitive/breadcrumbs",
+            "keywords": [
+                "breadcrumbs"
+            ],
+            "time": "2015-03-07 18:16:10"
+        },
+        {
+            "name": "creitive/laravel4-breadcrumbs",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/creitive/laravel4-breadcrumbs.git",
+                "reference": "47896c94c0bb043d48371e315aafe9d8204a895a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/creitive/laravel4-breadcrumbs/zipball/47896c94c0bb043d48371e315aafe9d8204a895a",
+                "reference": "47896c94c0bb043d48371e315aafe9d8204a895a",
+                "shasum": ""
+            },
+            "require": {
+                "creitive/breadcrumbs": "~2.0",
+                "illuminate/support": "4.x",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Creitive\\Breadcrumbs\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT License"
+            ],
+            "authors": [
+                {
+                    "name": "Miloš Levačić",
+                    "email": "milos.levacic@creitive.rs"
+                }
+            ],
+            "description": "Breadcrumbs integration for Laravel 4",
+            "homepage": "https://github.com/creitive/laravel4-breadcrumbs",
+            "keywords": [
+                "breadcrumbs",
+                "laravel"
+            ],
+            "time": "2015-03-07 18:33:15"
         },
         {
             "name": "d11wtq/boris",
