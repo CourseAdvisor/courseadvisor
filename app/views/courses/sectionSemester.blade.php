@@ -25,7 +25,8 @@
 
         <div class="list-group">
           <a href="{{{ action('CourseController@listBySectionSemester', [
-            'section_id' => $section['string_id']
+            'section_id' => $section['string_id'],
+            'semester' => 'ALL'
           ]) }}}" class="list-group-item">
             <h3>All semesters</h3>
           </a>

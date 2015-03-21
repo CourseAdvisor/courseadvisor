@@ -14,7 +14,7 @@ class CourseController extends BaseController {
 		$courses = Course::whereHas('sections', function($q) use ($section_id, $semester) {
 			if (!is_null($section_id))
 				$q->where('string_id', '=', $section_id);
-			if (!is_null($semester))
+			if (!is_null($semester) && $semester != 'ALL')
 				$q->where('semester', '=', $semester);
 		})->paginate($coursesPerPage);
 
@@ -25,7 +25,11 @@ class CourseController extends BaseController {
 			]);
 
 			if (!is_null($semester)) {
-				$this->addCrumb(Route::current()->getActionName(), $semester, Route::current()->parameters());
+				if ($semester == 'ALL') {
+					$this->addCrumb(Route::current()->getActionName(), 'All semesters', Route::current()->parameters());
+				} else {
+					$this->addCrumb(Route::current()->getActionName(), $semester, Route::current()->parameters());
+				}
 			}
 		}
 

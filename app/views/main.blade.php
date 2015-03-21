@@ -58,6 +58,7 @@
       <section class="row">
         <div class="col-sm-12">
           <div class="alert alert-{{{ Session::get('message')[0] }}}" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
             {{{ Session::get('message')[1] }}}
           </div>
         </div>
