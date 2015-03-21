@@ -4,6 +4,7 @@
 @section('content')
 
 <div class="container">
+  {{ Breadcrumbs::render() }}
   <section class="row">
     <div class="col-xs-12">
       <div class="page">

@@ -131,6 +131,7 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
+		'Creitive\Breadcrumbs\BreadcrumbsServiceProvider',
 	),
 
 	/*
@@ -201,7 +202,7 @@ return array(
 		'URL'               => 'Illuminate\Support\Facades\URL',
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
-
+		'Breadcrumbs' 		=> 'Creitive\Breadcrumbs\Facades\Breadcrumbs',
 	),
 
 );

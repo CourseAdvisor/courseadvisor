@@ -151,9 +151,11 @@ nav {
 // Containers =================================================================
 .page {
     background-color: white;
+    margin: 0;
     margin-top: 15px;
     box-shadow: 0px 0px 3px rgba(211, 209, 209, 0.94);
     padding: 15px 45px;
+    border-radius: 0;
 
     @media (max-width: @screen-sm-min) {
         padding: 5px 10px;
@@ -164,6 +166,11 @@ nav {
             margin-right: 0;
         }
     }
+}
+
+.breadcrumb:extend(.page) {
+    padding: 10px;
+    padding-left: 15px;
 }
 
 .list-group {

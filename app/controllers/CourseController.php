@@ -1,8 +1,15 @@
 <?php
-class CourseController extends Controller {
+class CourseController extends BaseController {
+
+	public function __construct() {
+		parent::__construct();
+		$this->addCrumb('CourseController@sections', 'Courses');
+	}
 
 	public function listBySectionSemester($section_id = null, $semester = null) {
+
 		$coursesPerPage = Config::get('app.nbCoursesPerPage');
+		$section_name = null;
 
 		$courses = Course::whereHas('sections', function($q) use ($section_id, $semester) {
 			if (!is_null($section_id))
@@ -11,7 +18,16 @@ class CourseController extends Controller {
 				$q->where('semester', '=', $semester);
 		})->paginate($coursesPerPage);
 
-		$section_name = is_null($section_id) ? null : Section::where('string_id', '=', $section_id)->firstOrFail()->name;
+		if (!is_null($section_id)) {
+			$section_name = Section::where('string_id', '=', $section_id)->firstOrFail()->name;
+			$this->addCrumb('CourseController@sectionSemester', ucfirst($section_name), [
+				'section_id' => $section_id
+			]);
+
+			if (!is_null($semester)) {
+				$this->addCrumb(Route::current()->getActionName(), $semester, Route::current()->parameters());
+			}
+		}
 
 		return View::make('courses.list', [
 			'courses' => $courses,
@@ -26,8 +42,14 @@ class CourseController extends Controller {
 	}
 
 	public function sectionSemester($section_id) {
+		$section = Section::where('string_id', '=', $section_id)->firstOrFail();
+
+		$this->addCrumb('CourseController@sectionSemester', ucfirst($section->name), [
+			'section_id' => $section->name
+		]);
+
 		return View::make('courses.sectionSemester', [
-			'section' => Section::where('string_id', '=', $section_id)->firstOrFail(),
+			'section' => $section,
 			'semesters' => DB::table('course_section')->select('semester')->distinct()->orderBy('semester')->get()
 		]);
 	}
@@ -45,6 +67,8 @@ class CourseController extends Controller {
 
 	public function show($slug, $id) {
 		$course = Course::with('teacher')->findOrFail($id);
+
+		$this->addCrumb(Route::current()->getActionName(), $course->name, Route::current()->parameters());
 
 		$hasAlreadyReviewed = false;
 		if(Tequila::isLoggedIn()) {
