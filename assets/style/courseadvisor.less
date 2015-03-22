@@ -150,6 +150,45 @@ nav {
 
 // Indicators =================================================================
 
+.difficulty-bar {
+    width: 50px;
+    height: 10px;
+    border-radius: 6px;
+    border: 1px black solid;
+    overflow: hidden;
+
+    & > .fill {
+        height: 100%;
+    }
+    &.difficulty-hard > .fill {
+        background-color: #ed1f1f;
+        width: 90%;
+    }
+
+    &.difficulty-medium > .fill {
+        background-color: #eda21f;
+        width: 50%;
+    }
+
+    &.difficulty-easy > .fill {
+        background-color: #47a025;
+        width: 20%;
+    }
+
+    &.disabled {
+        background-color: @gray-lighter;
+        border-color: @gray;
+
+        & > .fill {
+            width: 0;
+        }
+    }
+}
+
+dd > .difficulty-bar {
+    margin-top: 8px;
+}
+
 .alert {
     margin-top: 20px;
     margin-bottom: 0px;

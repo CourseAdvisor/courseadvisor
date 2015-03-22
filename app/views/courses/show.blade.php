@@ -22,7 +22,9 @@
       @endif
       <div class="clearfix"></div>
       <dl class="dl-horizontal course-attrs">
-        <dt>Difficulty</dt><dd>Todo</dd>
+        <dt>Difficulty</dt><dd>
+          @include('global.difficulty_bar', ['difficulty' => $course->avg_difficulty])
+        </dd>
         <dt>Teacher</dt><dd><a href="{{{ action('CourseController@showTeacher', [
                 'id' => $course->teacher['id'],
                 'slug' => Str::slug($course->teacher->fullname)
@@ -49,7 +51,6 @@
         <div class="row">
           <div class="col-xs-6 col-xs-offset-1 col-sm-offset-0">
             <h2>Distribution</h2>
-            {{-- TODO --}}
             <dl class="course-stats dl-horizontal">
               <dt>Excellent</dt>
               <dd>

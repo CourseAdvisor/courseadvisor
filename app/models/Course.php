@@ -38,6 +38,7 @@ class Course extends Eloquent {
 		$sql .= ", AVG(lectures_grade) as lectures";
 		$sql .= ", AVG(exercises_grade) as exercises";
 		$sql .= ", AVG(content_grade) as content";
+		$sql .= ", AVG(difficulty) as difficulty";
 
 		$averages = DB::table('reviews')
 					->select(DB::raw($sql))
@@ -47,6 +48,7 @@ class Course extends Eloquent {
 		$this->avg_lectures_grade = $averages->lectures;
 		$this->avg_exercises_grade = $averages->exercises;
 		$this->avg_content_grade = $averages->content;
+		$this->avg_difficulty = $averages->difficulty;
 
 		$this->save();
 	}
