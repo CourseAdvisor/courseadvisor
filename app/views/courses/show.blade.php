@@ -163,7 +163,7 @@
                     </a>
                   @endif
             	  </div>
-            	  <p>{{{ $review->comment }}}</p>
+            	  <p>{{ nl2br(e($review->comment)) }}</p>
             	</div>
             @endfor
           </div>
