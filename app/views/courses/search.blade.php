@@ -20,7 +20,7 @@
 	  		  <div class="form-group">
 	  		    <div class="checkbox">
 	  		  	  <label>
-	  		  	    <input type="checkbox" value="true" name="only_reviewed" {{{ Input::get('only_reviewed') ? 'checked' : '' }}} >
+	  		  	    <input type="checkbox" value="1" name="only_reviewed" {{{ Input::get('only_reviewed') ? 'checked' : '' }}} >
 	  		  	      Show only courses that have at least one review
 		  	  	  </label>
 		  	  	</div>
@@ -30,7 +30,13 @@
 		  		@foreach($sections as $section)
 				<div class="checkbox">
 	  		  	  <label>
-	  		  	    <input type="checkbox" value="true" {{{ in_array($section->id, $sectionIds) || empty($sectionIds) ? 'checked' : '' }}} name="sections[{{{ $section->id }}}]">
+	  		  	    <input type="checkbox" value="true"
+	  		  	    	{{{
+	  		  	    	in_array($section->id, $selected_sections) || empty($selected_sections) ?
+	  		  	    		'checked'
+	  		  	    		: ''
+	  		  	    	}}}
+	  		  	    	name="sections[{{{ $section->id }}}]">
 						{{{ $section->name }}}
 		  	  	  </label>
 		  	  	</div>
@@ -43,6 +49,7 @@
 
 		@include('global.course_list', [
 			'courses' => $courses,
+			'paginator' => $paginator,
 			'pagination_links_appendings' 	=> Input::all()
 		])
 
