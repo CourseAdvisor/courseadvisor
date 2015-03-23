@@ -11,7 +11,7 @@ class CourseController extends BaseController {
 		$coursesPerPage = Config::get('app.nbCoursesPerPage');
 		$section_name = null;
 
-		$courses = Course::whereHas('sections', function($q) use ($section_id, $semester) {
+		$courses = Course::with('sections', 'teacher')->whereHas('sections', function($q) use ($section_id, $semester) {
 			if (!is_null($section_id))
 				$q->where('string_id', '=', $section_id);
 			if (!is_null($semester) && $semester != 'ALL')
@@ -70,7 +70,7 @@ class CourseController extends BaseController {
 	}
 
 	public function show($slug, $id) {
-		$course = Course::with('teacher')->findOrFail($id);
+		$course = Course::with('teacher', 'sections')->findOrFail($id);
 
 		$this->addCrumb(Route::current()->getActionName(), $course->name, Route::current()->parameters());
 
@@ -107,12 +107,14 @@ class CourseController extends BaseController {
 	 *	Shows a teacher's courses and maybe some stats for that teacher
 	 */
 	public function showTeacher($slug, $id) {
-		$teacher = Teacher::with('courses')->findOrFail($id);
+
+		$coursesPerPage = Config::get('app.nbCoursesPerPage');
+		$teacher = Teacher::findOrFail($id);
 
 		return View::make('courses.teacher', [
 			'slug' => $slug,
 			'teacher' => $teacher,
-			'courses' => $teacher->courses
+			'courses' => $teacher->courses()->paginate($coursesPerPage)
 		]);
 	}
 
