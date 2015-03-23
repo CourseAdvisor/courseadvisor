@@ -6,7 +6,7 @@ class CourseController extends BaseController {
 		$this->addCrumb('CourseController@sections', 'Courses');
 	}
 
-	public function listBySectionSemester($section_id = null, $semester = null) {
+	public function listBySectionSemester($section_id, $semester) {
 
 		$coursesPerPage = Config::get('app.nbCoursesPerPage');
 		$section_name = null;
@@ -18,22 +18,19 @@ class CourseController extends BaseController {
 				$q->where('semester', '=', $semester);
 		})->paginate($coursesPerPage);
 
-		if (!is_null($section_id)) {
-			$section_name = Section::where('string_id', '=', $section_id)->firstOrFail()->name;
-			$this->addCrumb('CourseController@sectionSemester', ucfirst($section_name), [
-				'section_id' => $section_id
-			]);
+		$section_name = Section::where('string_id', '=', $section_id)->firstOrFail()->name;
+		$this->addCrumb('CourseController@sectionSemester', ucfirst($section_name), [
+			'section_id' => $section_id
+		]);
 
-			if (!is_null($semester)) {
-				if ($semester == 'ALL') {
-					$this->addCrumb(Route::current()->getActionName(), 'All semesters', Route::current()->parameters());
-				} else {
-					$this->addCrumb(Route::current()->getActionName(), $semester, Route::current()->parameters());
-				}
-			}
+		if ($semester == 'ALL') {
+			$this->addCrumb(Route::current()->getActionName(), 'All semesters', Route::current()->parameters());
+		} else {
+			$this->addCrumb(Route::current()->getActionName(), $semester, Route::current()->parameters());
 		}
 
 		return View::make('courses.list', [
+			'page_title' => $section_name.' &ndash; '.$semester,
 			'courses' => $courses,
 			'section' => $section_name
 		]);
@@ -41,6 +38,7 @@ class CourseController extends BaseController {
 
 	public function sections() {
 		return View::make('courses.sections', [
+			'page_title' => 'Sections',
 			'sections' => Section::get()
 		]);
 	}
@@ -53,6 +51,7 @@ class CourseController extends BaseController {
 		]);
 
 		return View::make('courses.sectionSemester', [
+			'page_title' => $section->name,
 			'section' => $section,
 			'semesters' => DB::table('course_section')->select('semester')->distinct()->orderBy('semester')->get()
 		]);
@@ -94,6 +93,7 @@ class CourseController extends BaseController {
 		}
 
 		return View::make('courses.show', [
+			'page_title' => $course->name,
 			'course' => $course,
 			'slug' 	=> $slug,
 			'distribution' => $distribution,
@@ -112,6 +112,7 @@ class CourseController extends BaseController {
 		$teacher = Teacher::findOrFail($id);
 
 		return View::make('courses.teacher', [
+			'page_title' => $teacher->fullname,
 			'slug' => $slug,
 			'teacher' => $teacher,
 			'courses' => $teacher->courses()->paginate($coursesPerPage)

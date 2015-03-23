@@ -9,4 +9,8 @@ class Teacher extends Eloquent {
   public function getFullnameAttribute() {
     return $this->firstname . " " . $this->lastname;
   }
+
+  public function getPeoplePageLinkAttribute() {
+    return 'http://people.epfl.ch/'.$this->sciper;
+  }
 }

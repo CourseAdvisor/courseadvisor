@@ -5,7 +5,7 @@
 
     <title>
     @section('page_title')
-    Course Advisor
+    {{{ isset($page_title) ? $page_title.' | ' : '' }}} Course Advisor
     @show
     </title>
 
