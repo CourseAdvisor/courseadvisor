@@ -3,6 +3,7 @@
 @section('content')
 
 <div class="container">
+  {{ Breadcrumbs::render() }}
   <section class="row">
     <div class="col-xs-12">
       <div class="page">
@@ -21,7 +22,9 @@
       @endif
       <div class="clearfix"></div>
       <dl class="dl-horizontal course-attrs">
-        <dt>Difficulty</dt><dd>Todo</dd>
+        <dt>Difficulty</dt><dd>
+          @include('global.difficulty_bar', ['difficulty' => $course->avg_difficulty])
+        </dd>
         <dt>Teacher</dt><dd><a href="{{{ action('CourseController@showTeacher', [
                 'id' => $course->teacher['id'],
                 'slug' => Str::slug($course->teacher->fullname)
@@ -29,7 +32,12 @@
         <dt>Sections</dt>
         <dd>
         	@foreach($course->sections as $section)
-        		<a href="#">{{{ $section->string_id }}}-{{{ $section->pivot->semester }}}</a>
+        		<a href="{{{ action('CourseController@listBySectionSemester', [
+              'section_id' => $section->string_id,
+              'semester' => $section->pivot->semester
+            ])}}}">
+              {{{ $section->string_id }}}-{{{ $section->pivot->semester }}}
+            </a>
         	@endforeach
         </dd>
       </dl>
@@ -43,7 +51,6 @@
         <div class="row">
           <div class="col-xs-6 col-xs-offset-1 col-sm-offset-0">
             <h2>Distribution</h2>
-            {{-- TODO --}}
             <dl class="course-stats dl-horizontal">
               <dt>Excellent</dt>
               <dd>
@@ -157,7 +164,7 @@
                     </a>
                   @endif
             	  </div>
-            	  <p>{{{ $review->comment }}}</p>
+            	  <p>{{ nl2br(e($review->comment)) }}</p>
             	</div>
             @endfor
           </div>
@@ -182,15 +189,6 @@
           </div>
         @else
 
-          @if($errors->any())
-            <div class="alert alert-danger" role="alert">
-              <p>Some errors happened.</p>
-              <ul>
-              @foreach($errors->all() as $message)
-                <li>{{ $message }}</li>
-              @endforeach
-            </div>
-          @endif
 
           {{ Form::open([
             'class' => 'row form-horizontal',
@@ -199,12 +197,13 @@
 
           <div class="col-md-8">
             <p>Take a couple of minutes to give your opinion on this course.</p>
-            <div class="form-group">
+            <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
               <input type="text" class="form-control" name="title" placeholder="Overall impression" value="{{ Input::old('title') }}">
+              {{ $errors->first('title', '<span class="help-block">:message</span>') }}
             </div>
 
             {{-- mobile friendly difficulty picker --}}
-            <div class="form-group visible-xs">
+            <div class="form-group visible-xs {{ $errors->has('difficulty_mobile') ? 'has-error' : '' }}">
               <label for="difficulty_mobile" class="control-label">Difficulty</label>
               <select id="difficulty-mobile" name="difficulty_mobile" class="form-control">
                 <option value="1" {{ Input::old('difficulty') == 1 ? 'selected' : ''}}>free</option>
@@ -214,10 +213,11 @@
                 <option value="5" {{ Input::old('difficulty') == 5 ? 'selected' : ''}}>extreme</option>
                 <option value="0" {{ Input::old('difficulty') == 0 ? 'selected' : ''}}>N/A</option>
               </select>
+              {{ $errors->first('difficulty_mobile', '<span class="help-block">:message</span>') }}
             </div>
 
             {{-- desktop difficulty picker --}}
-            <div class="form-group hidden-xs">
+            <div class="form-group hidden-xs {{ $errors->has('difficulty') ? 'has-error' : '' }}">
               <label class="col-sm-2 control-label">Difficulty</label>
               <div class="col-sm-10">
                 <label class="radio-inline">
@@ -240,6 +240,7 @@
                   <input type="radio" name="difficulty" id="difficulty-0" value="0" {{ Input::old('difficulty') == 0 ? 'checked' : ''}}> <span class="hint">N/A</span>
                 </label>
               </div>
+              {{ $errors->first('difficulty', '<span class="help-block">:message</span>') }}
             </div>
           </div>
           <div class="col-md-4">
@@ -263,10 +264,14 @@
                 data-content="{{{ Config::get('content.reviews.tip_content_grade') }}}"></div>
               </dd>
             </dl>
+            @if($errors->has('lectures_grade') OR $errors->has('exercises_grade') OR $errors->has('content_grade'))
+              <span class="error">Please grade all aspects of this course</span>
+            @endif
           </div>
           <div class="col-sm-10">
-            <div class="form-group">
+            <div class="form-group {{ $errors->has('comment') ? 'has-error' : '' }}">
               <textarea class="form-control" rows="3" name="comment" placeholder="Was this course useful to you? Did you find it interesting? Express your own opinion here without thinking about how others feel about this course.">{{ Input::old('comment') }}</textarea>
+              {{ $errors->first('comment', '<span class="help-block">:message</span>') }}
             </div>
           </div>
           <div class="col-sm-12">
@@ -289,6 +294,15 @@
             <p class="hint">Make sure that you understand and agree with our <a href="#">review policy</a> before submitting your review.</p>
           </div>
           {{ Form::close() }}
+
+          {{-- scrolls to form in case of an error --}}
+          @if($errors->any())
+            <script type="text/javascript">
+              document.location.hash = 'my-review';
+            </script>
+          @endif
+
+
         @endif
       </div> {{-- page --}}
     </div>

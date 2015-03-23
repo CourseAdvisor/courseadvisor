@@ -163,11 +163,22 @@ class DumpCourses extends Command {
 				$data = [];
 				$data['name'] = "".$course->title;
 				$prof = $course->classes->class[0]->instructors->professors;
-				$data['teacher'] = [
-					'firstname' => $prof->{'first-name'},
-					'lastname' => $prof->{'last-name'},
-					'sciper' => $prof->{'sciper'}
-				];
+
+				if (!isset($prof->{'first-name'}) || is_null($prof->{'first-name'})) {
+					// In case isa does not provide us with a teacher, we use the "prof divers"
+					// teacher that comes with some courses
+					$data['teacher'] = [
+						'firstname' => '*',
+						'lastname' => 'Profs divers',
+						'sciper' => '126096'
+					];
+				} else {
+					$data['teacher'] = [
+						'firstname' => $prof->{'first-name'},
+						'lastname' => $prof->{'last-name'},
+						'sciper' => $prof->{'sciper'}
+					];
+				}
 				$data['string_id'] = "".$course->code;
 
 

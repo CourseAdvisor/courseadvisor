@@ -18,12 +18,12 @@ parameters:
   }
 ?>
 
-<div class="starbar pull-left{{{ isset($disabled) && $disabled == TRUE ? ' disabled' : '' }}}" >
+<div class="starbar pull-left {{{ isset($disabled) && $disabled == TRUE ? 'disabled' : '' }}}" >
 @if(isset($compact) && $compact == TRUE)
   <span class="fa-stack">
-    @if($grade >= 4)
+    @if($grade >= 3.5)
       <i class="fa fa-star fa-stack-2x filling"></i>
-    @elseif($grade >= 2.5)
+    @elseif($grade > 2)
       <i class="fa fa-star-half-o fa-stack-2x filling"></i>
     @else
       <i class="fa fa-star-o fa-stack-2x filling"></i>
@@ -47,5 +47,5 @@ parameters:
 </div>
 
 @if(isset($comment_unsafe))
-  <span class="starbar-comment">{{ $comment_unsafe }}</span>
+  <span class="starbar-comment {{{ isset($disabled) && $disabled == TRUE ? 'disabled' : '' }}}">{{ $comment_unsafe }}</span>
 @endif

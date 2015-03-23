@@ -1,0 +1,393 @@
+// CourseAdvisor style
+// -----------------------------------------------------
+@import "../bower_components/bootstrap/less/bootstrap.less";
+@import "variables.less";
+
+// Layout =====================================================================
+
+html {
+    height: 100%;
+}
+
+body {
+    padding-bottom: 280px !important; /* important: prevents debugbar from overriding */
+    min-height: 100%;
+    position: relative;
+}
+
+footer {
+    background-color: #b7b7b7;
+    padding-top: 40px;
+    margin-top: 35px;
+    height: 240px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+
+    ul {
+        list-style-type: none;
+        padding-left: 10px;
+        & > li > a {
+            color: @text-color;
+            font-size: 15px;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+
+    .copyright {
+        margin-top: 30px;
+        color: @hint-color;
+        font-style: italic;
+        font-size: 12px;
+    }
+
+    .footnote {
+        margin-top: 50px;
+        line-height: 30px;
+        color: @hint-color;
+    }
+}
+
+// Navbar =====================================================================
+
+.navbar {
+
+    margin-bottom: 0;
+
+    .navbar-brand {
+        font-size: 22px;
+    }
+    .nav.navbar-nav {
+        text-transform: uppercase;
+
+        &.main-nav {
+            @media (min-width: @screen-sm-min) {
+                li.active {
+                    border-bottom: 3px @brand-primary solid;
+                    & > * {
+                        padding-bottom: (@navbar-padding-vertical - 3);
+                    }
+
+                    &:hover {
+                        border-bottom: 3px darken(@brand-primary, 8%) solid;
+                    }
+                }
+                li:hover {
+                    border-bottom: 3px @gray-lighter solid;
+                    & > * {
+                        padding-bottom: (@navbar-padding-vertical - 3);
+                    }
+                }
+            }
+        }
+
+        .sep {
+            width: 1px;
+            background-color: #999;
+            height: 12px;
+            margin: 19px 10px;
+
+            @media (max-width: @screen-sm-min) {
+                display: none;
+            }
+        }
+    }
+
+    @media (min-width: @screen-sm-min) {
+        .nav {
+            padding-left: 100px;
+        }
+    }
+}
+
+
+
+// Buttons ====================================================================
+
+// Typography =================================================================
+h1 {
+    font-weight: bold;
+}
+
+h2 {
+    color: @gray-darker;
+    text-transform: uppercase;
+}
+
+h3 {
+    color: @gray;
+}
+
+.logo-course {
+    color: @brand-primary;
+}
+
+.hint {
+    color: @hint-color;
+}
+p.hint {
+    margin-top: 10px;
+}
+
+.error {
+    color: @brand-danger;
+}
+
+// Tables =====================================================================
+
+// Forms ======================================================================
+
+.form-control {
+    box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.2);
+}
+// Navs =======================================================================
+
+nav {
+    text-align: center;
+}
+
+// Indicators =================================================================
+
+.difficulty-bar {
+    width: 50px;
+    height: 10px;
+    border-radius: 6px;
+    border: 1px black solid;
+    overflow: hidden;
+
+    & > .fill {
+        height: 100%;
+    }
+    &.difficulty-hard > .fill {
+        background-color: #ed1f1f;
+        width: 90%;
+    }
+
+    &.difficulty-medium > .fill {
+        background-color: #eda21f;
+        width: 50%;
+    }
+
+    &.difficulty-easy > .fill {
+        background-color: #47a025;
+        width: 20%;
+    }
+
+    &.disabled {
+        background-color: @gray-lighter;
+        border-color: @gray;
+
+        & > .fill {
+            width: 0;
+        }
+    }
+}
+
+dd > .difficulty-bar {
+    margin-top: 8px;
+}
+
+.alert {
+    margin-top: 20px;
+    margin-bottom: 0px;
+}
+
+// Progress bars ==============================================================
+
+// Containers =================================================================
+.page {
+    background-color: white;
+    margin: 0;
+    margin-top: 15px;
+    box-shadow: 0px 0px 3px rgba(211, 209, 209, 0.94);
+    padding: 15px 45px;
+    border-radius: 0;
+
+    @media (max-width: @screen-sm-min) {
+        padding: 5px 10px;
+        margin: 10 -10px;
+
+        .form-horizontal .form-group {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    }
+}
+
+.breadcrumb:extend(.page) {
+    padding: 10px;
+    padding-left: 15px;
+}
+
+.list-group {
+    .list-group-item {
+
+        h2 {
+            margin-top: 0px;
+            margin-bottom: 0px
+        }
+
+        h3 {
+            margin-top: 4px;
+            margin-bottom: 0px
+        }
+        padding: 6px 15px;
+    }
+}
+
+dl {
+    margin-bottom: 10px;
+    dt {
+        font-size: 18px;
+        color: @gray;
+    }
+    dd {
+        font-size: 16px;
+    }
+}
+
+
+// Misc
+.clickable {
+    cursor: pointer;
+}
+.disabled {
+    color: @gray-light;
+}
+
+// starbar
+.filling {
+    color: #f5df41;
+}
+.starbar {
+    font-size: 13px;
+
+    &.disabled {
+        color: @gray-lighter;
+    }
+}
+.starbar-comment {
+    font-size: 18px;
+    margin-left: 8px;
+    // min-width: 35px;
+    display: block;
+    float: left;
+    text-align: right;
+}
+
+
+.nomargin {
+    margin: 0;
+}
+
+hr {
+    clear: both;
+}
+// Application specific
+.sections {
+    color: @gray-light;
+    font-size: 15px;
+}
+
+.course-attrs {
+    margin-top: 10px;
+    dt {
+        text-align: left;
+    }
+}
+
+.reviews {
+    padding-top: 20px;
+}
+
+.review {
+    .review-author {
+        padding-left: 15px;
+        margin-bottom: 5px;
+    }
+    // border-bottom: 1px @hr-border solid;
+    margin-bottom: 10px;
+}
+
+.formula {
+    font-family: Georgia, serif;
+    color: @gray-light;
+    margin-left: 40px;
+}
+
+dl.course-stats {
+    color: @brand-primary;
+    dt, dd {
+        color: @brand-primary;
+        font-size: @font-size-base;
+    }
+    .progress {
+        width: 120px;
+        height: 10px;
+        margin: 5px 8px 0 0;
+    }
+}
+
+
+// Homepage  ==================================================================
+
+#splash {
+    height: 600px;
+
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    // Serve an adapted bg image
+    @media (max-width: @screen-xs-max) {
+        background-image: url('/img/background1-xs.jpg');
+    }
+    @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+        background-image: url('/img/background1-sm.jpg');
+    }
+    @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+        background-image: url('/img/background1-md.jpg');
+    }
+    @media (min-width: @screen-lg-min) {
+        background-image: url('/img/background1-lg.jpg');
+    }
+
+    text-align: center;
+    color: white;
+
+    strong {
+        color: @brand-primary;
+    }
+
+    .container {
+        max-width: 800px;
+    }
+
+    h1 {
+        font-size: 55px;
+        text-transform: uppercase;
+        margin-top: 0;
+        margin-bottom: 40px;
+    }
+
+    p {
+        font-size: 25px;
+        text-align: left;
+    }
+
+    .hero-search {
+        margin-top: 45px;
+        height: 120px;
+        padding-top: 40px;
+        background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,0.4) 28%,rgba(255,255,255,0.4) 72%,rgba(255,255,255,0) 100%); /* W3C */
+    }
+
+    .overlay {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        padding-top: 85px;
+    }
+}

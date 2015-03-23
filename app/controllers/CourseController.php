@@ -1,21 +1,60 @@
 <?php
-class CourseController extends Controller {
+class CourseController extends BaseController {
 
-	public function bySection($string_id, $section) {
+	public function __construct() {
+		parent::__construct();
+		$this->addCrumb('CourseController@sections', 'Courses');
+	}
+
+	public function listBySectionSemester($section_id = null, $semester = null) {
+
 		$coursesPerPage = Config::get('app.nbCoursesPerPage');
-		$courses = Course::whereHas('sections', function($q) use ($string_id) {
-			$q->where('string_id', '=', $string_id);
+		$section_name = null;
+
+		$courses = Course::whereHas('sections', function($q) use ($section_id, $semester) {
+			if (!is_null($section_id))
+				$q->where('string_id', '=', $section_id);
+			if (!is_null($semester) && $semester != 'ALL')
+				$q->where('semester', '=', $semester);
 		})->paginate($coursesPerPage);
 
+		if (!is_null($section_id)) {
+			$section_name = Section::where('string_id', '=', $section_id)->firstOrFail()->name;
+			$this->addCrumb('CourseController@sectionSemester', ucfirst($section_name), [
+				'section_id' => $section_id
+			]);
+
+			if (!is_null($semester)) {
+				if ($semester == 'ALL') {
+					$this->addCrumb(Route::current()->getActionName(), 'All semesters', Route::current()->parameters());
+				} else {
+					$this->addCrumb(Route::current()->getActionName(), $semester, Route::current()->parameters());
+				}
+			}
+		}
+
 		return View::make('courses.list', [
-			'courses'	=> $courses,
-			'section' => $section
+			'courses' => $courses,
+			'section' => $section_name
 		]);
 	}
 
 	public function sections() {
 		return View::make('courses.sections', [
 			'sections' => Section::get()
+		]);
+	}
+
+	public function sectionSemester($section_id) {
+		$section = Section::where('string_id', '=', $section_id)->firstOrFail();
+
+		$this->addCrumb('CourseController@sectionSemester', ucfirst($section->name), [
+			'section_id' => $section->name
+		]);
+
+		return View::make('courses.sectionSemester', [
+			'section' => $section,
+			'semesters' => DB::table('course_section')->select('semester')->distinct()->orderBy('semester')->get()
 		]);
 	}
 
@@ -32,6 +71,8 @@ class CourseController extends Controller {
 
 	public function show($slug, $id) {
 		$course = Course::with('teacher')->findOrFail($id);
+
+		$this->addCrumb(Route::current()->getActionName(), $course->name, Route::current()->parameters());
 
 		$hasAlreadyReviewed = false;
 		if(Tequila::isLoggedIn()) {
@@ -101,10 +142,14 @@ class CourseController extends Controller {
 		$newReview->student_id = $studentId;
 		$newReview->updateAverage();
 
+
 		// Check if we should use 'mobile_difficulty'
 		if(empty($newReview->difficulty)) {
 			$newReview->difficulty = Input::get('difficulty_mobile');
 		}
+		// difficulty 0 means N/A
+		if ($newReview->difficulty == 0)
+			unset($newReview->difficulty);
 
 		if(Input::get('anonymous') == true) {
 			$newReview->is_anonymous = 1;
