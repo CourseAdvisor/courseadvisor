@@ -1,27 +1,51 @@
-@extends('main')
-@section('content')
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
 
-<section id="splash">
-  <div class="overlay">
+    <title>CourseAdvisor &ndash; Review EPFL courses, for real!</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    {{ HTML::style("css/courseadvisor.css") }}
+    {{ HTML::style("css/font-awesome.min.css") }}
+  </head>
+  <body>
     <div class="container">
-      <h1>
-        Make the <strong>right</strong> decision
-      </h1>
-      <p>
-        On CourseAdvisor you benefit directly from past students feedbackto find the courses that are right for you.<br>
-        <br>
-        Lookup a course and find out what past students thought about it.
-      </p>
-      <div class="hero-search">
-        <div class="input-group input-group-lg">
-          <input type="text" class="form-control" placeholder="Search a course by title, field, teacher, ...">
-          <span class="input-group-btn">
-            <button class="btn btn-primary" type="button">Go!</button>
-          </span>
+      <a href="/" class="navbar-brand pull-left"><span class="logo-course">Course</span>Advisor</a>
+
+      <ul class="homepage-login pull-right">
+        <li><a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}">Log in</a></li>
+      </ul>
+    </div>
+    <section id="splash">
+      <div class="container">
+        <h1>Hi there!</h1>
+        <p>
+          Welcome to CourseAdvisor. Here you can choose your courses based on other students reviews.<br>
+          <br>
+          Lookup a course and find out what past students thought about it.
+        </p>
+        <div class="hero-search">
+          <div class="input-group input-group-lg">
+            <input type="text" class="form-control" placeholder="Search a course by title, field, teacher, ...">
+            <span class="input-group-btn">
+              <button class="btn btn-primary" type="button">Go!</button>
+            </span>
+          </div>
+        </div>
+        <p>
+          Or just browse the course catalogue
+        </p>
+        <div class="hero-browse">
+          <a href="{{{ action('CourseController@sections') }}}" class="btn btn-lg btn-primary"><i class="fa fa-book"></i> Browse courses</a>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-@stop
+    @include('footer')
+
+  </body>
+
+</html>
+
