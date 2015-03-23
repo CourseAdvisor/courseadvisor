@@ -7,6 +7,31 @@ class SearchController extends Controller {
 		}
 		$term = Input::get('q');
 		$nbPerPage = Config::get('app.searchNbCoursesPerPage');
+
+
+		// Get sections
+		$allSections = Section::all();
+		$selected_sections = [];
+		if (Input::has('sections')) {
+			$joined_selected_sections = Input::get('sections');
+			$selected_sections = explode("-", $joined_selected_sections);
+		}
+		else {
+			$joined_selected_sections = $allSections->reduce(function ($acc, $new) {
+				if (is_null($acc)) return $new->id;
+				return $acc . "-" . $new->id;
+			});
+		}
+
+		// Get student section
+		$student_section_id = -1;
+		if (Tequila::isLoggedIn()) {
+			$studentSectionSlug = StudentInfo::getSection();
+			$student_section_id = $allSections->first(function($i, $section) use($studentSectionSlug) {
+				return $section->string_id == $studentSectionSlug;
+			})->id;
+		}
+
 		$query = DB::table('courses')
 					->select(DB::raw('courses.name as name, courses.id as id'))
 					->addSelect(DB::raw('CONCAT(teachers.firstname, " ", teachers.lastname) as teacher_fullname'))
@@ -23,13 +48,11 @@ class SearchController extends Controller {
 			$query->whereExists(function ($query) {
 				$query->select(DB::raw(1))
 						->from('reviews')
-						->whereRaw('reviews.course_id=courses.id');
+						->whereRaw('reviews.course_id = courses.id');
 			});
 		}
 
-		$selected_sections = [];
 		if (Input::has('sections')) {
-			$selected_sections = array_keys(Input::get('sections'));
 			$query->whereIn('sections.id', $selected_sections);
 		}
 
@@ -58,13 +81,14 @@ class SearchController extends Controller {
 			unset($course['teacher_fullname']);
 		}
 
-
 		return View::make('courses.search', [
 			'paginator' => $paginated,
 			'courses' => $courses,
-			'sections' => Section::all(),
+			'sections' => $allSections,
+			'joined_selected_sections' => $joined_selected_sections,
 			'selected_sections' => $selected_sections,
-			'was_filtered' => Input::has('only_reviewed')
+			'was_filtered' => Input::has('only_reviewed'),
+			'student_section_id' => $student_section_id
 		]);
 	}
 }

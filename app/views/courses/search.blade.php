@@ -1,5 +1,9 @@
 @extends('main')
 
+@section('scripts')
+{{ HTML::script('js/search.js') }}
+@stop
+
 @section('content')
 
 <div class="container">
@@ -15,7 +19,7 @@
 			The 'advanced filters' panel is expanded only if a filter has been applied
 		--}}
 		<div class="well well-lg collapse {{{ $was_filtered ? 'in' : '' }}}" id="advancedFilters">
-			<form action="{{{ Request::URL() }}}" method="GET">
+			<form id="filters-form" action="{{{ Request::URL() }}}" method="GET">
 			  <input type="hidden" name="q" value="{{{ Input::get('q') }}}" />
 	  		  <div class="form-group">
 	  		    <div class="checkbox">
@@ -27,22 +31,39 @@
 	  		  </div>
 			  <fieldset>
 			  	<legend>Filter by section</legend>
-		  		@foreach($sections as $section)
-				<div class="checkbox">
-	  		  	  <label>
-	  		  	    <input type="checkbox" value="true"
-	  		  	    	{{{
-	  		  	    	in_array($section->id, $selected_sections) || empty($selected_sections) ?
-	  		  	    		'checked'
-	  		  	    		: ''
-	  		  	    	}}}
-	  		  	    	name="sections[{{{ $section->id }}}]">
-						{{{ $section->name }}}
-		  	  	  </label>
+		  	  	<div class="row">
+		  	  		@if(Tequila::isLoggedIn())
+		  	  			<a href="#" class="sections-check-mine">check mine</a> |
+		  	  		@endif
+		  			<a href="#" class="sections-check-all">check all</a> |
+		  			<a href="#" class="sections-uncheck-all">uncheck all</a>
 		  	  	</div>
+			  	<div class="row">
+			  		<input type="hidden" name="sections" id="sections-filter-list"
+			  			value="{{{ $joined_selected_sections }}}"
+			  		/>
+			  		@foreach($sections as $i => $section)
+					<label class="checkbox-inline col-lg-3 col-md-3" style="margin-left:0px;">
+		  		  	    <input type="checkbox" value="true" data-section-id="{{{ $section->id }}}" class="section-filter"
+		  		  	    	@if(in_array($section->id, $selected_sections) || empty($selected_sections))
+		  		  	    		checked
+		  		  	    	@endif
+
+		  		  	    	@if($section->id == $student_section_id)
+								data-is-student-section="1"
+		  		  	    	@endif
+		  		  	    	>
+							{{{ $section->name }}}
+			  	  	</label>
+			  	  	@if($i > 0 && $i % 5 == 0)
+						<br />
+			  	  	@endif
 		  	  	@endforeach
+		  	  	</div>
 		  		</fieldset>
-	  		  <button type="submit" class="btn btn-default">Apply</button>
+	  		  <div class="row" style="margin-top: 20px;">
+	  		  	<button type="submit" class="btn btn-default">Apply</button>
+	  		  </div>
 	  		</form>
 	  	</div>
 		</section>
@@ -50,7 +71,7 @@
 		@include('global.course_list', [
 			'courses' => $courses,
 			'paginator' => $paginator,
-			'pagination_links_appendings' 	=> Input::all()
+			'pagination_links_appendings' => Input::all()
 		])
 
 		@if(sizeof($courses) == 0)
