@@ -28,6 +28,12 @@
 	  		  	      Show only courses that have at least one review
 		  	  	  </label>
 		  	  	</div>
+	  		    <div class="checkbox">
+	  		  	  <label>
+	  		  	    <input type="checkbox" value="1" name="dont_match_teachers" {{{ Input::get('dont_match_teachers') ? 'checked' : '' }}} >
+	  		  	      Don't include courses where the teacher's name matches
+		  	  	  </label>
+		  	  	</div>
 	  		  </div>
 			  <fieldset>
 			  	<legend>Filter by section</legend>

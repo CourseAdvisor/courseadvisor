@@ -41,8 +41,18 @@ class SearchController extends Controller {
 					->addSelect(DB::raw('(select count(*) from reviews where course_id=courses.id) as reviewsCount'))
 					->leftJoin('course_section', 'course_section.course_id', '=', 'courses.id')
 					->leftJoin('sections', 'course_section.section_id', '=', 'sections.id')
-					->leftJoin('teachers', 'teachers.id', '=', 'courses.teacher_id')
-					->where('courses.name', 'LIKE', "%$term%"); // <-- Note : this is safe
+					->leftJoin('teachers', 'teachers.id', '=', 'courses.teacher_id');
+					//->where('courses.name', 'LIKE', "%$term%"); // <-- Note : this is safe
+
+		$query->where(function($q) use($term) {
+			$q->where('courses.name', 'LIKE', "%$term%"); // <-- Note : this is safe
+
+			if (!Input::has('dont_match_teachers')) {
+				$q->orWhereRaw('CONCAT(teachers.firstname, " ", teachers.lastname) LIKE ?', ["%$term%"]);
+				$q->orWhereRaw('teachers.firstname LIKE ?', ["%$term%"]);
+				$q->orWhereRaw('teachers.lastname LIKE ?', ["%$term%"]);
+			}
+		});
 
 		if (Input::has('only_reviewed')) {
 			$query->whereExists(function ($query) {
@@ -55,6 +65,7 @@ class SearchController extends Controller {
 		if (Input::has('sections')) {
 			$query->whereIn('sections.id', $selected_sections);
 		}
+
 
 		$query->groupBy('courses.id');
 

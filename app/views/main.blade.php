@@ -40,23 +40,48 @@
             <li><a href="./about.html">About</a></li>
           </ul>
 
+
           <ul class="nav navbar-nav navbar-right">
+            {{--<li>
+              <a href="#" id="search-icon"><i class="fa fa-2x fa-search"></i></a>
+            </li>--}}
+            @if(Tequila::isLoggedIn())
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="fa fa-user fa-2x"></i></a>
+               <ul class="dropdown-menu fa-ul" role="menu">
+                 <li><a href="#"><i class="fa fa-fw fa-user"></i> {{{ Tequila::get('firstname') }}}</a></li>
+                 <li><a href="{{{ action('AuthController@logout', ['next' => Request::url()]) }}}"><i class="fa fa-sign-out fa-fw"></i>  Log out</a></li>
+               </ul>
+            </li>
+            @else
+              <li><a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}">
+                <i class="fa fa-2x fa-sign-in" style="vertical-align:middle;"></i>
+                Tequila login
+              </a></li>
+            @endif
+          </ul>
+
+
+          {{--<form class="nav navbar-form navbar-right" style="display: none;" action="{{{ action('SearchController@search')}}}" method="GET" role="search" id="search-form">
+            <div class="input-group">
+                <input type="text" class="form-control input-sm" name="q" id="search-box" placeholder="Search courses" value="{{{ Input::get('q') }}}"/>
+                <span class="input-group-addon">
+                    <a class="fa fa-search" id="search-button" style="color: black;" href="#"></a>
+                </span>
+            </div>
+          </form>--}}
+
+
+
+          {{--<ul class="nav navbar-nav navbar-right">
             @if(Tequila::isLoggedIn())
               <li><a href="#">{{{ Tequila::get('firstname') }}}</a></li>
               <li><a href="{{{ action('AuthController@logout', ['next' => Request::url()]) }}}">Log out</a></li>
             @else
               <li><a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}">Log in</a></li>
             @endif
-          </ul>
+          </ul>--}}
 
-          <form class="navbar-form navbar-right" action="{{{ action('SearchController@search')}}}" method="GET" role="search" id="search-form">
-            <div class="input-group">
-                <input type="text" class="form-control input-sm" name="q" id="search-box" placeholder="Search courses" value="{{{ Input::get('q') }}}"/>
-                <span class="input-group-addon">
-                    <a class="fa fa-search" id="search-button" style="color: black;" href="#" onclick="document.getElementById('search-form').submit()"></a>
-                </span>
-            </div>
-          </form>
 
         </div>
       </div>
@@ -129,6 +154,13 @@
       // Initialize popovers
       var popovers = $("[data-toggle=popover]");
       popovers.popover();
+
+      $('#search-icon').click(function() {
+        $(this).fadeOut(function() {
+          $('#search-form').fadeIn();
+        });
+        return false;
+      });
     </script>
 
     @yield('scripts')
