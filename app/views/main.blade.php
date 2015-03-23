@@ -121,5 +121,8 @@
       var popovers = $("[data-toggle=popover]");
       popovers.popover();
     </script>
+
+    @yield('scripts')
+
   </body>
 </html>
