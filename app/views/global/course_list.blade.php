@@ -9,7 +9,7 @@
 --}}
 <div class="list-group" id="course_list">
 @foreach($courses as $course)
-  <?php $reviewsCount = $course->reviewsCount ?>
+  <?php $reviewsCount = $course['reviewsCount'] ?>
 
   <a href="{{{ action('CourseController@show', [
     'id' => $course['id'],
@@ -21,15 +21,15 @@
       <div class="pull-right hidden-xs hidden-sm">
         <div class="pull-right">
           @include('global.starbar', [
-            'grade' => $course->avg_overall_grade,
+            'grade' => $course['avg_overall_grade'],
             'disabled' => $reviewsCount == 0,
             'comment_unsafe' => $reviewsCount.' <i class="fa fa-comments"></i>'
           ])
         </div>
         <hr class="nomargin">
         <span class="sections pull-right">
-          @foreach($course->sections as $section)
-            {{{ $section->string_id }}}-{{{ $section->pivot->semester }}}
+          @foreach($course['sections'] as $section)
+            {{{ $section['string_id'] }}}-{{{ $section['semester'] ? $section['semester'] : $section->pivot->semester }}}
           @endforeach
         </span>
       </div>
@@ -37,7 +37,7 @@
       <!-- mobile only -->
       <div class="pull-right visible-xs visible-sm">
         @include('global.starbar', [
-          'grade' => $course->avg_overall_grade,
+          'grade' => $course['avg_overall_grade'],
           'disabled' => $reviewsCount == 0,
           'compact' => TRUE,
         ])
@@ -48,8 +48,8 @@
     <h3>{{{ $course['teacher']->fullname }}}</h3>
     <!-- except this -->
     <h4 class="sections visible-xs visible-sm">
-      @foreach($course->sections as $section)
-        {{{ $section->string_id }}}-{{{ $section->pivot->semester }}}
+      @foreach($course['sections'] as $section)
+        {{{ $section['string_id'] }}}-{{{ $section['semester'] ? $section['semester'] : $section->pivot->semester }}}
       @endforeach
     </h4>
 
