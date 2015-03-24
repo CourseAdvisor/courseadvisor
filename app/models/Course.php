@@ -10,6 +10,8 @@ class Course extends Eloquent {
 		'name', 'string_id', 'teacher_id'
 	];
 
+	protected $appends = ['reviewsCount'];
+
 	public function sections() {
 		return $this->belongsToMany('Section')->withPivot('semester');
 	}
@@ -55,7 +57,7 @@ class Course extends Eloquent {
 
 	public function getReviewsCountAttribute() {
 		if ($this->_reviewsCount == null)
-			$this->_reviewsCount = $this->reviews()->selectRaw('count(*) as count')->first()->count;
+			$this->_reviewsCount = $this->reviews()->count();
 
 		return $this->_reviewsCount;
 	}

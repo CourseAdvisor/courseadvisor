@@ -5,7 +5,7 @@
 
     <title>
     @section('page_title')
-    Course Advisor
+    {{{ isset($page_title) ? $page_title.' | ' : '' }}} Course Advisor
     @show
     </title>
 
@@ -18,7 +18,7 @@
     <div class="navbar navbar-default navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-          <a href="./" class="navbar-brand"><span class="logo-course">Course</span>Advisor</a>
+          <a href="/" class="navbar-brand"><span class="logo-course">Course</span>Advisor</a>
           <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
