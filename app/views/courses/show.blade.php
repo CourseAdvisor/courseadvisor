@@ -153,6 +153,21 @@
               @if($i != 0) <hr> @endif
 
             	<div class="review">
+                @if (Tequila::isLoggedIn() && StudentInfo::getSciper() == $review->student->sciper)
+                <span class="pull-right">
+                  <a href="#"
+                    data-review-id="{{{ $review->id }}}"
+                    data-review-lectures-grade="{{{ $review->lectures_grade }}}"
+                    data-review-exercises-grade="{{{ $review->exercises_grade }}}"
+                    data-review-content-grade="{{{ $review->content_grade }}}"
+                    data-review-title="{{{ $review->title }}}"
+                    data-review-difficulty="{{{ $review->difficulty }}}"
+                    data-review-anonymous="{{{ $review->is_anonymous ? 1 : 0 }}}"
+                    class="edit-review" title="Edit this review">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                @endif
+                </span>
             	  @include('global.starbar', [
                 'grade' => $review->avg_grade,
                 'comment_unsafe' => htmlspecialchars($review->title)
@@ -168,7 +183,7 @@
                     </a>
                   @endif
             	  </div>
-            	  <p>{{ nl2br(e($review->comment)) }}</p>
+            	  <p class="review-content">{{ nl2br(e($review->comment)) }}</p>
             	</div>
             @endfor
           </div>
@@ -177,6 +192,23 @@
       </div> {{-- page --}}
     </div>
   </section>
+
+  <div class="modal fade bs-example-modal-lg" id="edit-review-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" ><span>&times;</span></button>
+          <h4 class="modal-title">Edit your review</h4>
+        </div>
+        <div class="modal-body">
+        @include('forms.create-review', [
+          'edit' => true,
+          'data' => Input::old()
+        ])
+        </div>
+      </div>
+    </div>
+  </div>
 
   <section class="row">
     <div class="col-lg-12">

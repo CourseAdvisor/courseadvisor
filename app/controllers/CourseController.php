@@ -167,4 +167,8 @@ class CourseController extends BaseController {
 
 		return $goToCourse->with('message', ['success', 'Your review was successfuly posted. Thank you!']);
 	}
+
+	public function updateReview($slug, $courseId, $reviewId) {
+
+	}
 }
