@@ -1,12 +1,20 @@
 <?php
 
-class SearchController extends Controller {
+class SearchController extends BaseController {
+
+	public function __construct() {
+		parent::__construct();
+		$this->addCrumb('StaticController@homepage', 'Search courses');
+	}
+
 	public function search() {
 		if (!Input::has('q')) {
 			return Redirect::to('/');
 		}
 		$term = Input::get('q');
 		$nbPerPage = Config::get('app.searchNbCoursesPerPage');
+
+		$this->addCrumb(Route::current()->getActionName(), "« $term »", ['q' => $term]);
 
 
 		// Get sections
