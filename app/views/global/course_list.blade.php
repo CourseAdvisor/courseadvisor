@@ -45,7 +45,7 @@
 
     <!-- all platforms -->
     <h2>{{{ $course['name'] }}}</h2>
-    <h3>{{{ $course['teacher']->fullname }}}</h3>
+    <h3>{{{ $course['teacher']['fullname'] }}}</h3>
     <!-- except this -->
     <h4 class="sections visible-xs visible-sm">
       @foreach($course['sections'] as $section)
@@ -59,10 +59,11 @@
 
 @if(!isset($paginate) || $paginate)
 <nav>
+  <?php $paginator = isset($paginator) ? $paginator : $courses ?>
   @if(isset($pagination_links_appendings))
-    {{ $courses->appends($pagination_links_appendings)->links() }}
+    {{ $paginator->appends($pagination_links_appendings)->links() }}
   @else
-    {{ $courses->links() }}
+    {{ $paginator->links() }}
   @endif
 </nav>
 @endif

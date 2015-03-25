@@ -3,6 +3,7 @@
 return array(
 	'nbReviewsPerPage' => 10,
 	'nbCoursesPerPage' => 15,
+	'searchNbCoursesPerPage' => 10,
 
 	/*
 	|--------------------------------------------------------------------------

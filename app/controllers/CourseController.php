@@ -71,6 +71,10 @@ class CourseController extends BaseController {
 	public function show($slug, $id) {
 		$course = Course::with('teacher', 'sections')->findOrFail($id);
 
+		if (($realSlug = Str::slug($course->name)) != $slug) {
+			return Redirect::action('CourseController@show', ['slug' => $realSlug, 'id' => $id]);
+		}
+
 		$this->addCrumb(Route::current()->getActionName(), $course->name, Route::current()->parameters());
 
 		$hasAlreadyReviewed = false;

@@ -1,5 +1,9 @@
 @extends('main')
 
+@section('scripts')
+{{ HTML::script('js/show-course.js') }}
+@stop
+
 @section('content')
 
 <div class="container">
@@ -278,12 +282,13 @@
             <div class="form-group">
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" name="anonymous" value="true" {{ Input::old('anonymous') ? 'checked' : '' }}> Post anonymously
+                  <input type="checkbox" name="anonymous" id="anonymous" value="true" {{ Input::old('anonymous') ? 'checked' : '' }}> Post anonymously
                 </label>
                 <span data-trigger="hover" data-toggle="popover" data-placement="right"
                   data-content="Your name will not be displayed in your review if you choose this option.">
                     <a href="{{{ action('StaticController@faq') }}}"><i class="fa fa-question-circle" ></i></a>
                 </span>
+                <span class="help-block warning hidden" id="anonymous-warning">If you post anonymously, your review will be moderated by an administrator before being published.</span>
               </div>
             </div>
           </div>
