@@ -1,6 +1,7 @@
 <?php namespace Helpers;
 
 use \Tequila;
+use Illuminate\Support\Facades\Session;
 
 class StudentInfo {
 
@@ -27,5 +28,9 @@ class StudentInfo {
 
 	public static function getSciper() {
 		return Tequila::get('uniqueid');
+	}
+
+	public static function getId() {
+		return Session::get('student_id');
 	}
 }

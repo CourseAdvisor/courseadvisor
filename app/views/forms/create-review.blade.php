@@ -2,8 +2,13 @@
 
 {{ Form::open([
   'class' => 'row form-horizontal',
-  'action' => ['CourseController@' . ($is_editing ? 'update' : 'create') . 'Review', $slug, $course->id]
+  'action' => ['CourseController@' . ($is_editing ? 'update' : 'create') . 'Review', $slug, $course->id],
+  'id' => isset($id) ? $id : ''
   ]) }}
+
+@if ($is_editing)
+<input type="hidden" name="reviewId" />
+@endif
 
 <div class="col-md-8">
 
@@ -104,7 +109,10 @@
 <div class="col-sm-12">
   <input type="submit" class="btn btn-primary center-block" value="Submit my review">
 </div>
+
+@if (!$is_editing)
 <div class="col-sm-12">
   <p class="hint">Make sure that you understand and agree with our <a href="#">review policy</a> before submitting your review.</p>
 </div>
+@endif
 {{ Form::close() }}

@@ -127,7 +127,7 @@ class CourseController extends BaseController {
 		$validator = Validator::make(Input::all(), Review::rules());
 		$goToCourse = Redirect::action('CourseController@show', [$slug, $courseId]);
 		if ($validator->fails()) {
-			return $goToCourse
+			return Redirect::to(URL::previous() . "#my-review")
 					->withInput()
 					->withErrors($validator);
 		}
@@ -168,7 +168,46 @@ class CourseController extends BaseController {
 		return $goToCourse->with('message', ['success', 'Your review was successfuly posted. Thank you!']);
 	}
 
-	public function updateReview($slug, $courseId, $reviewId) {
+	public function updateReview($slug, $courseId) {
+		if (!Input::has('reviewId')) {
+			return Redirect::to('/');
+		}
 
+		$courseRedirect = Redirect::action('CourseController@show', [$slug, $courseId]);
+
+		// Retrieve review
+		$review = Review::findOrFail(Input::get('reviewId'));
+
+		// Check authorized
+		if ($review->student_id != StudentInfo::getId()) {
+			return $courseRedirect
+				->with('message', ['danger', 'You are not allowed to edit this review.']);
+		}
+
+		// Check input data
+		$validator = Validator::make(Input::all(), Review::rules());
+		if ($validator->fails()) {
+			return Redirect::to(URL::previous() . "#!edit-" . $review->id)
+					->withInput()
+					->withErrors($validator);
+		}
+
+		$review->comment = Input::get('comment');
+		$review->title = Input::get('title');
+		$review->lectures_grade = Input::get('lectures_grade');
+		$review->exercises_grade = Input::get('lectures_grade');
+		$review->content_grade = Input::get('content_grade');
+		$review->difficulty = Input::get('difficulty');
+
+		if (Input::get('anonymous') == true) {
+			$review->is_anonymous = 1;
+		}
+
+		$review->updateAverage();
+		$review->save();
+		$review->course->updateAverages();
+
+		return $courseRedirect
+				->with('message', ['success', 'Your review has been successfuly edited']);
 	}
 }
