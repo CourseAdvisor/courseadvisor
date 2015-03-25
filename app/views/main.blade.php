@@ -149,6 +149,7 @@
         if(typeof initialValue !== 'undefined') {
           starbar.setValue(initialValue);
         }
+        el.data('starbar', starbar);
       });
 
       // Initialize popovers

@@ -42,6 +42,7 @@ Route::group(array('before' => 'logged_in'), function() {
 Route::group(array('before' => 'force_login'), function() {
 	Route::get('/courses/suggestions', 'CourseController@suggestions');
 	Route::post('/courses/{slug}-{id}/createReview', 'CourseController@createReview');
+	Route::post('/courses/{slug}-{id}/updateReview', 'CourseController@updateReview');
 });
 
 Route::when('*', 'csrf', array('post', 'put', 'delete'));
