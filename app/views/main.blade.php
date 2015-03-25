@@ -18,7 +18,19 @@
     <div class="navbar navbar-default navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-          <a href="/" class="navbar-brand"><span class="logo-course">Course</span>Advisor</a>
+
+          <a href="/" class="navbar-brand hidden-xs"><span class="logo-course">Course</span>Advisor</a>
+
+          {{-- mobile-only search --}}
+          <form class="navbar-form navbar-right visible-xs mobile-search" role="search" action="{{{ action('SearchController@search') }}}" method="GET">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Search" name="q" value="{{{ isset($_GET['q']) ? $_GET['q'] : '' }}}">
+            </div>
+          </form>
+          <button class="navbar-search visible-xs" type="button">
+            <span class="fa fa-search"></span>
+          </button>
+
           <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -26,62 +38,49 @@
           </button>
         </div>
         <div class="navbar-collapse collapse" id="navbar-main">
-          <ul class="nav navbar-nav main-nav">
-            <li {{ MenuHelper::active_if_home() }}>
-              <a href="/">Home</a>
-            </li>
-            <li class="sep"></li>
-            <li {{ MenuHelper::active_if_controller("course") }}>
-              <a href="{{{ action('CourseController@sections') }}}">
-                Courses
-              </a>
-            </li>
-            <li class="sep"></li>
-            <li><a href="./about.html">About</a></li>
-          </ul>
 
+          <form class="navbar-form navbar-right hidden-xs desktop-search" role="search" action="{{{ action('SearchController@search') }}}" method="GET">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search" name="q" value="{{{ isset($_GET['q']) ? $_GET['q'] : '' }}}">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+              </span>
+            </div>
+          </form>
 
-          <ul class="nav navbar-nav navbar-right">
-            {{--<li>
-              <a href="#" id="search-icon"><i class="fa fa-2x fa-search"></i></a>
-            </li>--}}
+          {{-- desktop nav --}}
+          <ul class="nav navbar-nav navbar-right hidden-xs">
             @if(Tequila::isLoggedIn())
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="fa fa-user fa-2x"></i></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                <i class="fa fa-user"></i>
+                <i class="fa fa-caret-down"></i>
+              </a>
                <ul class="dropdown-menu fa-ul" role="menu">
-                 <li><a href="#"><i class="fa fa-fw fa-user"></i> {{{ Tequila::get('firstname') }}}</a></li>
-                 <li><a href="{{{ action('AuthController@logout', ['next' => Request::url()]) }}}"><i class="fa fa-sign-out fa-fw"></i>  Log out</a></li>
+                 <li><a href="#TODO-dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                 <li><a href="{{{ action('AuthController@logout', ['next' => Request::url()]) }}}"><i class="fa fa-sign-out"></i> Log out</a></li>
                </ul>
             </li>
             @else
               <li><a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}">
-                <i class="fa fa-2x fa-sign-in" style="vertical-align:middle;"></i>
-                Tequila login
+                log in
               </a></li>
             @endif
           </ul>
 
-
-          {{--<form class="nav navbar-form navbar-right" style="display: none;" action="{{{ action('SearchController@search')}}}" method="GET" role="search" id="search-form">
-            <div class="input-group">
-                <input type="text" class="form-control input-sm" name="q" id="search-box" placeholder="Search courses" value="{{{ Input::get('q') }}}"/>
-                <span class="input-group-addon">
-                    <a class="fa fa-search" id="search-button" style="color: black;" href="#"></a>
-                </span>
-            </div>
-          </form>--}}
-
-
-
-          {{--<ul class="nav navbar-nav navbar-right">
+          {{-- mobile nav --}}
+          <ul class="nav navbar-nav main-nav visible-xs">
             @if(Tequila::isLoggedIn())
-              <li><a href="#">{{{ Tequila::get('firstname') }}}</a></li>
-              <li><a href="{{{ action('AuthController@logout', ['next' => Request::url()]) }}}">Log out</a></li>
+              <li><a href="#TODO-dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+              <li><a href="{{{ action('AuthController@logout', ['next' => Request::url()]) }}}">
+                <i class="fa fa-sign-out"></i> Log out
+              </a></li>
             @else
-              <li><a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}">Log in</a></li>
+              <li><a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}">
+                <i class="fa fa-sign-in"></i> Log in
+              </a></li>
             @endif
-          </ul>--}}
-
+          </ul>
 
         </div>
       </div>
@@ -131,6 +130,23 @@
         });
         return false;
       });
+    </script>
+
+    {{-- mobile search navbar script --}}
+    <script>
+    $(function() {
+      $('.mobile-search').each(function() {
+        var $el = $(this);
+        var initial_width = $el.css('width');
+        var padding = $el.css('padding-left');
+
+        $el.find('input').focusin(function() {
+          $el.css({'opacity': '1', 'width': '100%'});
+        }).focusout(function() {
+          $el.css({'opacity': '0', 'width': initial_width});
+        });
+      });
+    });
     </script>
 
     @yield('scripts')

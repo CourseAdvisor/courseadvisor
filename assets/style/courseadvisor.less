@@ -64,7 +64,6 @@ footer {
     margin-bottom: 0;
 
     .nav.navbar-nav {
-        text-transform: uppercase;
 
         &.main-nav {
             @media (min-width: @screen-sm-min) {
@@ -353,13 +352,8 @@ dl.course-stats {
         color: @brand-primary;
     }
 
-    .container {
-        max-width: 800px;
-    }
-
     h1 {
         font-size: 30px;
-        margin-top: 0;
         margin-bottom: 40px;
     }
 
@@ -394,5 +388,33 @@ dl.course-stats {
 
     .hero-browse {
         margin: 40px 0;
+    }
+}
+
+
+.navbar-search:extend(.navbar-toggle) {
+    float: left;
+}
+
+.navbar .mobile-search {
+    position: absolute;
+    width: 20%;
+    top: 0;
+    margin-top: 0;
+    background-color: white;
+    left: 16px;
+    opacity: 0;
+    z-index: 100;
+    transition: width 500ms, opacity 100ms;
+
+
+}
+
+.navbar .desktop-search.navbar-form .input-group>.form-control {
+    width: 150px;
+    transition: width 500ms;
+
+    &:focus {
+        width: 250px;
     }
 }
