@@ -378,13 +378,19 @@ form div.checkbox-panel {
         @button-width: 80px;
 
         margin: 45px 0;
-        padding-left: @button-width;
+
+        .hero-search-input {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .hero-search-button {
+            margin: auto;
+        }
 
         .input-group {
+            margin-left: @button-width;
             text-align: center;
-            & > input {
-                border-radius: 10px;
-            }
 
             & > .input-group-btn {
                 left: -@button-width;

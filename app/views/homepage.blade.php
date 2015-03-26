@@ -29,12 +29,17 @@
           </p>
           <form action="{{{ action('SearchController@search') }}}" method="GET">
             <div class="hero-search">
-              <div class="input-group input-group-lg">
-                <input type="text" class="form-control" name="q" placeholder="Search a course by title, field, teacher, ...">
+              <div class="input-group input-group-lg hidden-xs">
+                <input type="text" class="form-control hero-search-input" name="q" placeholder="Search a course by title, field, teacher, ...">
                 <span class="input-group-btn">
                   <button class="btn btn-primary" type="submit">Go!</button>
                 </span>
               </div>
+
+              <div class="form-group form-group-lg visible-xs">
+                <input type="text" class="form-control hero-search-input" name="q" placeholder="Search a course by title, field, teacher, ...">
+              </div>
+              <button class="btn btn-primary visible-xs hero-search-button" type="submit">Go!</button>
             </div>
           </form>
           <p>
