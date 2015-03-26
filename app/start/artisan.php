@@ -13,3 +13,4 @@
 
 Artisan::add(new DumpCourses());
 Artisan::add(new CreateSections());
+Artisan::add(new UpdateCoursesDescription());

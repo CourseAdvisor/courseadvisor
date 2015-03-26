@@ -7,6 +7,10 @@ use Symfony\Component\Console\Input\InputArgument;
 class DumpCourses extends Command {
 
 	const ISA_URL = "https://isa.epfl.ch/services/plans/%period%/semester/%semester%/section/%section%";
+
+	const SEARCH_URL = "http://search.epfl.ch/eduwebadv.action?pageSize=100&course_words=%words%&orientation=all&cycle=all&section_id=%section_id%&language=all&semester=all";
+
+
 	/**
 	 * The console command name.
 	 *
@@ -101,18 +105,18 @@ class DumpCourses extends Command {
 		else {
 			$this->dump($this->option('section'), $this->option('semester'));
 		}
+		echo "\x07"; // beep when it's done
 	}
 
 	private function dump($section, $semester) {
 		print "Downloading courses data for ".$section."-".$semester." from IS-Academia...\n";
 		$url = $this->makeUrl($section, $semester);
-		print "\tGET $url\n";
 		$timeStart = microtime(true);
 		$xml = $this->curlGet($url);
 		$timeEnd = microtime(true);
 		print "Done in ".round($timeEnd - $timeStart, 1)." seconds\n";
 
-		$parseResult = $this->parse($xml);
+		$parseResult = $this->parse($xml, $section, $semester);
 		if ($parseResult === false) {
 			return;
 		}
@@ -132,6 +136,7 @@ class DumpCourses extends Command {
 			print "\t- ".$course['name']."\n";
 		}
 
+		echo "\x07"; // beep
 		if(!$this->confirm("Do you wish to continue? [Yes|no]", true)) {
 			return;
 		}
@@ -141,7 +146,7 @@ class DumpCourses extends Command {
 		print "Done!\n";
 	}
 
-	private function parse($xml) {
+	private function parse($xml, $section, $semester) {
 		$courses = [];
 		$skipped = [];
 		$inserted = []; // slugs of inserted courses
@@ -179,16 +184,13 @@ class DumpCourses extends Command {
 						'sciper' => $prof->{'sciper'}
 					];
 				}
-				$data['string_id'] = "".$course->code;
 
-
-				// A course is defined by its id. But in some cases, we only have its name
-				// and teacher name
-				$hash = md5($data['teacher']['sciper'].$data['name']);
-
-				if(!strlen(trim($data['string_id']))) {
-					$data['string_id'] = $hash;
+				if(!$this->lookupStringIdAndURL($data, $section, $semester)) {
+					$skipped[] = "".$course->title;
+					continue;
 				}
+
+				$hash = $data['string_id'];
 
 				if(in_array($hash, $inserted)) {
 					continue;
@@ -223,12 +225,7 @@ class DumpCourses extends Command {
 			}
 
 			// Check if the course exists
-			if(!empty($courseData['string_id'])) {
-				$existing = Course::where('string_id', '=', $courseData['string_id'])->first();
-			}
-			else {
-				$existing = Course::where('string_id', '=', md5($courseData['teacher_id'].$courseData['name']));
-			}
+			$existing = Course::where('string_id', '=', $courseData['string_id'])->first();
 
 			unset($courseData['teacher']);
 			if($existing) {
@@ -276,7 +273,11 @@ class DumpCourses extends Command {
 	}
 
 	private function curlGet($url) {
+		print "\tGET $url\n";
+
 		$ch = curl_init ();
+
+		$header = ["Accept-Language: fr-FR,fr;q=0.8,en;q=0.6,en-US;q=0.4"];
 
 		$options = array(
 		    CURLOPT_URL            => $url,
@@ -287,6 +288,7 @@ class DumpCourses extends Command {
 		    CURLOPT_CONNECTTIMEOUT => 120,
 		    CURLOPT_TIMEOUT        => 120,
 		    CURLOPT_MAXREDIRS      => 15,
+		    CURLOPT_HTTPHEADER     => $header,
 		    CURLOPT_SSL_VERIFYPEER => false,
 		    CURLOPT_SSL_VERIFYHOST => false
 		);
@@ -304,4 +306,91 @@ class DumpCourses extends Command {
 	}
 
 
+	private function lookupStringIdAndURL(&$course, $section, $semester) {
+
+		$name = $this->normalizeFragment($course['name']);
+		$pattern = '#<a href="(http://edu\.epfl\.ch/coursebook/[a-z]{2}/%name%-([A-Za-z0-9-]+))">#';
+		$words = strtr($name, ['-' => '+']);
+		$matches = [];
+		$url = strtr(self::SEARCH_URL, [
+			'%words%' => $words,
+			'%section_id%' => $section
+		]);
+
+		$responseText = $this->curlGet($url);
+
+		// trying exact match
+		$exact_pattern = strtr($pattern, ['%name%' => $name]);
+		if (!($nb_matches = preg_match_all($exact_pattern, $responseText, $matches, PREG_SET_ORDER))) {
+			// not found
+
+			// trying without secion id
+			$url = strtr(self::SEARCH_URL, [
+				'%words%' => $words,
+				'%section_id%' => ""
+			]);
+			$responseText2 = $this->curlGet($url);
+			if (!($nb_matches = preg_match_all($exact_pattern, $responseText2, $matches, PREG_SET_ORDER))) {
+				// still not found
+
+				//trying approximative match
+				$approximate_pattern = strtr($pattern, ['%name%' => "([A-Za-z0-9-]+)"]);
+				$nb_matches = preg_match_all($approximate_pattern, $responseText2, $matches, PREG_SET_ORDER);
+			}
+		}
+
+		$chose_match = 0;
+
+		if (!$nb_matches) {
+			echo "[Warning] no string id found for course ".$course['name']."\n";
+			echo "\x07"; // beep
+			if (strtolower($this->ask('Try manually (Y/n)? ')) != 'n') {
+				$course['name'] = $this->ask("Enter course name\n");
+				return $this->lookupStringIdAndURL($course, $section, $semester);
+			}
+			echo "[Warning] skipping";
+			return 0;
+		} else if ($nb_matches > 1) {
+			echo "[Info] Found multiple urls for course ".$name."\n\n";
+			for($i = 0 ; $i < $nb_matches ; $i++) {
+				echo $i." = ".$matches[$i][1]."\n";
+			}
+
+			do {
+				echo "\x07"; // beep
+				$chose_match = intval($this->ask('Which one to use? (-1 to skip)'));
+				if ($chose_match == -1) {
+					echo "[Warning] skipping\n";
+					return 0;
+				}
+			} while ($chose_match < 0 || $chose_match >= $nb_matches);
+		}
+
+		$course['string_id'] = $matches[$chose_match][2];
+		$course['url'] = $matches[$chose_match][1];
+
+		return 1;
+	}
+
+	private function normalizeFragment($fragment)
+    {
+        // http://stackoverflow.com/questions/3371697/replacing-accented-characters-php
+        $unaccentizer = array(
+            'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+            'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
+            'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
+            'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y');
+
+        // Strip accents and lowercase
+        $fragment = strtolower(strtr($fragment, $unaccentizer));
+        // non alphanum characters to dashes
+        $fragment = preg_replace("/([^a-z0-9])/i", "-", $fragment);
+        // strip multiple dashes
+        $fragment = preg_replace("/(-+)/", "-", $fragment);
+        // strip trailing dashes
+        $fragment = preg_replace("/(-+)$/", "", $fragment);
+
+        return $fragment;
+    }
 }
