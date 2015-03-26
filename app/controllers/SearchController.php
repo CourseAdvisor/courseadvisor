@@ -31,6 +31,17 @@ class SearchController extends BaseController {
 			});
 		}
 
+		// Semesters
+		$selected_semesters = [];
+		$filter_semesters = Input::has('semesters') && Input::get('semesters') != 'all';
+		if ($filter_semesters) {
+			$joined_selected_semesters = Input::get('semesters');
+			$selected_semesters = explode("-", $joined_selected_semesters);
+		}
+		else {
+			$joined_selected_semesters = implode("-", Config::get('content.semesters'));
+		}
+
 		// Get student section
 		$student_section_id = -1;
 		if (Tequila::isLoggedIn()) {
@@ -80,8 +91,19 @@ class SearchController extends BaseController {
 			$query->whereIn('sections.id', $selected_sections);
 		}
 
+		if ($filter_semesters) {
+			$query->whereIn('course_section.semester', $selected_semesters);
+		}
 
-		$query->orderBy(DB::raw('2 * course_relevance + teacher_relevance'), false);
+		$allowedSortingFields = ['courses.name', 'teachers.lastname', 'reviewsCount'];
+		$order = Input::has('desc') ? 'desc' : 'asc';
+		if (Input::has('sortby') && in_array($field = Input::get('sortby'), $allowedSortingFields)) {
+			$query->orderBy(DB::raw($field), $order);
+		}
+		else {
+			$query->orderBy(DB::raw('2 * course_relevance + teacher_relevance'), $order);
+		}
+
 		$query->groupBy('courses.id');
 
 
@@ -112,8 +134,10 @@ class SearchController extends BaseController {
 			'courses' => $courses,
 			'sections' => $allSections,
 			'joined_selected_sections' => $joined_selected_sections,
+			'joined_selected_semesters' => $joined_selected_semesters,
 			'selected_sections' => $selected_sections,
-			'was_filtered' => count(Input::all()) > 1,
+			'selected_semesters' => $selected_semesters,
+			'was_filtered' => count(Input::except('page', 'q')) > 0,
 			'student_section_id' => $student_section_id
 		]);
 	}
