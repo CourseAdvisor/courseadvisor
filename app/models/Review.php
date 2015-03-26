@@ -20,11 +20,11 @@ class Review extends Eloquent {
 		$gradeRule = 'required|integer|between:1,5';
 
 		return [
-			'lectures_grade' => $gradeRule, 
-			'exercises_grade' => $gradeRule, 
-			'content_grade' => $gradeRule, 
-			'difficulty' => 'integer|between:0,5', 
-			'title' => 'required|max:50', 
+			'lectures_grade' => $gradeRule,
+			'exercises_grade' => $gradeRule,
+			'content_grade' => $gradeRule,
+			'difficulty' => 'integer|between:0,5',
+			'title' => 'required|max:50',
 			'comment' => 'required|min:20'
 		];
 	}

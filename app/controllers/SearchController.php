@@ -4,7 +4,6 @@ class SearchController extends BaseController {
 
 	public function __construct() {
 		parent::__construct();
-		$this->addCrumb('StaticController@homepage', 'Search courses');
 	}
 
 	public function search() {
@@ -14,13 +13,14 @@ class SearchController extends BaseController {
 		$term = Input::get('q');
 		$nbPerPage = Config::get('app.searchNbCoursesPerPage');
 
-		$this->addCrumb(Route::current()->getActionName(), "« $term »", ['q' => $term]);
+		$this->addCrumb(Route::current()->getActionName(), "Search for « $term »", Input::all());
 
 
 		// Get sections
 		$allSections = Section::all();
 		$selected_sections = [];
-		if (Input::has('sections')) {
+		$filter_sections = Input::has('sections') && Input::get('sections') != 'all';
+		if ($filter_sections) {
 			$joined_selected_sections = Input::get('sections');
 			$selected_sections = explode("-", $joined_selected_sections);
 		}
@@ -29,6 +29,17 @@ class SearchController extends BaseController {
 				if (is_null($acc)) return $new->id;
 				return $acc . "-" . $new->id;
 			});
+		}
+
+		// Semesters
+		$selected_semesters = [];
+		$filter_semesters = Input::has('semesters') && Input::get('semesters') != 'all';
+		if ($filter_semesters) {
+			$joined_selected_semesters = Input::get('semesters');
+			$selected_semesters = explode("-", $joined_selected_semesters);
+		}
+		else {
+			$joined_selected_semesters = implode("-", Config::get('content.semesters'));
 		}
 
 		// Get student section
@@ -40,6 +51,7 @@ class SearchController extends BaseController {
 			})->id;
 		}
 
+		$cleaned = DB::getPDO()->quote(preg_replace("/[^A-Za-z0-9èàé ]/", '', $term));
 		$query = DB::table('courses')
 					->select(DB::raw('courses.name as name, courses.id as id'))
 					->addSelect(DB::raw('CONCAT(teachers.firstname, " ", teachers.lastname) as teacher_fullname'))
@@ -47,18 +59,23 @@ class SearchController extends BaseController {
 					->addSelect(DB::raw('GROUP_CONCAT(sections.string_id) as sections'))
 					->addSelect(DB::raw('GROUP_CONCAT(course_section.semester) as semesters'))
 					->addSelect(DB::raw('(select count(*) from reviews where course_id=courses.id) as reviewsCount'))
+					->addSelect(DB::raw("
+						MATCH(courses.name)
+						AGAINST ($cleaned IN NATURAL LANGUAGE MODE) as course_relevance
+					"))
+					->addSelect(DB::raw("
+						MATCH(teachers.firstname, teachers.lastname)
+						AGAINST ($cleaned IN NATURAL LANGUAGE MODE) as teacher_relevance
+					"))
 					->leftJoin('course_section', 'course_section.course_id', '=', 'courses.id')
 					->leftJoin('sections', 'course_section.section_id', '=', 'sections.id')
 					->leftJoin('teachers', 'teachers.id', '=', 'courses.teacher_id');
-					//->where('courses.name', 'LIKE', "%$term%"); // <-- Note : this is safe
 
-		$query->where(function($q) use($term) {
-			$q->where('courses.name', 'LIKE', "%$term%"); // <-- Note : this is safe
+		$query->where(function($q) use($cleaned) {
+			$q->whereRaw("MATCH(courses.name) AGAINST($cleaned IN NATURAL LANGUAGE MODE)");
 
 			if (!Input::has('dont_match_teachers')) {
-				$q->orWhereRaw('CONCAT(teachers.firstname, " ", teachers.lastname) LIKE ?', ["%$term%"]);
-				$q->orWhereRaw('teachers.firstname LIKE ?', ["%$term%"]);
-				$q->orWhereRaw('teachers.lastname LIKE ?', ["%$term%"]);
+				$q->orWhereRaw("MATCH(teachers.firstname, teachers.lastname) AGAINST ($cleaned IN NATURAL LANGUAGE MODE)");
 			}
 		});
 
@@ -70,10 +87,22 @@ class SearchController extends BaseController {
 			});
 		}
 
-		if (Input::has('sections')) {
+		if ($filter_sections) {
 			$query->whereIn('sections.id', $selected_sections);
 		}
 
+		if ($filter_semesters) {
+			$query->whereIn('course_section.semester', $selected_semesters);
+		}
+
+		$allowedSortingFields = ['courses.name', 'teachers.lastname', 'reviewsCount'];
+		$order = Input::has('desc') ? 'desc' : 'asc';
+		if (Input::has('sortby') && in_array($field = Input::get('sortby'), $allowedSortingFields)) {
+			$query->orderBy(DB::raw($field), $order);
+		}
+		else {
+			$query->orderBy(DB::raw('2 * course_relevance + teacher_relevance'), $order);
+		}
 
 		$query->groupBy('courses.id');
 
@@ -106,8 +135,10 @@ class SearchController extends BaseController {
 			'courses' => $courses,
 			'sections' => $allSections,
 			'joined_selected_sections' => $joined_selected_sections,
+			'joined_selected_semesters' => $joined_selected_semesters,
 			'selected_sections' => $selected_sections,
-			'was_filtered' => Input::has('only_reviewed'),
+			'selected_semesters' => $selected_semesters,
+			'was_filtered' => count(Input::except('page', 'q')) > 0,
 			'student_section_id' => $student_section_id
 		]);
 	}
