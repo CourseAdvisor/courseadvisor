@@ -101,7 +101,7 @@ class CourseController extends BaseController {
 			'course' => $course,
 			'slug' 	=> $slug,
 			'distribution' => $distribution,
-			'reviews' =>$course->reviews()->with('student')->paginate($reviewsPerPage),
+			'reviews' =>$course->reviews()->with('student', 'student.section')->paginate($reviewsPerPage),
 			'hasAlreadyReviewed' => $hasAlreadyReviewed,
 			'nbReviews' => $course->reviews->count()
 		]);

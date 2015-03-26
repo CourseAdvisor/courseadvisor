@@ -176,11 +176,10 @@
             	  <div class="review-author">
                   by
                   @if($review->is_anonymous)
-                    <a href="#">Anonymous student</a>
+                    <span class="hint">Anonymous {{{ $review->student->section->name }}} student</span>
                   @else
-                    <a target="_blank" href="http://people.epfl.ch/{{{ $review->student->firstname.".".$review->student->lastname }}}">
-                      {{{ $review->student->fullname }}}
-                    </a>
+                    <a target="_blank" href="http://people.epfl.ch/{{{ $review->student->sciper }}}">{{{ $review->student->fullname }}}</a>
+                    <span class="hint">({{{ $review->student->section->name }}})</span>
                   @endif
             	  </div>
             	  <p class="review-content">{{ nl2br(e($review->comment)) }}</p>
