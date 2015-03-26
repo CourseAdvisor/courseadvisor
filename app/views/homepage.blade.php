@@ -12,12 +12,12 @@
         <br>
         Lookup a course and find out what past students thought about it.
       </p>
-      <form action="{{{ action('SearchController@search') }}}" method="GET">
+      <form action="{{{ action('SearchController@search') }}}" method="GET" id="searchForm">
       <div class="hero-search">
         <div class="input-group input-group-lg">
           <input type="text" class="form-control" name="q" placeholder="Search a course by title, field, teacher, ...">
           <span class="input-group-btn">
-            <button class="btn btn-primary" type="button">Go!</button>
+            <button class="btn btn-primary" type="button" onclick="document.getElementById('searchForm').submit();">Go!</button>
           </span>
         </div>
       </div>

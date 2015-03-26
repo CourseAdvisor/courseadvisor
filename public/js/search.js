@@ -1,22 +1,5 @@
 var holder = $('input[type=hidden]#sections-filter-list');
 var checkboxes = $('input[type=checkbox].section-filter');
-/*checkboxes.change(function() {
-	var checkbox = $(this);
-	var wasChecked = checkbox.is(':checked');
-	var sectionsList = holder.val().split("-");
-	var clicked = checkbox.data('section-id')+"";
-	var index = sectionsList.indexOf(clicked);
-
-	if (wasChecked && index < 0) {
-		sectionsList.push(clicked);
-	}
-	else if (!wasChecked && index >= 0) {
-		sectionsList.splice(index, 1);
-	}
-
-	console.log(sectionsList);
-	holder.val(sectionsList.join("-"));
-});*/
 
 $('#filters-form').submit(function() {
 	var checked = [];
@@ -26,7 +9,12 @@ $('#filters-form').submit(function() {
 		}
 	});
 
-	holder.val(checked.join("-"));
+	if (checked.length == checkboxes.size()) {
+		holder.val('all');
+	}
+	else {
+		holder.val(checked.join("-"));
+	}
 })
 
 $('a.sections-check-all').click(function(e) {
