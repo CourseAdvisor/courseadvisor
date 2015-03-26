@@ -14,8 +14,7 @@
 		<h1>Search results for '<i>{{{ Input::get('q') }}}</i>'</h1>
 
 		<section class="row">
-		<h2><a href="#advancedFilters" data-toggle="collapse">Advanced filters</a></h2>
-
+		<h2><a href="#advancedFilters" data-toggle="collapse"><i class="fa fa-filter"></i> Filters</a></h2>
 		{{--
 			The 'advanced filters' panel is expanded only if a filter has been applied
 		--}}
@@ -45,7 +44,7 @@
 		  			<a href="#" class="sections-check-all">check all</a> |
 		  			<a href="#" class="sections-uncheck-all">uncheck all</a>
 		  	  	</div>
-			  	<div class="row">
+			  	<div class="row checkbox-panel">
 			  		<input type="hidden" name="sections" id="sections-filter-list"
 			  			value="{{{ $joined_selected_sections }}}"
 			  		/>
@@ -68,6 +67,47 @@
 		  	  	@endforeach
 		  	  	</div>
 		  		</fieldset>
+		  		<fieldset>
+				  	<legend>Filter by semester</legend>
+				  	<div class="row">
+			  			<a href="#" class="semesters-check-all">check all</a> |
+			  			<a href="#" class="semesters-uncheck-all">uncheck all</a>
+			  	  	</div>
+					<div class="row checkbox-panel">
+						<input type="hidden" name="semesters" id="semesters-filter-list"
+				  			value="{{{ $joined_selected_semesters }}}"
+				  		/>
+						@foreach(Config::get('content.semesters') as $semester)
+						<label class="checkbox-inline col-lg-3 col-md-3" style="margin-left:0px;">
+			  		  	    <input type="checkbox" value="true" data-semester="{{{ $semester }}}" class="semester-filter"
+			  		  	    	@if(in_array($semester, $selected_semesters) || empty($selected_semesters))
+			  		  	    		checked
+			  		  	    	@endif
+			  		  	    	>
+								{{{ $semester }}}
+				  	  	</label>
+						@endforeach
+					</div>
+			  	</fieldset>
+			  	<fieldset>
+			  		<legend>Sorting</legend>
+			  		<div class="row">
+			  			<label class="col-lg-3 col-md-3">
+						Sort by :
+						<select class="form-control" name="sortby">
+			  			  <option value="relevance" {{{ Input::get('sortby') == 'relevance' ? 'selected' : '' }}} >Relevance</option>
+			  			  <option value="courses.name" {{{ Input::get('sortby') == 'courses.name' ? 'selected' : '' }}}>Course name</option>
+			  			  <option value="teachers.lastname" {{{ Input::get('sortby') == 'teachers.lastname' ? 'selected' : '' }}}>Teacher's name</option>
+			  			  <option value="reviewsCount" {{{ Input::get('sortby') == 'reviewsCount' ? 'selected' : '' }}}>Number of reviews</option>
+			  			</select>
+			  			</label>
+			  		</div>
+			  		<div class="row">
+			  			<label class="col-lg-3 col-md-3">
+  			  		  	    <input type="checkbox" value="true" name="desc" {{{ Input::get('desc') == true ? 'checked' : '' }}} /> Descending order
+  				  	  	</label>
+			  		</div>
+			  	</fieldset>
 	  		  <div class="row" style="margin-top: 20px;">
 	  		  	<button type="submit" class="btn btn-default">Apply</button>
 	  		  </div>
