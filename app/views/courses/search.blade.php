@@ -11,7 +11,22 @@
   <section class="row">
     <div class="col-xs-12">
       <div class="page">
-		<h1>Search results for '<i>{{{ Input::get('q') }}}</i>'</h1>
+		<h1>Search</h1>
+
+
+		<form role="search" action="{{{ action('SearchController@search') }}}" method="GET">
+			<div class="row">
+				<div class="col-lg-7 col-lg-offset-2 col-md-7 col-sm-9 col-sm-offset-1 col-xs-9 col-xs-offset-0">
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="Search" name="q" value="{{{ Input::get('q') }}}">
+					</div>
+				</div>
+				<div class="col-sm-1 col-xs-3">
+					<button class="btn btn-primary" type="submit">Search</button>
+				</div>
+			</div>
+		</form>
+
 
 		<section class="row">
 		<h2><a href="#advancedFilters" data-toggle="collapse"><i class="fa fa-filter"></i> Filters</a></h2>

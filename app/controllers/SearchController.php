@@ -130,6 +130,7 @@ class SearchController extends BaseController {
 		}
 
 		return View::make('courses.search', [
+			'page_title' => $term.' &ndash; Search courses',
 			'paginator' => $paginated,
 			'courses' => $courses,
 			'sections' => $allSections,
