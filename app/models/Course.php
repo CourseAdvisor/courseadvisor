@@ -12,8 +12,12 @@ class Course extends Eloquent {
 
 	protected $appends = ['reviewsCount'];
 
-	public function sections() {
-		return $this->belongsToMany('Section')->withPivot('semester');
+	public function section() {
+		return $this->belongsTo('Section');
+	}
+
+	public function plans() {
+		return $this->belongsToMany('StudyPlan');
 	}
 
 	public function reviews() {
