@@ -46,7 +46,7 @@ class CreateSections extends Command {
 	public function fire()
 	{
 		$this->makeSection('AR', 'Architecture');
-		$this->makeSection('CGC', 'Chimie');
+		$this->makeSection('CGC', 'Chimie et génie chimique');
 		$this->makeSection('EL', 'Génie électrique et électronique');
 		$this->makeSection('GC', 'Génie civil');
 		$this->makeSection('GM', 'Génie mécanique');
@@ -56,7 +56,7 @@ class CreateSections extends Command {
 		$this->makeSection('MX', 'Matériaux');
 		$this->makeSection('PH', 'Physique');
 		$this->makeSection('SC', 'Systèmes de communication');
-		$this->makeSection('SIE', 'Environnement');
+		$this->makeSection('SIE', 'Sciences et ingénierie de l\'environnement');
 		$this->makeSection('SV', 'Sciences de la vie');
 	}
 
