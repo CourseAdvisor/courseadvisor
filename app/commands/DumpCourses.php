@@ -309,8 +309,8 @@ class DumpCourses extends Command {
 	private function lookupStringIdAndURL(&$course, $section, $semester) {
 
 		$name = $this->normalizeFragment($course['name']);
-		$pattern = '#<a href="(http://edu\.epfl\.ch/coursebook/[a-z]{2}/%name%-([A-Za-z0-9-]+))">#';
-		$words = strtr($name, ['-' => '+']);
+		$pattern = '#<a href="(http://edu\.epfl\.ch/coursebook/[a-z]{2}/%name%-([A-Z0-9-]+))">#';
+		$words = urlencode(strtr($name, ['-' => ' ']));
 		$matches = [];
 		$url = strtr(self::SEARCH_URL, [
 			'%words%' => $words,
@@ -334,7 +334,7 @@ class DumpCourses extends Command {
 				// still not found
 
 				//trying approximative match
-				$approximate_pattern = strtr($pattern, ['%name%' => "([A-Za-z0-9-]+)"]);
+				$approximate_pattern = strtr($pattern, ['%name%' => "[a-z0-9-]+"]);
 				$nb_matches = preg_match_all($approximate_pattern, $responseText2, $matches, PREG_SET_ORDER);
 			}
 		}
@@ -360,6 +360,10 @@ class DumpCourses extends Command {
 				echo "\x07"; // beep
 				$chose_match = intval($this->ask('Which one to use? (-1 to skip)'));
 				if ($chose_match == -1) {
+					if (strtolower($this->ask('Try manually (Y/n)? ')) != 'n') {
+						$course['name'] = $this->ask("Enter course name\n");
+						return $this->lookupStringIdAndURL($course, $section, $semester);
+					}
 					echo "[Warning] skipping\n";
 					return 0;
 				}
