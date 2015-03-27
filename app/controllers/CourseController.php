@@ -96,14 +96,16 @@ class CourseController extends BaseController {
 			];
 		}
 
+		$allReviews = $course->reviews()->with('student', 'student.section')->published();
+
 		return View::make('courses.show', [
 			'page_title' => $course->name,
 			'course' => $course,
 			'slug' 	=> $slug,
 			'distribution' => $distribution,
-			'reviews' =>$course->reviews()->with('student', 'student.section')->paginate($reviewsPerPage),
+			'reviews' => $allReviews->paginate($reviewsPerPage),
 			'hasAlreadyReviewed' => $hasAlreadyReviewed,
-			'nbReviews' => $course->reviews->count()
+			'nbReviews' => $allReviews->count(),
 		]);
 	}
 
@@ -160,12 +162,22 @@ class CourseController extends BaseController {
 
 		if(Input::get('anonymous') == true) {
 			$newReview->is_anonymous = 1;
+			$newReview->status = 'waiting';
 		}
 
 		$newReview->save();
-		$course->updateAverages();
 
-		return $goToCourse->with('message', ['success', 'Your review was successfuly posted. Thank you!']);
+		// Update averages only if the review is not anonymous
+		if (!$newReview->is_anonymous) {
+			$course->updateAverages();
+			$msg = 'Your review was successfuly posted. Thank you!';
+		}
+		else {
+			$msg = 'Your review was successfuly posted. It will now be moderated by an administrator.';
+		}
+
+
+		return $goToCourse->with('message', ['success', $msg]);
 	}
 
 	public function updateReview($slug, $courseId) {
@@ -205,7 +217,9 @@ class CourseController extends BaseController {
 
 		$review->updateAverage();
 		$review->save();
-		$review->course->updateAverages();
+
+		if (!$review->is_anonymous)
+			$review->course->updateAverages();
 
 		return $courseRedirect
 				->with('message', ['success', 'Your review has been successfuly edited']);

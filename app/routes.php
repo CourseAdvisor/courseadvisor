@@ -45,7 +45,20 @@ Route::group(array('before' => 'force_login'), function() {
 	Route::post('/courses/{slug}-{id}/updateReview', 'CourseController@updateReview');
 });
 
+/* Admin stuff */
+Route::group(['before' => 'admin_check'], function() {
+	Route::get('/admin', 'AdminController@index');
+	Route::get('/admin/moderate', 'AdminController@moderate');
+	Route::get('/admin/moderate/{id}/{decision}', 'AdminController@doModerate');
+});
+
 Route::when('*', 'csrf', array('post', 'put', 'delete'));
+
+Route::filter('admin_check', function() {
+	if (!StudentInfo::isAdmin()) {
+		return Redirect::to(Config::get('content.rickroll_url'));
+	}
+});
 
 Route::filter('logged_in', function() {
 	if(!Tequila::isLoggedIn())  {
