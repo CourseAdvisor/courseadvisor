@@ -27,21 +27,22 @@
             <br>
             Lookup a course and find out what past students thought about it.
           </p>
-          <form action="{{{ action('SearchController@search') }}}" method="GET">
-            <div class="hero-search">
+          <div class="hero-search">
+            <form action="{{{ action('SearchController@search') }}}" method="GET">
               <div class="input-group input-group-lg hidden-xs">
                 <input type="text" class="form-control hero-search-input" name="q" placeholder="Search a course by title, field, teacher, ...">
                 <span class="input-group-btn">
                   <button class="btn btn-primary" type="submit">Go!</button>
                 </span>
               </div>
-
+            </form>
+            <form action="{{{ action('SearchController@search') }}}" method="GET">
               <div class="form-group form-group-lg visible-xs">
                 <input type="text" class="form-control hero-search-input" name="q" placeholder="Search a course by title, field, teacher, ...">
               </div>
               <button class="btn btn-primary visible-xs hero-search-button" type="submit">Go!</button>
-            </div>
-          </form>
+            </form>
+          </div>
           <p>
             Or just browse the course catalogue
           </p>
