@@ -29,3 +29,6 @@ public/img/*
 public/fonts/*
 
 ## END assets
+
+github_pull.sh
+public/__github_update.php
