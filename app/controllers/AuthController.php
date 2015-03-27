@@ -52,6 +52,9 @@ class AuthController extends Controller {
 				$student->save();
 			}
 			Session::put('student_id', $student->id);
+			if ($student->is_admin) {
+				Session::put('is_admin', 1);
+			}
 			Session::flash('message', ['success', 'Welcome back, ' . Tequila::get('firstname') . '!']);
 		}
 

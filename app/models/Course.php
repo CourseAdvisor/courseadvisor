@@ -44,6 +44,7 @@ class Course extends Eloquent {
 
 		$averages = DB::table('reviews')
 					->select(DB::raw($sql))
+					->whereIn('status', ['accepted', 'published'])
 					->where('course_id', $this->id)->first();
 
 		$this->avg_overall_grade = $averages->total;

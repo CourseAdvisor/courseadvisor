@@ -33,4 +33,12 @@ class StudentInfo {
 	public static function getId() {
 		return Session::get('student_id');
 	}
+
+	public static function isAdmin() {
+		if (!Session::has('is_admin')) {
+			return false;
+		}
+
+		return Session::get('is_admin') == 1;
+	}
 }

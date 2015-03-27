@@ -53,10 +53,17 @@
             @if(Tequila::isLoggedIn())
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                <i class="fa fa-user"></i>
+                <i class="fa fa-user">
+                  @if (StudentInfo::isAdmin() && ($waitingCount = Review::waiting()->count()) > 0)
+                    <sup class="text-danger">{{{ $waitingCount }}}</sup>
+                  @endif
+                </i>
                 <i class="fa fa-caret-down"></i>
               </a>
                <ul class="dropdown-menu fa-ul" role="menu">
+                 @if (StudentInfo::isAdmin())
+                   <li><a href="{{{ action('AdminController@index') }}}"<i class="fa fa-lock"></i> Admin</a></li>
+                 @endif
                  <li><a href="#TODO-dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
                  <li><a href="{{{ action('AuthController@logout', ['next' => Request::url()]) }}}"><i class="fa fa-sign-out"></i> Log out</a></li>
                </ul>
