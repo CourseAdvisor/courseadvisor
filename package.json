@@ -4,7 +4,7 @@
   "description": "A TripAdvisor for courses",
   "main": "index.js",
   "scripts": {
-    "preinstall": "php composer.phar install || echo You must install composer to download php dependencies && exit 1",
+    "preinstall": "php composer.phar install || (echo You must install composer to download php dependencies && exit 1)",
     "postinstall": "cd assets && node ../node_modules/bower/bin/bower install && echo 'well done, everything is set up! Consider `npm install -g gulp` if you want to develop for the front-end'"
   },
   "repository": {
