@@ -7,7 +7,7 @@ class Course extends Eloquent {
 	private $_reviewsCount = null;
 
 	protected $fillable = [
-		'name', 'string_id', 'teacher_id'
+		'name', 'string_id', 'teacher_id', 'url', 'description'
 	];
 
 	protected $appends = ['reviewsCount'];
