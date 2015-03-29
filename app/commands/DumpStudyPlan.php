@@ -5,7 +5,7 @@ use Illuminate\Console\Command;
 
 class DumpStudyPlan extends Command {
 
-	const SOURCE_DOMAIN = "http://edu.epfl.ch/";
+	const SOURCE_DOMAIN = "http://edu.epfl.ch";
 
 	const PEOPLE_URL = "http://people.epfl.ch/%sciper%";
 
@@ -53,7 +53,7 @@ class DumpStudyPlan extends Command {
 		print "=============================\n\n";
 
 
-		$plans = StudyPlan::where('study_cycle_id', '>', '3')->get();
+		$plans = StudyPlan::get();
 
 		foreach($plans as $plan) {
 			$this->dumpPlan($plan);
@@ -76,13 +76,37 @@ class DumpStudyPlan extends Command {
 	private function saveplan($plan, $courses)
 	{
 		foreach($courses as $string_id => $course) {
+
+			// Extract semesters
 			$semesters = $course['semesters'];
+			unset($course['semesters']);
+
+			// Ensures teacher
 			if (!$course['teacher_id'] = $this->ensureTeacher($course['teacher'])) {
 				echo "[WARNING]: Skipping ".$course['name_en']." due to unknown teacher\n";
 				continue;
 			}
 			unset($course['teacher']);
-			unset($course['semesters']);
+
+			// Ensures section
+			if(!$section = Section::where('string_id', $course['section'])->first()) {
+				echo "[WARNING]: No section with id: ".$course['section']."\n";
+				echo "           Creating one, consider updating it\'s name manually\n";
+
+				$section = new Section(['string_id' => $course['section']]);
+				$section->save();
+			}
+			unset($course['section']);
+			$course['section_id'] = $section->id;
+
+
+			// Only crawling one description because they are often identical and it takes quite some time
+			if (!$course['description'] = $this->fetchCourseDescription($course['url_en'])) {
+				if (!$course['description'] = $this->fetchCourseDescription($course['url_fr'])) {
+					echo "[Warning] Description not found for course ".$course['name_en']."\n";
+				}
+			}
+
 
 
 			$existing = Course::where('string_id', $string_id)->first();
@@ -164,6 +188,7 @@ class DumpStudyPlan extends Command {
 				'url_fr' => $course_fr['url'],
 				'string_id' => $string_id,
 				'semesters' => $course_en['semesters'],
+				'section' => $course_en['section'],
 				'teacher' => $teacher
 			];
 		}
@@ -286,6 +311,16 @@ class DumpStudyPlan extends Command {
 		}
 
 		return $course;
+	}
+
+	private function fetchCourseDescription($url)
+	{
+		$raw = $this->curlGet($url);
+
+		if (!preg_match("#<h4>[\n\t ]*(?:RESUME|SUMMARY)[\n\t ]*</h4>(.+)<h4>[\n\t ]*(?:CONTENU|CONTENT)[\n\t ]*</h4>#msU", $raw, $matches)) {
+			return NULL;
+		}
+		return trim($matches[1]);
 	}
 
 

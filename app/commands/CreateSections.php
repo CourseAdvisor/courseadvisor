@@ -63,6 +63,11 @@ class CreateSections extends Command {
 		$this->makeSection('SC', 'Systèmes de communication', 'Communication Systems');
 		$this->makeSection('SIE', 'Sciences et ingénierie de l\'environnement', 'Environmental Sciences and Engineering');
 		$this->makeSection('SV', 'Sciences et technologies du vivant', 'Life Sciences and Technologies');
+		$this->makeSection('SHS', 'Sciences humaines et sociales', 'Social and Human Sciences');
+		$this->makeSection('MTE', 'Management, technologie et entrepreneuriat','Management, Technology and Entrepreneurship');
+		$this->makeSection('IF', 'Ingénierie financière','Financial engineering');
+		$this->makeSection('HPLANS', '???','???');
+		$this->makeSection('MATH', '???','???');
 	}
 
 
