@@ -28,9 +28,9 @@
         </div>
         <hr class="nomargin">
         <span class="sections pull-right">
-          @foreach($course['sections'] as $section)
-            {{{ $section['string_id'] }}}-{{{ $section['semester'] ? $section['semester'] : $section->pivot->semester }}}
-          @endforeach
+        @foreach($course['plans'] as $plan)
+            {{{ $plan['string_id'] }}}-{{{ $plan['semester'] ? $plan['semester'] : $plan->pivot->semester }}}
+        @endforeach
         </span>
       </div>
 
@@ -45,11 +45,11 @@
 
     <!-- all platforms -->
     <h2>{{{ $course['name'] }}}</h2>
-    <h3>{{{ $course['teacher']['fullname'] }}}</h3>
+    <h3>{{{ $course['teacher']['fullname'] }}}&nbsp;</h3>
     <!-- except this -->
     <h4 class="sections visible-xs visible-sm">
-      @foreach($course['sections'] as $section)
-        {{{ $section['string_id'] }}}-{{{ $section['semester'] ? $section['semester'] : $section->pivot->semester }}}
+      @foreach($course['plans'] as $plan)
+        {{{ $plan['string_id'] }}}-{{{ $plan['semester'] ? $plan['semester'] : $plan->pivot->semester }}}
       @endforeach
     </h4>
 

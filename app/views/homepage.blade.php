@@ -47,7 +47,7 @@
             Or just browse the course catalogue
           </p>
           <div class="hero-browse">
-            <a href="{{{ action('CourseController@sections') }}}" class="btn btn-lg btn-primary"><i class="fa fa-book"></i> Browse courses</a>
+            <a href="{{{ action('CourseController@studyCycles') }}}" class="btn btn-lg btn-primary"><i class="fa fa-book"></i> Browse courses</a>
           </div>
         </div>
       </div>

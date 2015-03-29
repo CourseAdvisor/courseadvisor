@@ -7,7 +7,7 @@ class Section extends Eloquent {
 	}
 
 	public function courses() {
-		return $this->belongsToMany('Course')->withPivot('semester');
+		return $this->hasToMany('Course');
 	}
 
     public function getNameAttribute() {

@@ -28,6 +28,14 @@ class Course extends Eloquent {
 		return $this->belongsTo('Teacher');
 	}
 
+    public function getNameAttribute() {
+        return $this->name_en;
+    }
+
+    public function getUrlAttribute() {
+        return $this->url_en;
+    }
+
 	public function alreadyReviewedBy($student_id) {
 		if(Config::get('app.debug')) {
 			return false;

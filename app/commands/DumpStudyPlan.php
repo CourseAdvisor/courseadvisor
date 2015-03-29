@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Input\InputOption;
 
 
 class DumpStudyPlan extends Command {
@@ -41,6 +42,15 @@ class DumpStudyPlan extends Command {
 	 */
 	protected $description = 'Dump study plan from edu.epfl.ch';
 
+
+	protected function getOptions()
+    {
+       	return array(
+            array('skip-description', 'sd', InputOption::VALUE_NONE, 'Do not dump descriptions (saves huge time)', null)
+        );
+    }
+
+
 	/**
 	 * Execute the console command.
 	 *
@@ -53,7 +63,7 @@ class DumpStudyPlan extends Command {
 		print "=============================\n\n";
 
 
-		$plans = StudyPlan::get();
+		$plans = StudyPlan::where('study_cycle_id', '>', 3)->get();
 
 		foreach($plans as $plan) {
 			$this->dumpPlan($plan);
@@ -100,13 +110,14 @@ class DumpStudyPlan extends Command {
 			$course['section_id'] = $section->id;
 
 
-			// Only crawling one description because they are often identical and it takes quite some time
-			if (!$course['description'] = $this->fetchCourseDescription($course['url_en'])) {
-				if (!$course['description'] = $this->fetchCourseDescription($course['url_fr'])) {
-					echo "[Warning] Description not found for course ".$course['name_en']."\n";
+			if (!$this->option('skip-description')) {
+				// Only crawling one description locale because they are often identical and it takes quite some time
+				if (!$course['description'] = $this->fetchCourseDescription($course['url_en'])) {
+					if (!$course['description'] = $this->fetchCourseDescription($course['url_fr'])) {
+						echo "[Warning] Description not found for course ".$course['name_en']."\n";
+					}
 				}
 			}
-
 
 
 			$existing = Course::where('string_id', $string_id)->first();
@@ -120,9 +131,12 @@ class DumpStudyPlan extends Command {
 			}
 
 			// update studyplan relations
-			$existing->plans()->detach();
 			foreach($semesters as $semester) {
-				$existing->plans()->attach($plan->id, ["semester" => $semester]);
+				try {
+					$existing->plans()->attach($plan->id, ["semester" => $semester]);
+				} catch (Exception $e) {
+					// probably a duplicate, normal operation
+				}
 			}
 		}
 	}

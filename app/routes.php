@@ -23,8 +23,10 @@ Route::get('/search', 'SearchController@search');
 Route::get('/students', 'StudentController@index');
 Route::get('/students/{id}', 'StudentController@show');
 
-Route::get('/courses', 'CourseController@sections');
-Route::get('/courses/{section_id}', 'CourseController@sectionSemester');
+Route::get('/courses', 'CourseController@studyCycles');
+Route::get('/courses/{cycle}', 'CourseController@studyPlans');
+Route::get('/courses/{cycle}/{plan_slug}', 'CourseController@studyPlanCourses');
+// Route::get('/courses/{section_id}', 'CourseController@sectionSemester');
 // Route::get('/courses', 'CourseController@list');
 Route::get('/courses/{section_id}/{semester}', 'CourseController@listBySectionSemester');
 Route::get('/course/{slug}-{id}', 'CourseController@show');
@@ -41,8 +43,8 @@ Route::group(array('before' => 'logged_in'), function() {
 /* Routes forcing login */
 Route::group(array('before' => 'force_login'), function() {
 	Route::get('/courses/suggestions', 'CourseController@suggestions');
-	Route::post('/courses/{slug}-{id}/createReview', 'CourseController@createReview');
-	Route::post('/courses/{slug}-{id}/updateReview', 'CourseController@updateReview');
+	Route::post('/course/{slug}-{id}/createReview', 'CourseController@createReview');
+	Route::post('/course/{slug}-{id}/updateReview', 'CourseController@updateReview');
 });
 
 /* Admin stuff */

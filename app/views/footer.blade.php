@@ -4,7 +4,7 @@
       <div class="col-sm-4 col-xs-6">
         <h2><span class="logo-course">Course</span>Advisor</h2>
         <ul>
-          <li><a href="{{{ action('CourseController@sections') }}}">Browse courses</a></li>
+          <li><a href="{{{ action('CourseController@studyCycles') }}}">Browse courses</a></li>
           <li><a href="{{{ action('AuthController@login') }}}">Log in</a></li>
           <li><a href="#">About</a></li>
         </ul>
