@@ -11,6 +11,5 @@
 |
 */
 
-Artisan::add(new DumpCourses());
+Artisan::add(new DumpStudyPlan());
 Artisan::add(new CreateSections());
-Artisan::add(new UpdateCoursesDescription());

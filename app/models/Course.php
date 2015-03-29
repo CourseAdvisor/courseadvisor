@@ -7,7 +7,7 @@ class Course extends Eloquent {
 	private $_reviewsCount = null;
 
 	protected $fillable = [
-		'name', 'string_id', 'teacher_id', 'url', 'description'
+		'name_fr', 'name_en', 'string_id', 'teacher_id', 'url_fr', 'url_en', 'description_fr', 'description_en'
 	];
 
 	protected $appends = ['reviewsCount'];
@@ -17,7 +17,7 @@ class Course extends Eloquent {
 	}
 
 	public function plans() {
-		return $this->belongsToMany('StudyPlan');
+		return $this->belongsToMany('StudyPlan')->withPivot('semester');
 	}
 
 	public function reviews() {

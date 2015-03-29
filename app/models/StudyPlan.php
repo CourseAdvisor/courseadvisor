@@ -15,7 +15,7 @@ class StudyPlan extends Eloquent {
     }
 
     public function courses() {
-        return $this->hasMany('Course');
+        return $this->hasMany('Course')->withPivot('semester');
     }
 
     public function studyCycle() {
