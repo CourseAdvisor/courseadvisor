@@ -7,13 +7,17 @@ class Course extends Eloquent {
 	private $_reviewsCount = null;
 
 	protected $fillable = [
-		'name', 'string_id', 'teacher_id', 'url', 'description'
+		'name_fr', 'name_en', 'string_id', 'teacher_id', 'url_fr', 'url_en', 'description', 'section_id'
 	];
 
 	protected $appends = ['reviewsCount'];
 
-	public function sections() {
-		return $this->belongsToMany('Section')->withPivot('semester');
+	public function section() {
+		return $this->belongsTo('Section');
+	}
+
+	public function plans() {
+		return $this->belongsToMany('StudyPlan')->withPivot('semester');
 	}
 
 	public function reviews() {
@@ -23,6 +27,14 @@ class Course extends Eloquent {
 	public function teacher() {
 		return $this->belongsTo('Teacher');
 	}
+
+    public function getNameAttribute() {
+        return $this->name_en;
+    }
+
+    public function getUrlAttribute() {
+        return $this->url_en;
+    }
 
 	public function alreadyReviewedBy($student_id) {
 		if(Config::get('app.debug')) {
@@ -58,7 +70,7 @@ class Course extends Eloquent {
 
 	public function getReviewsCountAttribute() {
 		if ($this->_reviewsCount == null)
-			$this->_reviewsCount = $this->reviews()->count();
+			$this->_reviewsCount = $this->reviews()->published()->count();
 
 		return $this->_reviewsCount;
 	}

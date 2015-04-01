@@ -19,17 +19,6 @@ class SearchController extends BaseController {
 		// Get sections
 		$allSections = Section::all();
 		$selected_sections = [];
-		$filter_sections = Input::has('sections') && Input::get('sections') != 'all';
-		if ($filter_sections) {
-			$joined_selected_sections = Input::get('sections');
-			$selected_sections = explode("-", $joined_selected_sections);
-		}
-		else {
-			$joined_selected_sections = $allSections->reduce(function ($acc, $new) {
-				if (is_null($acc)) return $new->id;
-				return $acc . "-" . $new->id;
-			});
-		}
 
 		// Semesters
 		$selected_semesters = [];
@@ -51,28 +40,30 @@ class SearchController extends BaseController {
 			})->id;
 		}
 
+		// TODO : name en / fr
 		$cleaned = DB::getPDO()->quote(preg_replace("/[^A-Za-z0-9èàé ]/", '', $term));
 		$query = DB::table('courses')
-					->select(DB::raw('courses.name as name, courses.id as id'))
+					->select(DB::raw('courses.name_fr as name, courses.id as id'))
 					->addSelect(DB::raw('CONCAT(teachers.firstname, " ", teachers.lastname) as teacher_fullname'))
 					->addSelect(DB::raw('courses.avg_overall_grade as avg_overall_grade'))
-					->addSelect(DB::raw('GROUP_CONCAT(sections.string_id) as sections'))
-					->addSelect(DB::raw('GROUP_CONCAT(course_section.semester) as semesters'))
+					->addSelect(DB::raw('GROUP_CONCAT(study_plans.string_id) as plans'))
+					->addSelect(DB::raw('GROUP_CONCAT(course_study_plan.semester) as semesters'))
 					->addSelect(DB::raw('(select count(*) from reviews where course_id=courses.id) as reviewsCount'))
 					->addSelect(DB::raw("
-						MATCH(courses.name)
+						MATCH(courses.name_en, courses.name_fr)
 						AGAINST ($cleaned IN NATURAL LANGUAGE MODE) as course_relevance
 					"))
 					->addSelect(DB::raw("
 						MATCH(teachers.firstname, teachers.lastname)
 						AGAINST ($cleaned IN NATURAL LANGUAGE MODE) as teacher_relevance
 					"))
-					->leftJoin('course_section', 'course_section.course_id', '=', 'courses.id')
-					->leftJoin('sections', 'course_section.section_id', '=', 'sections.id')
+					->leftJoin('sections', 'sections.id', '=', 'courses.section_id')
+					->leftJoin('course_study_plan', 'course_study_plan.course_id', '=', 'courses.id')
+					->leftJoin('study_plans', 'course_study_plan.study_plan_id', '=', 'study_plans.id')
 					->leftJoin('teachers', 'teachers.id', '=', 'courses.teacher_id');
 
 		$query->where(function($q) use($cleaned) {
-			$q->whereRaw("MATCH(courses.name) AGAINST($cleaned IN NATURAL LANGUAGE MODE)");
+			$q->whereRaw("MATCH(courses.name_en, courses.name_fr) AGAINST($cleaned IN NATURAL LANGUAGE MODE)");
 
 			if (!Input::has('dont_match_teachers')) {
 				$q->orWhereRaw("MATCH(teachers.firstname, teachers.lastname) AGAINST ($cleaned IN NATURAL LANGUAGE MODE)");
@@ -87,12 +78,8 @@ class SearchController extends BaseController {
 			});
 		}
 
-		if ($filter_sections) {
-			$query->whereIn('sections.id', $selected_sections);
-		}
-
 		if ($filter_semesters) {
-			$query->whereIn('course_section.semester', $selected_semesters);
+			$query->whereIn('course_study_plan.semester', $selected_semesters);
 		}
 
 		$allowedSortingFields = ['courses.name', 'teachers.lastname', 'reviewsCount'];
@@ -101,7 +88,7 @@ class SearchController extends BaseController {
 			$query->orderBy(DB::raw($field), $order);
 		}
 		else {
-			$query->orderBy(DB::raw('2 * course_relevance + teacher_relevance'), $order);
+			$query->orderBy(DB::raw('course_relevance + teacher_relevance'), 'desc' /*$order*/);
 		}
 
 		$query->groupBy('courses.id');
@@ -113,17 +100,18 @@ class SearchController extends BaseController {
 
 		/* From the SQL query, 'sections' and 'semesters' look like IN,SV,MT and BA1,BA1,BA3.
 		We need to adapt them to a standard array */
+
 		foreach($courses as &$course) {
-			$sections = explode(",", $course['sections']);
+			$plans = explode(",", $course['plans']);
 			$semesters = explode(",", $course['semesters']);
-			$sectionsData = [];
-			foreach($sections as $i => $section) {
-				$sectionsData[] = [
-					'string_id' => $section,
+			$plansData = [];
+			foreach($plans as $i => $plan) {
+				$plansData[] = [
+					'string_id' => $plan,
 					'semester' => $semesters[$i]
 				];
 			}
-			$course['sections'] = $sectionsData;
+			$course['plans'] = $plansData;
 			$course['teacher'] = ['fullname' => $course['teacher_fullname']];
 			unset($course['semesters']);
 			unset($course['teacher_fullname']);
@@ -134,9 +122,7 @@ class SearchController extends BaseController {
 			'paginator' => $paginated,
 			'courses' => $courses,
 			'sections' => $allSections,
-			'joined_selected_sections' => $joined_selected_sections,
 			'joined_selected_semesters' => $joined_selected_semesters,
-			'selected_sections' => $selected_sections,
 			'selected_semesters' => $selected_semesters,
 			'was_filtered' => count(Input::except('page', 'q')) > 0,
 			'student_section_id' => $student_section_id

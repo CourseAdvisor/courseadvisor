@@ -33,22 +33,21 @@
                 'id' => $course->teacher['id'],
                 'slug' => Str::slug($course->teacher->fullname)
                 ]) }}}">{{{ $course->teacher->fullname }}}</a></dd>
-        <dt>Sections</dt>
+        <dt>Plans</dt>
         <dd>
-        	@foreach($course->sections as $section)
-        		<a href="{{{ action('CourseController@listBySectionSemester', [
-              'section_id' => $section->string_id,
-              'semester' => $section->pivot->semester
+        	@foreach($course->plans as $plan)
+        		<a href="{{{ action('CourseController@studyPlanCourses', [
+              'cycle' => $plan->studyCycle->name,
+              'plan_slug' => $plan->slug
             ])}}}">
-              {{{ $section->string_id }}}-{{{ $section->pivot->semester }}}
+              {{{ $plan->string_id }}}-{{{ $plan->pivot->semester }}}
             </a>
         	@endforeach
         </dd>
       </dl>
       <h2>Summary</h2>
-      <p>Analyse complexe: emploi de fonctions multivoques, équations de Cauchy-Riemann,
-      intégration complexe, théorème de Cauchy, formule de Cauchy, séries de Laurent, théorème des résidus.
-      Distributions tempérées sur la droite réelle: définition, exemples, calcul sur les distributions tempérées.</p>
+      <p>{{ nl2br(e($course->description)) }}<br />
+      <a target="_blank" href="{{{ $course->url }}}" title="coursebook page"><i class="fa fa-external-link"></i> Read more...</a></p>
 
       @if($nbReviews > 0)
         <hr class="nomargin">

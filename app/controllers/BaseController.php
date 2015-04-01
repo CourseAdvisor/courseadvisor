@@ -26,9 +26,9 @@ class BaseController extends Controller {
 	 *	Adds a breadcrumb to the breadcrumb stream.
 	 *	**name is unsafe (not escaped)**
 	 *
-	 * @param $action controller action this breadcrumb links to
-	 * @param $name (unsafe) text shown in the breadcrumb link
-	 * @param $params (optionnal) action parameters to build the link
+	 * @param $action string controller action this breadcrumb links to
+	 * @param $name string (unsafe) text shown in the breadcrumb link
+	 * @param $params array (optional) action parameters to build the link
 	 *
 	 * @return void
 	 */

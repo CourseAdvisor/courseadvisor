@@ -3,60 +3,54 @@ class CourseController extends BaseController {
 
 	public function __construct() {
 		parent::__construct();
-		$this->addCrumb('CourseController@sections', 'Courses');
+		$this->addCrumb('CourseController@studyCycles', 'Courses');
 	}
 
-	public function listBySectionSemester($section_id, $semester) {
+    public function studyPlanCourses($cycle_name, $slug) {
+        $coursesPerPage = Config::get('app.nbCoursesPerPage');
 
-		$coursesPerPage = Config::get('app.nbCoursesPerPage');
-		$section_name = null;
+        $plan = StudyPlan::with('studyCycle')
+            ->whereHas('studyCycle', function($q) use($cycle_name)
+            {
+                $q->where('name_en', $cycle_name)->orWhere('name_fr', $cycle_name);
+            })
+            ->where('slug', $slug)
+            ->firstOrFail();
 
-		$courses = Course::with('sections', 'teacher')->whereHas('sections', function($q) use ($section_id, $semester) {
-			if (!is_null($section_id))
-				$q->where('string_id', '=', $section_id);
-			if (!is_null($semester) && $semester != 'ALL')
-				$q->where('semester', '=', $semester);
-		})->paginate($coursesPerPage);
+        $this->addCrumb('CourseController@studyPlans', ucfirst($cycle_name), ['cycle' => $cycle_name]);
+        $this->addCrumb('CourseController@studyPlanCourses', ucfirst($plan->name), [
+            'cycle' => $cycle_name,
+            'plan_slug' => $slug]);
 
-		$section_name = Section::where('string_id', '=', $section_id)->firstOrFail()->name;
-		$this->addCrumb('CourseController@sectionSemester', ucfirst($section_name), [
-			'section_id' => $section_id
-		]);
+        return View::make('courses.planCourses', [
+            'page_title' => $cycle_name.' &ndash; '.$plan->name,
+            'plan' => $plan,
+            'cycle' => $cycle_name,
+            'courses' => $plan->courses()->with('teacher', 'plans')->paginate($coursesPerPage)
+        ]);
+    }
 
-		if ($semester == 'ALL') {
-			$this->addCrumb(Route::current()->getActionName(), 'All semesters', Route::current()->parameters());
-		} else {
-			$this->addCrumb(Route::current()->getActionName(), $semester, Route::current()->parameters());
-		}
+	public function studyPlans($cycle_name) {
+        $cycle = StudyCycle::where('name_fr', $cycle_name)->orWhere('name_en', $cycle_name)->firstOrFail();
 
-		return View::make('courses.list', [
-			'page_title' => $section_name.' &ndash; '.$semester,
-			'courses' => $courses,
-			'section' => $section_name
-		]);
-	}
+        $this->addCrumb('CourseController@studyPlans', ucfirst($cycle_name), ['cycle' => $cycle_name]);
 
-	public function sections() {
-		return View::make('courses.sections', [
-			'page_title' => 'Sections',
-			'sections' => Section::get()
-		]);
-	}
-
-	public function sectionSemester($section_id) {
-		$section = Section::where('string_id', '=', $section_id)->firstOrFail();
-
-		$this->addCrumb('CourseController@sectionSemester', ucfirst($section->name), [
-			'section_id' => $section->name
-		]);
-
-		return View::make('courses.sectionSemester', [
-			'page_title' => $section->name,
-			'section' => $section,
-			'semesters' => DB::table('course_section')->select('semester')->distinct()->orderBy('semester')->get()
+		return View::make('courses.plans', [
+			'page_title' => $cycle_name.' courses',
+			'plans' => $cycle->plans,
+            'cycle' => $cycle->name
 		]);
 	}
 
+	public function studyCycles() {
+		return View::make('courses.cycles', [
+			'page_title' => 'Study cycles',
+			'cycles' => StudyCycle::get()
+		]);
+	}
+
+
+    // To be rewritten
 	public function suggestions() {
 		$courses = Course::whereHas('sections', function($q) {
 			$q->where('string_id', '=', StudentInfo::getSection());
@@ -69,7 +63,9 @@ class CourseController extends BaseController {
 	}
 
 	public function show($slug, $id) {
-		$course = Course::with('teacher', 'sections')->findOrFail($id);
+		$course = Course::with('teacher', 'plans')->findOrFail($id);
+
+		dd($course->toArray());
 
 		if (($realSlug = Str::slug($course->name)) != $slug) {
 			return Redirect::action('CourseController@show', ['slug' => $realSlug, 'id' => $id]);
@@ -111,6 +107,8 @@ class CourseController extends BaseController {
 
 	/**
 	 *	Shows a teacher's courses and maybe some stats for that teacher
+     *
+     * TODO: move in separate controller
 	 */
 	public function showTeacher($slug, $id) {
 

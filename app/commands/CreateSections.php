@@ -27,37 +27,47 @@ class CreateSections extends Command {
 	}
 
 
-	private function makeSection($id, $name) {
-		print "Section '$name' ";
-		$count = Section::where('string_id', $id)->count();
-		if($count > 0) {
-			print "already exists in database. Skipping...\n";
-			return;
+	private function makeSection($id, $name_fr, $name_en) {
+		print "Section '$name_en' ";
+		$section = Section::where('string_id', $id)->first();
+		if($section) {
+			print "already exists in database. Updating...\n";
+			$section->where('id', $section->id)->update([
+				'string_id' => $id,
+				'name_fr'	=> $name_fr,
+				'name_en'	=> $name_en
+				]);
+		} else {
+			Section::create([
+				'string_id' => $id,
+				'name_fr'	=> $name_fr,
+				'name_en'	=> $name_en
+			]);
+			print "successfuly created\n";
 		}
-
-		Section::create([
-			'string_id' => $id,
-			'name'		=> $name
-		]);
-		print "successfuly created\n";
 	}
 
 
 	public function fire()
 	{
-		$this->makeSection('AR', 'Architecture');
-		$this->makeSection('CGC', 'Chimie');
-		$this->makeSection('EL', 'Génie électrique et électronique');
-		$this->makeSection('GC', 'Génie civil');
-		$this->makeSection('GM', 'Génie mécanique');
-		$this->makeSection('IN', 'Informatique');
-		$this->makeSection('MA', 'Mathématiques');
-		$this->makeSection('MT', 'Microtechnique');
-		$this->makeSection('MX', 'Matériaux');
-		$this->makeSection('PH', 'Physique');
-		$this->makeSection('SC', 'Systèmes de communication');
-		$this->makeSection('SIE', 'Environnement');
-		$this->makeSection('SV', 'Sciences de la vie');
+		$this->makeSection('AR', 'Architecture', 'Architecture');
+		$this->makeSection('CGC', 'Chimie et génie chimique', 'Chemistry and Chemical Engineering');
+		$this->makeSection('EL', 'Génie électrique et électronique', 'Electrical and Electronics Engineering');
+		$this->makeSection('GC', 'Génie civil', 'Civil Engineering');
+		$this->makeSection('GM', 'Génie mécanique', 'Mechanical Engineering');
+		$this->makeSection('IN', 'Informatique', 'Computer Science');
+		$this->makeSection('MA', 'Mathématiques', 'Mathematics');
+		$this->makeSection('MT', 'Microtechnique', 'Microengineering');
+		$this->makeSection('MX', 'Science et génie des matériaux', 'Materials Science and Engineering');
+		$this->makeSection('PH', 'Physique', 'Physics');
+		$this->makeSection('SC', 'Systèmes de communication', 'Communication Systems');
+		$this->makeSection('SIE', 'Sciences et ingénierie de l\'environnement', 'Environmental Sciences and Engineering');
+		$this->makeSection('SV', 'Sciences et technologies du vivant', 'Life Sciences and Technologies');
+		$this->makeSection('SHS', 'Sciences humaines et sociales', 'Social and Human Sciences');
+		$this->makeSection('MTE', 'Management, technologie et entrepreneuriat','Management, Technology and Entrepreneurship');
+		$this->makeSection('IF', 'Ingénierie financière','Financial engineering');
+		$this->makeSection('HPLANS', '???','???');
+		$this->makeSection('MATH', '???','???');
 	}
 
 

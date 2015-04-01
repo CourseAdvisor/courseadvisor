@@ -8,7 +8,7 @@ class StaticController extends BaseController {
     {
         if (Tequila::isLoggedIn()) {
             // TODO: redirect to dashboard
-            return Redirect::action('CourseController@sections');
+            return Redirect::action('CourseController@studyCycles');
         } else {
             return View::make('homepage');
         }
