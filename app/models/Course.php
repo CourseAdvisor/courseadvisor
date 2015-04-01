@@ -70,7 +70,7 @@ class Course extends Eloquent {
 
 	public function getReviewsCountAttribute() {
 		if ($this->_reviewsCount == null)
-			$this->_reviewsCount = $this->reviews()->count();
+			$this->_reviewsCount = $this->reviews()->published()->count();
 
 		return $this->_reviewsCount;
 	}

@@ -45,4 +45,9 @@ class Review extends Eloquent {
 		];
 	}
 
+	public static function count() {
+		exit("nope");
+	}
+
+
 }

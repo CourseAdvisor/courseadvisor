@@ -50,38 +50,6 @@
 		  	  	  </label>
 		  	  	</div>
 	  		  </div>
-			  <fieldset>
-			  	<legend>Filter by section</legend>
-		  	  	<div class="row">
-		  	  		@if(Tequila::isLoggedIn())
-		  	  			<a href="#" class="sections-check-mine">check mine</a> |
-		  	  		@endif
-		  			<a href="#" class="sections-check-all">check all</a> |
-		  			<a href="#" class="sections-uncheck-all">uncheck all</a>
-		  	  	</div>
-			  	<div class="row checkbox-panel">
-			  		<input type="hidden" name="sections" id="sections-filter-list"
-			  			value="{{{ $joined_selected_sections }}}"
-			  		/>
-			  		@foreach($sections as $i => $section)
-					<label class="checkbox-inline col-lg-3 col-md-3" style="margin-left:0px;">
-		  		  	    <input type="checkbox" value="true" data-section-id="{{{ $section->id }}}" class="section-filter"
-		  		  	    	@if(in_array($section->id, $selected_sections) || empty($selected_sections))
-		  		  	    		checked
-		  		  	    	@endif
-
-		  		  	    	@if($section->id == $student_section_id)
-								data-is-student-section="1"
-		  		  	    	@endif
-		  		  	    	>
-							{{{ $section->name }}}
-			  	  	</label>
-			  	  	@if($i > 0 && $i % 5 == 0)
-						<br />
-			  	  	@endif
-		  	  	@endforeach
-		  	  	</div>
-		  		</fieldset>
 		  		<fieldset>
 				  	<legend>Filter by semester</legend>
 				  	<div class="row">
