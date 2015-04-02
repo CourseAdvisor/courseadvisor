@@ -12,7 +12,7 @@
   </head>
   <body>
     <div class="container">
-      <a href="/" class="navbar-brand pull-left"><span class="logo-course">Course</span>Advisor</a>
+      <a href="/" class="navbar-brand pull-left"><img src="//www.epfl.ch/img/epfl_small.png" class="epfl-logo" alt=""> <span class="logo-course">Course</span>Advisor</a>
 
       <ul class="homepage-login pull-right">
         <li><a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}">Log in</a></li>
@@ -21,16 +21,16 @@
     <section id="splash">
       <div class="container">
         <div class="page">
-          <h1>Hi there!</h1>
+          <h1>Welcome!</h1>
           <p>
-            Welcome to CourseAdvisor. Here you can choose your courses based on other students reviews.<br>
+            Courseadvisor is a service dedicated to helping EPFL students chose their courses.<br>
             <br>
             Lookup a course and find out what past students thought about it.
           </p>
           <div class="hero-search">
             <form action="{{{ action('SearchController@search') }}}" method="GET">
               <div class="input-group input-group-lg hidden-xs">
-                <input type="text" class="form-control hero-search-input" name="q" placeholder="Search a course by title, field, teacher, ...">
+                <input type="text" class="form-control hero-search-input-lg" name="q" placeholder="Search a course by title, field, teacher, ...">
                 <span class="input-group-btn">
                   <button class="btn btn-primary" type="submit">Go!</button>
                 </span>
@@ -44,10 +44,10 @@
             </form>
           </div>
           <p>
-            Or just browse the course catalogue
+            Or log-in with your gaspar ID to instantly find relevant courses!
           </p>
           <div class="hero-browse">
-            <a href="{{{ action('CourseController@studyCycles') }}}" class="btn btn-lg btn-primary"><i class="fa fa-book"></i> Browse courses</a>
+            <a href="{{{ action('AuthController@login') }}}" class="btn btn-lg btn-primary"><i class="fa fa-eye"></i> Log-in</a>
           </div>
         </div>
       </div>

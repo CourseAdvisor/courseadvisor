@@ -17,9 +17,9 @@ body {
 
 footer {
     background-color: #b7b7b7;
-    padding-top: 40px;
+    padding-top: 15px;
     margin-top: 35px;
-    height: 240px;
+    height: 80px;
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -27,17 +27,20 @@ footer {
     ul {
         list-style-type: none;
         padding-left: 10px;
-        & > li > a {
-            color: @text-color;
-            font-size: 15px;
-            &:hover {
-                text-decoration: none;
+        & > li {
+            display: inline-block;
+            margin-right: 30px;
+            & > a {
+                color: @text-color;
+                font-size: 15px;
+                &:hover {
+                    text-decoration: none;
+                }
             }
         }
     }
 
     .copyright {
-        margin-top: 30px;
         color: @hint-color;
         font-style: italic;
         font-size: 12px;
@@ -54,6 +57,13 @@ footer {
 
 .navbar-brand {
     font-size: 22px;
+
+    .epfl-logo {
+        display: inline;
+        height: 28px;
+        width: auto;
+        margin-right: 10px;
+    }
 
     &, &:hover {
         color: @text-color;
@@ -402,6 +412,11 @@ form div.checkbox-panel {
             border-radius: 10px;
         }
 
+        .hero-search-input-lg {
+            width: 100%;
+            border-radius: 10px 0 0 10px;
+        }
+
         .hero-search-button {
             margin: auto;
         }
@@ -415,7 +430,7 @@ form div.checkbox-panel {
                 z-index: 10;
 
                 & > button {
-                    border-radius: 10px;
+                    border-radius: 0 10px 10px 0;
                     width: @button-width;
                 }
             }

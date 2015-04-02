@@ -216,8 +216,8 @@
         <h2 id="my-review">Your review</h2>
 
         @if(!Tequila::isLoggedIn())
-          <div class="alert alert-danger" role="alert">
-            You need to be {{ link_to_action('AuthController@login', 'logged in', ['next' => Request::url()]) }} to post a review.
+          <div class="alert alert-info" role="alert">
+            {{ link_to_action('AuthController@login', 'Log in', ['next' => Request::url()]) }} to post a review.
           </div>
         @elseif($hasAlreadyReviewed)
           <div class="alert alert-warning" role="alert">
