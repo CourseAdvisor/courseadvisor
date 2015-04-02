@@ -17,13 +17,13 @@ class AuthController extends Controller {
 		$sciper = Tequila::get('uniqueid');
 		$student = Student::where('sciper', '=', $sciper);
 
-		$count = $student->count();
+        $fullSection = explode(',', Tequila::get('unit'))[0]; // Of the form IN-BA6
+        $splitted = explode('-', $fullSection);
+        $sectionId = $splitted[0];
 
-		if($count == 0) {
-			$fullSection = explode(',', Tequila::get('unit'))[0]; // Of the form IN-BA6
-			$splitted = explode('-', $fullSection);
-			$sectionId = $splitted[0];
-			$semester = $splitted[1];
+        $count = $student->count();
+        if($count == 0) {
+            // It's a new user
 
 			// Check that the section exists
 			$section = Section::where('string_id', '=', $sectionId)->firstOrFail();
@@ -58,7 +58,7 @@ class AuthController extends Controller {
 			Session::flash('message', ['success', 'Welcome back, ' . Tequila::get('firstname') . '!']);
 		}
 
-
+        $student->refreshPlans($sectionId);
 
 		if(Session::has('login.next')) {
 			return Redirect::to(Session::pull('login.next'));

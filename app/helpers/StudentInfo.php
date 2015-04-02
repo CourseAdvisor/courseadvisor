@@ -16,6 +16,20 @@ class StudentInfo {
 		return explode('-', self::getFullSection())[1];
 	}
 
+    public static function getStudyCycle() {
+        $map = array(
+            'BA1' => 1, 'BA2' => 1,                         // prope
+            'BA3' => 2, 'BA4' => 2, 'BA5' => 2, 'BA6' => 2, // bachelor
+            'MA1' => 3, 'MA2' => 3                          // master
+        );
+
+        $semester = self::getSemester();
+
+        if (array_key_exists($semester, $map)) {
+            return $map[$semester];
+        }
+    }
+
 	public static function getLowerSemesters() {
 		$current = self::getSemester();
 		$semesters = ['BA1', 'BA2', 'BA3', 'BA4', 'BA5', 'BA6', 'MA1', 'MA2', 'MA3', 'MA4'];
