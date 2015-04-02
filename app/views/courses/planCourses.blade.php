@@ -10,7 +10,13 @@
             <div class="col-xs-12">
                 <div class="page">
                     <h1>{{{ $plan->name }}} courses ({{{ $cycle }}})</h1>
-                    @include('global.course_list', ['courses' => $courses])
+                    @foreach($courses as $semester => $_courses)
+                        <h2>{{{ $semester }}}</h2>
+                        @include('global.course_list', [
+                        'courses' => $_courses,
+                        'paginate' => FALSE])
+
+                    @endforeach
                 </div>
             </div>
         </section>

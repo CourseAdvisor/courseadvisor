@@ -26,7 +26,14 @@ class CourseController extends BaseController {
             'page_title' => $cycle_name.' &ndash; '.$plan->name,
             'plan' => $plan,
             'cycle' => $cycle_name,
-            'courses' => $plan->courses()->with('teacher', 'plans')->paginate($coursesPerPage)
+            'courses' => $plan->courses()
+                ->with('teacher', 'plans')
+                ->withPivot('semester')
+                ->orderBy('pivot_semester')
+                ->get()
+                ->groupBy(function($course) {
+                    return $course->nice_semester;
+            })
         ]);
     }
 

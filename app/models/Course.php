@@ -74,4 +74,13 @@ class Course extends Eloquent {
 
 		return $this->_reviewsCount;
 	}
+
+    public function getNiceSemesterAttribute() {
+        $sem_nb = intval(substr($this->pivot->semester, 2));
+
+        if (substr($this->pivot->semester, 0, 2) == "BA" && $sem_nb > 2) {
+            $sem_nb -= 2;
+        }
+        return "Semester ".$sem_nb;
+    }
 }
