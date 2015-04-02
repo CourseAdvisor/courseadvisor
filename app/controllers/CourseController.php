@@ -65,8 +65,6 @@ class CourseController extends BaseController {
 	public function show($slug, $id) {
 		$course = Course::with('teacher', 'plans')->findOrFail($id);
 
-		dd($course->toArray());
-
 		if (($realSlug = Str::slug($course->name)) != $slug) {
 			return Redirect::action('CourseController@show', ['slug' => $realSlug, 'id' => $id]);
 		}
