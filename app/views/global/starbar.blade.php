@@ -13,7 +13,7 @@ parameters:
 
 <?php
   $grade = isset($grade) ? $grade : 0;
-  if (isset($compact) && $compact == TRUE && !isset($comment_unsafe) && isset($disabled) && $disabled != TRUE) {
+  if (isset($compact) && $compact == TRUE && !isset($comment_unsafe) && (!isset($disabled) || $disabled != TRUE)) {
     $comment_unsafe = (round($grade*2)/2).'/5';
   }
 ?>

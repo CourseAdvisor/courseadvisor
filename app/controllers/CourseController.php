@@ -176,7 +176,7 @@ class CourseController extends BaseController {
 			$msg = 'Your review was successfuly posted. Thank you!';
 		}
 		else {
-			$msg = 'Your review was successfuly posted. It will now be moderated by an administrator.';
+			$msg = 'Thank you! Your review has been submitted for moderation. It will appear on this page anytime soon.';
 		}
 
 

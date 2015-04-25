@@ -7,7 +7,7 @@
   - array $pagination_links_appendings : An array to be passed to the 'appends' method.
     See http://laravel.com/docs/4.2/pagination#appending-to-pagination-links
 --}}
-<div class="list-group" id="course_list">
+<div class="list-group" id="course_list"> {{-- TODO: why id ? id is unique thus cannot use list at multiple places --}}
 @foreach($courses as $course)
   <?php $reviewsCount = $course['reviewsCount'] ?>
 

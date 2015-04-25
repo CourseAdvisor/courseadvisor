@@ -64,8 +64,8 @@
                  @if (StudentInfo::isAdmin())
                    <li><a href="{{{ action('AdminController@index') }}}"<i class="fa fa-lock"></i> Admin</a></li>
                  @endif
-                 <li><a href="#TODO-dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-                 <li><a href="{{{ action('AuthController@logout', ['next' => Request::url()]) }}}"><i class="fa fa-sign-out"></i> Log out</a></li>
+                 <li><a href="{{{ action('StudentController@dashboard') }}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+                 <li><a href="{{{ action('AuthController@logout') }}}"><i class="fa fa-sign-out"></i> Log out</a></li>
                </ul>
             </li>
             @else
@@ -78,8 +78,8 @@
           {{-- mobile nav --}}
           <ul class="nav navbar-nav main-nav visible-xs">
             @if(Tequila::isLoggedIn())
-              <li><a href="#TODO-dashboard"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-              <li><a href="{{{ action('AuthController@logout', ['next' => Request::url()]) }}}">
+              <li><a href="{{{ action('StudentController@dashboard') }}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+              <li><a href="{{{ action('AuthController@logout') }}}">
                 <i class="fa fa-sign-out"></i> Log out
               </a></li>
             @else

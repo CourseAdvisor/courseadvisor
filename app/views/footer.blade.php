@@ -7,7 +7,7 @@
             <li><a href="{{{ action('CourseController@studyCycles') }}}">Browse courses</a></li>
             <li><a href="{{{ action('AuthController@login') }}}">Log in</a></li>
           @else
-            <li><a href="#">Dashboard</a></li> {{-- TODO: dashboard link --}}
+            <li><a href="{{{ action('StudentController@dashboard') }}}">Dashboard</a></li>
             <li><a href="{{{ action('AuthController@logout', ['next' => Request::url()]) }}}">Log out</a></li>
           @endif
           <li><a href="#">About</a></li>
