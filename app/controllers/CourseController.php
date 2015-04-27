@@ -214,8 +214,12 @@ class CourseController extends BaseController {
 		$review->content_grade = Input::get('content_grade');
 		$review->difficulty = Input::get('difficulty');
 
+        $msg = 'Your review has been successfuly edited';
+        
 		if (Input::get('anonymous') == true) {
 			$review->is_anonymous = 1;
+            $review->status = 'waiting';
+            $msg = 'Your review has been edited. It will now be reviewed by an administrator';
 		}
 
 		$review->updateAverage();
@@ -225,6 +229,6 @@ class CourseController extends BaseController {
 			$review->course->updateAverages();
 
 		return $courseRedirect
-				->with('message', ['success', 'Your review has been successfuly edited']);
+				->with('message', ['success', $msg]);
 	}
 }
