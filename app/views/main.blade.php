@@ -5,7 +5,7 @@
 
     <title>
     @section('page_title')
-    {{{ isset($page_title) ? $page_title.' | ' : '' }}} Course Advisor
+    {{{ isset($page_title) ? $page_title.' | ' : '' }}} CourseAdvisor
     @show
     </title>
 
@@ -65,14 +65,16 @@
                 @if (StudentInfo::isAdmin())
                 <li><a href="{{{ action('AdminController@index') }}}"<i class="fa fa-lock"></i> Admin</a></li>
                 @endif
-                <li><a href="{{{ action('StudentController@dashboard') }}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-                <li><a href="{{{ action('AuthController@logout') }}}"><i class="fa fa-sign-out"></i> Log out</a></li>
+                <li><a href="{{{ action('StudentController@dashboard') }}}"><i class="fa fa-dashboard"></i> {{{ trans('global.dashboard-action') }}}</a></li>
+                <li><a href="{{{ action('AuthController@logout') }}}"><i class="fa fa-sign-out"></i> {{{ trans('global.logout-action') }}}</a></li>
               </ul>
             </li>
             @else
-              <li><a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}">
-                log in
-              </a></li>
+            <li>
+              <a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}">
+                {{{ trans('global.login-action') }}}
+              </a>
+            </li>
             @endif
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
@@ -93,13 +95,13 @@
           {{-- mobile nav --}}
           <ul class="nav navbar-nav main-nav visible-xs">
             @if(Tequila::isLoggedIn())
-              <li><a href="{{{ action('StudentController@dashboard') }}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+              <li><a href="{{{ action('StudentController@dashboard') }}}"><i class="fa fa-dashboard"></i> {{{ trans('global.dashboard-action') }}}</a></li>
               <li><a href="{{{ action('AuthController@logout') }}}">
-                <i class="fa fa-sign-out"></i> Log out
+                <i class="fa fa-sign-out"></i> {{{ trans('global.logout-action') }}}
               </a></li>
             @else
               <li><a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}">
-                <i class="fa fa-sign-in"></i> Log in
+                <i class="fa fa-sign-in"></i> {{{ trans('global.login-action') }}}
               </a></li>
             @endif
             <li class="dropdown">

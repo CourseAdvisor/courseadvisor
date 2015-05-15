@@ -9,7 +9,10 @@
         <section class="row">
             <div class="col-xs-12">
                 <div class="page">
-                    <h1>{{{ $plan->name }}} courses ({{{ $cycle }}})</h1>
+                    <h1>{{{ trans('courses.plan-courses-heading', [
+                    'plan' => $plan->name,
+                    'cycle' => $cycle ])
+                    }}}</h1>
                     @foreach($courses as $semester => $_courses)
                         <h2>{{{ $semester }}}</h2>
                         @include('global.course_list', [

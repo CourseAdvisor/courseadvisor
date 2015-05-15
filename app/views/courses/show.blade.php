@@ -16,24 +16,26 @@
       @if($nbReviews > 0)
         @include('global.starbar', [
           'grade' => $course->avg_overall_grade,
-          'comment_unsafe' => '<a href="#reviews">'.$nbReviews.' review(s)</a>'
+          'comment_unsafe' => '<a href="#reviews">'.
+            Lang::choice('courses.reviews-counter', $nbReviews, ['count' => $nbReviews]).
+            '</a>'
         ])
       @else
         @include('global.starbar', [
           'disabled' => TRUE,
-          'comment_unsafe' => 'No reviews for this course.',
+          'comment_unsafe' => e(trans('courses.no-review-message')),
         ])
       @endif
       <div class="clearfix"></div>
       <dl class="dl-horizontal course-attrs">
-        <dt>Difficulty</dt><dd>
+        <dt>{{{ trans('courses.difficulty-label') }}}</dt><dd>
           @include('global.difficulty_bar', ['difficulty' => $course->avg_difficulty])
         </dd>
-        <dt>Teacher</dt><dd><a href="{{{ action('CourseController@showTeacher', [
+        <dt>{{{ trans('courses.difficulty-label') }}}</dt><dd><a href="{{{ action('CourseController@showTeacher', [
                 'id' => $course->teacher['id'],
                 'slug' => Str::slug($course->teacher->fullname)
                 ]) }}}">{{{ $course->teacher->fullname }}}</a></dd>
-        <dt>Plans</dt>
+        <dt>{{{ trans('courses.studyplans-label') }}}</dt>
         <dd>
         	@foreach($course->plans as $plan)
         		<a href="{{{ action('CourseController@studyPlanCourses', [
@@ -45,17 +47,17 @@
         	@endforeach
         </dd>
       </dl>
-      <h2>Summary</h2>
+      <h2>{{{ trans('courses.summary-heading') }}}</h2>
       <p>{{ nl2br(e($course->description)) }}<br />
-      <a target="_blank" href="{{{ $course->url }}}" title="coursebook page"><i class="fa fa-external-link"></i> Read more...</a></p>
+      <a target="_blank" href="{{{ $course->url }}}" title="coursebook page"><i class="fa fa-external-link"></i> {{{ trans('courses.read-more-action') }}}</a></p>
 
       @if($nbReviews > 0)
         <hr class="nomargin">
         <div class="row">
           <div class="col-xs-6 col-xs-offset-1 col-sm-offset-0">
-            <h2>Distribution</h2>
+            <h2>{{{ trans('courses.distribution-heading') }}}</h2>
             <dl class="course-stats dl-horizontal">
-              <dt>Excellent</dt>
+              <dt>{{{ trans('courses.grading-5-label') }}}</dt>
               <dd>
                 <div class="progress pull-left">
                   <div class="progress-bar" role="progressbar" style="width: {{{ $distribution[4]['percentage']}}}%;">
@@ -65,7 +67,7 @@
                 <div class="pull-left">{{{ $distribution[4]['total']}}} votes</div>
               </dd>
 
-              <dt>Good</dt>
+              <dt>{{{ trans('courses.grading-4-label') }}}</dt>
               <dd>
                 <div class="progress pull-left">
                   <div class="progress-bar" role="progressbar" style="width: {{{ $distribution[3]['percentage']}}}%;">
@@ -75,7 +77,7 @@
                 <div class="pull-left">{{{ $distribution[3]['total'] }}} votes</div>
               </dd>
 
-              <dt>Okay</dt>
+              <dt>{{{ trans('courses.grading-3-label') }}}</dt>
               <dd>
                 <div class="progress pull-left">
                   <div class="progress-bar" role="progressbar" style="width: {{{ $distribution[2]['percentage']}}}%;">
@@ -85,7 +87,7 @@
                 <div class="pull-left">{{{ $distribution[2]['total']}}} votes</div>
               </dd>
 
-              <dt>Bad</dt>
+              <dt>{{{ trans('courses.grading-2-label') }}}</dt>
               <dd>
                 <div class="progress pull-left">
                   <div class="progress-bar" role="progressbar" style="width: {{{ $distribution[1]['percentage']}}}%;">
@@ -95,7 +97,7 @@
                 <div class="pull-left">{{{ $distribution[1]['total']}}} votes</div>
               </dd>
 
-              <dt>Terrible</dt>
+              <dt>{{{ trans('courses.grading-1-label') }}}</dt>
               <dd>
                 <div class="progress pull-left">
                   <div class="progress-bar" role="progressbar" style="width: {{{ $distribution[0]['percentage']}}}%;">
@@ -105,22 +107,22 @@
                 <div class="pull-left">{{{ $distribution[0]['total'] }}} votes</div>
               </dd>
             </dl>
-            <p class="formula">s²=1.344 <span class="overline">x</span>=3.7 x̃=4 Q1=3</p>
+            {{-- <p class="formula">s²=1.344 <span class="overline">x</span>=3.7 x̃=4 Q1=3</p> --}}
           </div>
           <div class="col-xs-5 col-sm-6">
-            <h2>Rating</h2>
+            <h2>{{{ trans('courses.rating-heading') }}}</h2>
             <dl class="dl-horizontal">
-              <dt>Lectures</dt>
+              <dt>{{{ trans('courses.lectures-label') }}}</dt>
               <dd>
               @include('global.starbar', ['grade' => $course->avg_lectures_grade])
               </dd>
 
-              <dt>Contents</dt>
+              <dt>{{{ trans('courses.contents-label') }}}</dt>
               <dd>
               @include('global.starbar', ['grade' => $course->avg_content_grade])
         	  </dd>
 
-              <dt>Exercises</dt>
+              <dt>{{{ trans('courses.exercises-label') }}}</dt>
               <dd>
               @include('global.starbar', ['grade' => $course->avg_exercises_grade])
               </dd>
@@ -137,14 +139,14 @@
     <div class="col-xs-12">
       <div class="page">
         <h2 id="reviews">
-          Reviews
+          {{{ trans('courses.reviews-heading') }}}
         @if($nbReviews > 0)
-          <a href="#my-review" class="pull-right btn btn-primary btn-large"><i class="fa fa-plus"></i> Review this course</a>
+          <a href="#my-review" class="pull-right btn btn-primary btn-large"><i class="fa fa-plus"></i> {{{ trans('courses.review-this-action') }}}</a>
         @endif
         </h2>
 
         @if($nbReviews == 0)
-          <p>This course hasn't been reviewed yet. Maybe you can help?</p>
+          <p>{{{ trans('courses.no-reviews-message') }}}</p>
         @else
           <div class="reviews">
             @for($i = 0 ; $i < count($reviews) ; $i++)
@@ -162,7 +164,7 @@
                     data-review-title="{{{ $review->title }}}"
                     data-review-difficulty="{{{ $review->difficulty }}}"
                     data-review-anonymous="{{{ $review->is_anonymous ? 1 : 0 }}}"
-                    class="edit-review" title="Edit this review">
+                    class="edit-review" title="{{{ trans('courses.edit-reviews-action') }}}">
                     <i class="fa fa-pencil"></i>
                   </a>
                 @endif
@@ -173,12 +175,15 @@
                 ])
             	  <div class="clearfix"></div>
             	  <div class="review-author">
-                  by
                   @if($review->is_anonymous)
-                    <span class="hint">Anonymous {{{ $review->student->section->name }}} student</span>
+                    {{{ trans('courses.review-anonymous-author', ['section' => $review->student->section->name])}}}
                   @else
-                    <a target="_blank" href="http://people.epfl.ch/{{{ $review->student->sciper }}}">{{{ $review->student->fullname }}}</a>
-                    <span class="hint">({{{ $review->student->section->name }}})</span>
+                  {{
+                    trans('courses.review-author', [
+                      'author' => '<a target="_blank" href="http://people.epfl.ch/'.e($review->student->sciper).'">'.e($review->student->fullname).'</a>',
+                      'section' => '<span class="hint">'.$review->student->section->name.'</span>'
+                      ])
+                  }}
                   @endif
             	  </div>
             	  <p class="review-content">{{ nl2br(e($review->comment)) }}</p>
@@ -196,7 +201,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" ><span>&times;</span></button>
-          <h4 class="modal-title">Edit your review</h4>
+          <h4 class="modal-title">{{{ trans('courses.edit-review-heading') }}}</h4>
         </div>
         <div class="modal-body">
         @include('forms.create-review', [
@@ -213,15 +218,20 @@
   <section class="row">
     <div class="col-lg-12">
       <div class="page">
-        <h2 id="my-review">Your review</h2>
+        <h2 id="my-review">{{{ trans('courses.create-review-heading') }}}</h2>
 
         @if(!Tequila::isLoggedIn())
           <div class="alert alert-info" role="alert">
-            {{ link_to_action('AuthController@login', 'Log in', ['next' => Request::url()]) }} to post a review.
+            {{ trans('courses.login-to-post-prompt', [
+            'action-link' => link_to_action(
+              'AuthController@login',
+              trans('global.login-action'),
+              ['next' => Request::url()])
+            ]) }}
           </div>
         @elseif($hasAlreadyReviewed)
           <div class="alert alert-warning" role="alert">
-            You already posted a review for this course! You can (todo) edit it.
+            {{{ trans('courses.already-reviewed-message') }}}
           </div>
         @else
 
