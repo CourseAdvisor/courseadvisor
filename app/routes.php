@@ -12,48 +12,63 @@
 */
 
 
+/* PATTERNS */
 Route::pattern('id', '\d+');
 Route::pattern('slug', '[a-zA-Z0-9_\-\.]+');
 
-Route::get('/', 'StaticController@homepage');
-Route::get('/faq', 'StaticController@faq');
 
-Route::get('/search', 'SearchController@search');
+// Localization wrapper
+Route::group([
+	'prefix' => LaravelLocalization::setLocale(),
+	'before' => 'LaravelLocalizationRedirectFilter' // LaravelLocalization filter
+], function() {
+  /* All localized routes */
+  Route::get('/', function()
+  {
+    return View::make('hello');
+  });
 
-Route::get('/students', 'StudentController@index');
-Route::get('/students/{id}', 'StudentController@show');
+	Route::get('/', 'StaticController@homepage');
+	Route::get('/faq', 'StaticController@faq');
 
-Route::get('/courses', 'CourseController@studyCycles');
-Route::get('/courses/{cycle}', 'CourseController@studyPlans');
-Route::get('/courses/{cycle}/{plan_slug}', 'CourseController@studyPlanCourses');
-// Route::get('/courses/{section_id}', 'CourseController@sectionSemester');
-// Route::get('/courses', 'CourseController@list');
-Route::get('/courses/{section_id}/{semester}', 'CourseController@listBySectionSemester');
-Route::get('/course/{slug}-{id}', 'CourseController@show');
-Route::get('/teacher/{slug}-{id}', 'CourseController@showTeacher');
+	Route::get('/search', 'SearchController@search');
 
-Route::get('/login', array('before' => 'logged_out', 'uses' => 'AuthController@login'));
-Route::get('/login_redirect', 'AuthController@loginRedirect');
+	Route::get('/students', 'StudentController@index');
+	Route::get('/students/{id}', 'StudentController@show');
 
-/* Routes requiring login (display error message if not logged in) */
-Route::group(array('before' => 'logged_in'), function() {
-	Route::get('/logout', 'AuthController@logout');
+	Route::get('/courses', 'CourseController@studyCycles');
+	Route::get('/courses/{cycle}', 'CourseController@studyPlans');
+	Route::get('/courses/{cycle}/{plan_slug}', 'CourseController@studyPlanCourses');
+	// Route::get('/courses/{section_id}', 'CourseController@sectionSemester');
+	// Route::get('/courses', 'CourseController@list');
+	Route::get('/courses/{section_id}/{semester}', 'CourseController@listBySectionSemester');
+	Route::get('/course/{slug}-{id}', 'CourseController@show');
+	Route::get('/teacher/{slug}-{id}', 'CourseController@showTeacher');
+
+	Route::get('/login', array('before' => 'logged_out', 'uses' => 'AuthController@login'));
+	Route::get('/login_redirect', 'AuthController@loginRedirect');
+
+	/* Routes requiring login (display error message if not logged in) */
+	Route::group(array('before' => 'logged_in'), function() {
+		Route::get('/logout', 'AuthController@logout');
+	});
+
+	/* Routes forcing login */
+	Route::group(array('before' => 'force_login'), function() {
+		Route::get('/dashboard', 'StudentController@dashboard');
+		Route::get('/courses/suggestions', 'CourseController@suggestions');
+		Route::post('/course/{slug}-{id}/createReview', 'CourseController@createReview');
+		Route::post('/course/{slug}-{id}/updateReview', 'CourseController@updateReview');
+	});
+
+	/* Admin stuff */
+	Route::group(['before' => 'admin_check'], function() {
+		Route::get('/admin', 'AdminController@index');
+		Route::get('/admin/moderate', 'AdminController@moderate');
+		Route::get('/admin/moderate/{id}/{decision}', 'AdminController@doModerate');
+	});
 });
 
-/* Routes forcing login */
-Route::group(array('before' => 'force_login'), function() {
-	Route::get('/dashboard', 'StudentController@dashboard');
-	Route::get('/courses/suggestions', 'CourseController@suggestions');
-	Route::post('/course/{slug}-{id}/createReview', 'CourseController@createReview');
-	Route::post('/course/{slug}-{id}/updateReview', 'CourseController@updateReview');
-});
-
-/* Admin stuff */
-Route::group(['before' => 'admin_check'], function() {
-	Route::get('/admin', 'AdminController@index');
-	Route::get('/admin/moderate', 'AdminController@moderate');
-	Route::get('/admin/moderate/{id}/{decision}', 'AdminController@doModerate');
-});
 
 Route::when('*', 'csrf', array('post', 'put', 'delete'));
 

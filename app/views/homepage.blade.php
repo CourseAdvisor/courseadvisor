@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
 
-    <title>CourseAdvisor &ndash; Review EPFL courses, for real!</title>
+    <title>{{ trans('homepage.title') }}</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
