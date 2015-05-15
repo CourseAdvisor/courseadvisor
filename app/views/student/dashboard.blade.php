@@ -8,7 +8,7 @@
         <section class="row">
             <div class="col-xs-12">
                 <div class="page">
-                    <h1>My home</h1>
+                    <h1>Dashboard</h1>
                     <div class="hint">Logged in as {{{ $student->fullname }}}</div>
                     <h2>My reviews</h2>
                     @if(!count($student->reviews))
@@ -56,7 +56,7 @@
                     @endif
                     <br/>
                     <hr/>
-                    <h2>Courses I may know about</h2>
+                    <h2>My courses</h2>
                     <a class="btn btn-large btn-default" href="{{{ action("CourseController@studyCycles") }}}">Browse all courses</a>
                     <br/><br/>
                     @include('global.course_list', [
