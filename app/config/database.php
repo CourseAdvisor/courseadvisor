@@ -46,10 +46,10 @@ return array(
     ),
     'mysql' => array(
       'driver'    => 'mysql',
-      'host'      => 'MYSQL_HOST',
+      'host'      => 'localhost',
       'database'  => 'courseadvisor',
-      'username'  => 'MYSQL_USERNAME',
-      'password'  => 'MYSQL_PASSWORD',
+      'username'  => 'root',
+      'password'  => '',
       'charset'   => 'utf8',
       'collation' => 'utf8_unicode_ci',
       'prefix'    => '',
