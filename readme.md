@@ -20,8 +20,8 @@ This section describes how to setup a development environment.
 
 ### Database configuration
 
-`cp app/config/database.php.example app/config/database.php`
-Enter your database specific configuration.
+`cp app/config/database.php app/config/production/database.php`
+Enter your database specific configuration in app/config/production/database.php
 
 
 ## Documentation
