@@ -6,7 +6,7 @@ composer.phar
 .DS_Store
 Thumbs.db
 
-app/config/database.php
+app/config/production/*
 *.bak
 
 # js stuff
