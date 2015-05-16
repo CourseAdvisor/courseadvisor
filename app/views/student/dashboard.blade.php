@@ -45,7 +45,7 @@
 
                 <hr class="nomargin" />
                 <div class="pull-right">
-                  {{ $review->generatePrivacyIcon() }} &nbsp; {{ $review->generateStatusIcon() }}
+                  {{ ReviewHelper::makePrivacyIcon($review) }} &nbsp; {{ ReviewHelper::makeStatusIcon($review) }}
                 </div>
               </div>
 

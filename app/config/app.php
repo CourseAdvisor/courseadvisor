@@ -164,6 +164,7 @@ return array(
 		'NewCourseReviewEventHandler' => 'Events\NewCourseReviewEventHandler',
 		'StudentInfo'		=> 'Helpers\StudentInfo',
 		'MenuHelper'		=> 'Helpers\MenuHelper',
+		'ReviewHelper'		=> 'Helpers\ReviewHelper',
 		'Tequila'			=> 'Tequila\Facade',
 		'Debug' 			=> 'Barryvdh\Debugbar\Facade',
 		'App'               => 'Illuminate\Support\Facades\App',

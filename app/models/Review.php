@@ -32,26 +32,6 @@ class Review extends Eloquent {
 		return $q->where('status', 'accepted');
 	}
 
-    public function generateStatusIcon() {
-        switch($this->status) {
-            case 'published':
-            case 'accepted':
-                return '<i class="fa fa-check-square-o" title="published"></i>';
-            case 'waiting':
-                return '<i class="fa fa-square-o" title="waiting for moderation"></i>';
-            case 'rejected':
-                return '<i class="fa fa-times" title="rejected"></i>';
-        }
-    }
-
-    public function generatePrivacyIcon() {
-        if ($this->is_anonymous) {
-            return '<i class="fa fa-eye-slash" title="anonymous"></i>';
-        } else {
-            return '<i class="fa fa-eye" title="not anonymous"></i>';
-        }
-    }
-
 	public static function rules() {
 		$gradeRule = 'required|integer|between:1,5';
 

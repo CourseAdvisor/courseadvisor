@@ -8,4 +8,10 @@ return array(
 
   'dashboard-courses-heading' => 'Mes cours',
   'browse-courses-action' => 'Parcourir tous les cours',
+
+  'review-waiting-tip' => 'En attente de moderation',
+  'review-rejected-tip' => 'Rejeté',
+  'review-published-tip' => 'Publié',
+  'review-anonymous-tip' => 'Anonyme',
+  'review-not-anonymous-tip' => 'Non anonyme',
 );
