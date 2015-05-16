@@ -9,11 +9,14 @@
 $difficulty_class = "NA";
 $difficulty_text = trans('courses.difficulty-hint-na');
 if ($difficulty > 3.5) {
-    $difficulty_class = $difficulty_text = trans('courses.difficulty-hint-hard');
+    $difficulty_class = "hard";
+    $difficulty_text = trans('courses.difficulty-hint-hard');
 } else if ($difficulty > 2.5) {
-    $difficulty_class = $difficulty_text = trans('courses.difficulty-hint-medium');
+    $difficulty_class = "medium";
+    $difficulty_text = trans('courses.difficulty-hint-medium');
 } else if ($difficulty >= 1) {
-    $difficulty_class = $difficulty_text = trans('courses.difficulty-hint-easy');
+    $difficulty_class = "easy";
+    $difficulty_text = trans('courses.difficulty-hint-easy');
 }
 ?>
 <div class="difficulty-bar {{ $difficulty_class == 'NA' ? 'disabled' : '' }} difficulty-{{{ $difficulty_class }}}"
