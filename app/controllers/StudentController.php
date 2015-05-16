@@ -1,7 +1,7 @@
 <?php
 class StudentController extends BaseController {
 
-	public function index() {
+	/*public function index() {
 		$students = Student::all();
 		return View::make('student.list')->withStudents($students);
 	}
@@ -14,7 +14,7 @@ class StudentController extends BaseController {
 		}
 
 		return View::make('student.show')->withStudent($student);
-	}
+	}*/
 
 	public function dashboard() {
 		$this->addCrumb('StudentController@dashboard', 'dashboard');

@@ -31,7 +31,7 @@
         <dt>{{{ trans('courses.difficulty-label') }}}</dt><dd>
           @include('global.difficulty_bar', ['difficulty' => $course->avg_difficulty])
         </dd>
-        <dt>{{{ trans('courses.difficulty-label') }}}</dt><dd><a href="{{{ action('CourseController@showTeacher', [
+        <dt>{{{ trans('courses.teacher-label') }}}</dt><dd><a href="{{{ action('CourseController@showTeacher', [
                 'id' => $course->teacher['id'],
                 'slug' => Str::slug($course->teacher->fullname)
                 ]) }}}">{{{ $course->teacher->fullname }}}</a></dd>

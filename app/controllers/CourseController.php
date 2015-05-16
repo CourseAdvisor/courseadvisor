@@ -56,19 +56,6 @@ class CourseController extends BaseController {
 		]);
 	}
 
-
-    // To be rewritten
-	public function suggestions() {
-		$courses = Course::whereHas('sections', function($q) {
-			$q->where('string_id', '=', StudentInfo::getSection());
-			$q->whereIn('semester', StudentInfo::getLowerSemesters());
-		})->get();
-
-		return View::make('courses.suggestions', [
-			'courses'	=> $courses
-		]);
-	}
-
 	public function show($slug, $id) {
 		$course = Course::with('teacher', 'plans')->findOrFail($id);
 
@@ -215,7 +202,7 @@ class CourseController extends BaseController {
 		$review->difficulty = Input::get('difficulty');
 
         $msg = 'Your review has been successfuly edited';
-        
+
 		if (Input::get('anonymous') == true) {
 			$review->is_anonymous = 1;
             $review->status = 'waiting';

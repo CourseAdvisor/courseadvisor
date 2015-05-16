@@ -33,8 +33,8 @@ Route::group([
 
 	Route::get('/search', 'SearchController@search');
 
-	Route::get('/students', 'StudentController@index');
-	Route::get('/students/{id}', 'StudentController@show');
+	/*Route::get('/students', 'StudentController@index');
+	Route::get('/students/{id}', 'StudentController@show');*/
 
 	Route::get('/courses', 'CourseController@studyCycles');
 	Route::get('/courses/{cycle}', 'CourseController@studyPlans');
@@ -56,7 +56,6 @@ Route::group([
 	/* Routes forcing login */
 	Route::group(array('before' => 'force_login'), function() {
 		Route::get('/dashboard', 'StudentController@dashboard');
-		Route::get('/courses/suggestions', 'CourseController@suggestions');
 		Route::post('/course/{slug}-{id}/createReview', 'CourseController@createReview');
 		Route::post('/course/{slug}-{id}/updateReview', 'CourseController@updateReview');
 	});

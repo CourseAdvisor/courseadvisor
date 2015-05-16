@@ -79,6 +79,7 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
                 <i class="flag-icon flag-icon-{{{ LaravelLocalization::getCurrentLocale() }}}" title="choose language"></i>
+                <i class="fa fa-caret-down"></i>
               </a>
               <ul class="dropdown-menu locale-dropdown" role="menu">
                 @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
@@ -107,6 +108,7 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
                 language: <i class="flag-icon flag-icon-{{{ LaravelLocalization::getCurrentLocale() }}}" title="choose language"></i>
+                <i class="fa fa-caret-down"></i>
               </a>
               <ul class="dropdown-menu locale-dropdown" role="menu">
                 @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
