@@ -8,6 +8,6 @@ return array(
   'dashboard-action' => 'Tableau de bord',
   'about-action' => 'À propos',
 
-  'welcome-message' => 'Bienvenue sur CourseAdvisor!',
-  'welcome-back-message' => 'Content de te revoir :name!',
+  'welcome-message' => 'Bienvenue sur CourseAdvisor !',
+  'welcome-back-message' => 'Content de te revoir, :name !',
 );
