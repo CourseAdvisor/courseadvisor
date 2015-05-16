@@ -43,9 +43,6 @@ class Course extends Eloquent {
     }
 
 	public function alreadyReviewedBy($student_id) {
-		if(Config::get('app.debug')) {
-			return false;
-		}
 		$review = $this->reviews->first(function($num, $review) use($student_id) {
 				return $review->student_id == $student_id;
 		}, false);

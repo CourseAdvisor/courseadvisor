@@ -225,7 +225,7 @@
             ]) }}
           </div>
         @elseif($hasAlreadyReviewed)
-          <div class="alert alert-warning" role="alert">
+          <div class="alert alert-info" role="alert">
             {{{ trans('courses.already-reviewed-message') }}}
           </div>
         @else
