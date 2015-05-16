@@ -71,6 +71,7 @@ Route::group(['before' => 'admin_check'], function() {
 });
 
 Route::when('*', 'csrf', array('post', 'put', 'delete'));
+Route::when('*', 'force_domain', ['post', 'get']);
 
 Route::filter('admin_check', function() {
 	if (!StudentInfo::isAdmin()) {
@@ -95,5 +96,13 @@ Route::filter('logged_out', function() {
 	if(Tequila::isLoggedIn())  {
 		Session::flash('message', array('type' => 'danger', 'message' => 'You must be logged out to do this.'));
 		return Redirect::to('/');
+	}
+});
+
+Route::filter('force_domain', function() {
+	list($protocol, $domain) = explode("://", Request::root());
+	$real_domain = Config::get('production/global.domain_name');
+	if (!preg_match("#".preg_quote($real_domain)."$#", $domain)) {
+		return Redirect::to($protocol . "://" . $real_domain . "/" . Request::path());
 	}
 });
