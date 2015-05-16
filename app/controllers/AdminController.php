@@ -26,11 +26,19 @@ class AdminController extends BaseController {
 	}
 
 	public function moderate() {
+		$this->addCrumb('AdminController@moderate', 'Moderate reviews');
 		$reviews = Review::with('student', 'student.section')->waiting()->get();
 
 		return View::make('admin.moderate')->with([
 			'reviews' => $reviews
 		]);
+	}
+
+	public function listStudents() {
+		$this->addCrumb('AdminController@listStudents', 'View registred students');
+		$students = Student::orderBy('id', 'desc')->get();
+
+		return View::make('admin.listStudents')->withStudents($students);
 	}
 
 	/*
