@@ -60,15 +60,15 @@ Route::group([
 		Route::post('/course/{slug}-{id}/updateReview', 'CourseController@updateReview');
 	});
 
-	/* Admin stuff */
-	Route::group(['before' => 'admin_check'], function() {
-		Route::get('/admin', 'AdminController@index');
-		Route::get('/admin/moderate', 'AdminController@moderate');
-		Route::get('/admin/moderate/{id}/{decision}', 'AdminController@doModerate');
-		Route::get('/admin/students', 'AdminController@listStudents');
-	});
 });
 
+/* Admin stuff */
+Route::group(['before' => 'admin_check'], function() {
+	Route::get('/admin', 'AdminController@index');
+	Route::get('/admin/moderate', 'AdminController@moderate');
+	Route::get('/admin/moderate/{id}/{decision}', 'AdminController@doModerate');
+	Route::get('/admin/students', 'AdminController@listStudents');
+});
 
 Route::when('*', 'csrf', array('post', 'put', 'delete'));
 
