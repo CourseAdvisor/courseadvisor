@@ -64,6 +64,13 @@ return array(
   'grade-content-helper' => 'Did you find the content of the course interesting? Useful? Relevant to your field of studies?',
   'submit-review-action' => 'Submit my review',
 
+  'review-posted-message' => 'Your review was successfuly posted. Thank you!',
+  'review-posted-anonymous-message' => 'Thank you! Your review has been submitted for moderation. It will appear on this page anytime soon.',
+  'review-create-not-allowed' => 'You can\'t review a course twice. Nice try!',
+  'review-updated-message' => 'Your review has been successfuly edited',
+  'review-updated-anonymous-message' => 'Your review has been edited. It will now be reviewed by an administrator',
+  'review-update-not-allowed' => 'You are not allowed to edit this review.',
+
   'teacher-more-info' => 'More about :teacher',
   'teacher-courses-heading' => ':teacher teaches the following courses'
 );

@@ -7,5 +7,5 @@ return array(
   'no-reviews-message' => 'Tu n\'as pas encore envoyé d\'avis. Regarde si tu peux noter un des cours ci-dessous.',
 
   'dashboard-courses-heading' => 'Mes cours',
-  'browse-coruses-action' => 'Parcourir tous les cours',
+  'browse-courses-action' => 'Parcourir tous les cours',
 );

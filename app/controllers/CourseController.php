@@ -130,7 +130,7 @@ class CourseController extends BaseController {
 
 		// Check if the course was not already reviewed by the student
 		if($course->alreadyReviewedBy($studentId)) {
-			return $goToCourse->with('message', ['danger', 'You can\'t review a course twice. Nice try!']);
+			return $goToCourse->with('message', ['danger', trans('courses.review-create-not-allowed')]);
 		}
 
 		// Create the review
@@ -160,10 +160,10 @@ class CourseController extends BaseController {
 		// Update averages only if the review is not anonymous
 		if (!$newReview->is_anonymous) {
 			$course->updateAverages();
-			$msg = 'Your review was successfuly posted. Thank you!';
+			$msg = trans('courses.review-posted-message');
 		}
 		else {
-			$msg = 'Thank you! Your review has been submitted for moderation. It will appear on this page anytime soon.';
+			$msg = trans('courses.review-posted-anonymous-message');
 		}
 
 
@@ -183,7 +183,7 @@ class CourseController extends BaseController {
 		// Check authorized
 		if ($review->student_id != StudentInfo::getId()) {
 			return $courseRedirect
-				->with('message', ['danger', 'You are not allowed to edit this review.']);
+				->with('message', ['danger', trans('courses.review-update-not-allowed')]);
 		}
 
 		// Check input data
@@ -201,12 +201,12 @@ class CourseController extends BaseController {
 		$review->content_grade = Input::get('content_grade');
 		$review->difficulty = Input::get('difficulty');
 
-        $msg = 'Your review has been successfuly edited';
+    $msg = trans('courses.review-updated-message');
 
 		if (Input::get('anonymous') == true) {
-			$review->is_anonymous = 1;
-            $review->status = 'waiting';
-            $msg = 'Your review has been edited. It will now be reviewed by an administrator';
+      $review->is_anonymous = 1;
+      $review->status = 'waiting';
+      $msg = trans('courses.review-updated-anonymous-message');
 		}
 
 		$review->updateAverage();

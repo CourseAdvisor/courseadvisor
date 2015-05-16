@@ -65,6 +65,13 @@ return array(
   'grade-content-helper' => 'Le contenu du cours est-il intéressant et/ou utile pour tes études?',
   'submit-review-action' => 'Envoyer mon avis',
 
+  'review-posted-message' => 'Ton avis a été posté. Merci!',
+  'review-posted-anonymous-message' => 'Merci! Ton avis a été envoyé à la modération. Il devrait apparaître ici dans peu de temps.',
+  'review-create-not-allowed' => 'Impossible de poster deux avis sur le même cours',
+  'review-updated-message' => 'Ton avis a été édité.',
+  'review-updated-anonymous-message' => 'Ton avis a été édité. Il doit maintenant être validé par un modérateur.',
+  'review-update-not-allowed' => 'Impossible d\'éditer cet avis',
+
   'teacher-more-info' => 'En savoir plus sur :teacher',
   'teacher-courses-heading' => ':teacher enseigne les cours suivants'
 );

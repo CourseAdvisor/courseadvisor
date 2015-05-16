@@ -38,7 +38,7 @@ class AuthController extends Controller {
 			));
 
 			Session::put('student_id', $student->id);
-			Session::flash('message', ['success', 'Welcome on CourseAdvisor!']);
+			Session::flash('message', ['success', trans('global.welcome-message')]);
 
 		}
 		else {
@@ -55,7 +55,10 @@ class AuthController extends Controller {
 			if ($student->is_admin) {
 				Session::put('is_admin', 1);
 			}
-			Session::flash('message', ['success', 'Welcome back, ' . Tequila::get('firstname') . '!']);
+			Session::flash('message', [
+				'success',
+				trans('global.welcome-back-message', ['name' => Tequila::get('firstname')])
+			]);
 		}
 
         $student->refreshPlans($sectionId);
