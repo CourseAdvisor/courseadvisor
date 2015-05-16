@@ -27,7 +27,7 @@
 
   {{-- mobile friendly difficulty picker --}}
   <div class="form-group visible-xs {{ $errors->has('difficulty_mobile') ? 'has-error' : '' }}">
-    <label for="difficulty_mobile" class="control-label">{{{ trans('coruses.difficulty-label') }}}</label>
+    <label for="difficulty_mobile" class="control-label">{{{ trans('courses.difficulty-label') }}}</label>
     <select id="difficulty-mobile" name="difficulty_mobile" class="form-control">
       <option value="1" {{ isset($data['difficulty']) && $data['difficulty'] == 1 ? 'selected' : ''}}>
         {{{ trans('courses.difficulty-1-label') }}}

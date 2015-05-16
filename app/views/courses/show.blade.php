@@ -193,25 +193,6 @@
     </div>
   </section>
 
-  <div class="modal fade bs-example-modal-lg" id="edit-review-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" ><span>&times;</span></button>
-          <h4 class="modal-title">{{{ trans('courses.edit-review-heading') }}}</h4>
-        </div>
-        <div class="modal-body">
-        @include('forms.create-review', [
-          'edit' => true,
-          'data' => Input::old(),
-          'errors' => $errors,
-          'id' => 'edit-review-form'
-        ])
-        </div>
-      </div>
-    </div>
-  </div>
-
   <section class="row">
     <div class="col-lg-12">
       <div class="page">
@@ -241,6 +222,25 @@
       </div> {{-- page --}}
     </div>
   </section>
+</div>
+
+<div class="modal fade bs-example-modal-lg" id="edit-review-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" ><span>&times;</span></button>
+        <h4 class="modal-title">{{{ trans('courses.edit-review-heading') }}}</h4>
+      </div>
+      <div class="modal-body">
+      @include('forms.create-review', [
+        'edit' => true,
+        'data' => Input::old(),
+        'errors' => $errors,
+        'id' => 'edit-review-form'
+      ])
+      </div>
+    </div>
+  </div>
 </div>
 
 @stop
