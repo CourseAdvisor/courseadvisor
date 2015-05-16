@@ -114,19 +114,16 @@
             <dl class="dl-horizontal">
               <dt>{{{ trans('courses.grading-lectures-label') }}}</dt>
               <dd>
-              @include('global.starbar', ['grade' => $course->avg_lectures_grade])
+                @include('global.starbar', ['grade' => $course->avg_lectures_grade])
               </dd>
-
-              <dt>{{{ trans('courses.grading-content-label') }}}</dt>
-              <dd>
-              @include('global.starbar', ['grade' => $course->avg_content_grade])
-        	  </dd>
-
               <dt>{{{ trans('courses.grading-exercises-label') }}}</dt>
               <dd>
-              @include('global.starbar', ['grade' => $course->avg_exercises_grade])
+                @include('global.starbar', ['grade' => $course->avg_exercises_grade])
               </dd>
-
+              <dt>{{{ trans('courses.grading-content-label') }}}</dt>
+              <dd>
+                @include('global.starbar', ['grade' => $course->avg_content_grade])
+              </dd>
             </dl>
           </div>
         </div>
