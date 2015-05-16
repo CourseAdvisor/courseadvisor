@@ -112,17 +112,17 @@
           <div class="col-xs-5 col-sm-6">
             <h2>{{{ trans('courses.rating-heading') }}}</h2>
             <dl class="dl-horizontal">
-              <dt>{{{ trans('courses.lectures-label') }}}</dt>
+              <dt>{{{ trans('courses.grading-lectures-label') }}}</dt>
               <dd>
               @include('global.starbar', ['grade' => $course->avg_lectures_grade])
               </dd>
 
-              <dt>{{{ trans('courses.contents-label') }}}</dt>
+              <dt>{{{ trans('courses.grading-content-label') }}}</dt>
               <dd>
               @include('global.starbar', ['grade' => $course->avg_content_grade])
         	  </dd>
 
-              <dt>{{{ trans('courses.exercises-label') }}}</dt>
+              <dt>{{{ trans('courses.grading-exercises-label') }}}</dt>
               <dd>
               @include('global.starbar', ['grade' => $course->avg_exercises_grade])
               </dd>
@@ -223,10 +223,8 @@
         @if(!Tequila::isLoggedIn())
           <div class="alert alert-info" role="alert">
             {{ trans('courses.login-to-post-prompt', [
-            'action-link' => link_to_action(
-              'AuthController@login',
-              trans('global.login-action'),
-              ['next' => Request::url()])
+            'link-begin' => '<a href="'.action('AuthController@login', ['next' => Request::url()]).'">',
+            'link-end' => '</a>'
             ]) }}
           </div>
         @elseif($hasAlreadyReviewed)

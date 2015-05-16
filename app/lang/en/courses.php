@@ -36,14 +36,10 @@ return array(
   'grading-2-label' => 'Bad',
   'grading-1-label' => 'Terrible',
 
+  'rating-heading' => 'Rating',
   'grading-lectures-label' => 'Lectures',
   'grading-exercises-label' => 'Exercises',
   'grading-content-label' => 'Content',
-
-  'rating-heading' => 'Rating',
-  'lectures-label' => 'Lectures',
-  'content-label' => 'Content',
-  'exercises-label' => 'Exercises',
 
   'reviews-heading' => 'Reviews',
   'review-this-action' => 'Review this course',
@@ -54,12 +50,12 @@ return array(
 
   'edit-review-heading' => 'Edit your review',
   'create-review-heading' => 'Your review',
-  'login-to-post-prompt' => ':action-link to post a review.',
+  'login-to-post-prompt' => ':link-beginLog in:link-end to post a review.',
   'already-reviewed-message' => 'You already posted a review for this course! You can (todo) edit it.',
 
   'create-review-message' => 'Please take a couple of minutes to give your opinion on this course.',
   'review-title-placeholder' => 'Overall impression',
-  'review-body-placeholder' => 'Was this course useful to you? Did you find it interesting? Express your own opinion here without thinking about how others feel about this course.',
+  'review-body-placeholder' => 'Was this course useful to you? Did you find it interesting? Express your own opinion.',
   'incomplete-grading-message' => 'Please grade all aspects of this course.',
   'anonymous-post-label' => 'Post anonymously',
   'anonymous-post-helper' => 'If you post anonymously, your review will be moderated by an administrator before being published.',
