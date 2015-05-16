@@ -30,7 +30,11 @@
 				<ul>
 					<li><strong>{{{ $stats['nb_courses'] }}}</strong> courses</li>
 					<li><strong>{{{ $stats['nb_reviews'] }}}</strong> reviews</li>
-					<li><strong>{{{ $stats['nb_students'] }}}</strong> registred students</li>
+					<li>
+						<a href="{{{ action('AdminController@listStudents') }}}">
+							<strong>{{{ $stats['nb_students'] }}}</strong> registred students
+						</a>
+					</li>
 				</ul>
 			</div>
 		</div>

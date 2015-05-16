@@ -65,6 +65,7 @@ Route::group([
 		Route::get('/admin', 'AdminController@index');
 		Route::get('/admin/moderate', 'AdminController@moderate');
 		Route::get('/admin/moderate/{id}/{decision}', 'AdminController@doModerate');
+		Route::get('/admin/students', 'AdminController@listStudents');
 	});
 });
 
