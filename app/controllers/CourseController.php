@@ -17,7 +17,7 @@ class CourseController extends BaseController {
             ->where('slug', $slug)
             ->firstOrFail();
 
-        $this->addCrumb('CourseController@studyPlans', ucfirst($cycle_name), ['cycle' => $cycle_name]);
+        $this->addCrumb('CourseController@studyPlans', ucfirst($plan->studyCycle->name), ['cycle' => $plan->studyCycle->name]);
         $this->addCrumb('CourseController@studyPlanCourses', ucfirst($plan->name), [
             'cycle' => $cycle_name,
             'plan_slug' => $slug]);
@@ -38,14 +38,14 @@ class CourseController extends BaseController {
     }
 
 	public function studyPlans($cycle_name) {
-        $cycle = StudyCycle::where('name_fr', $cycle_name)->orWhere('name_en', $cycle_name)->firstOrFail();
+    $cycle = StudyCycle::where('name_fr', $cycle_name)->orWhere('name_en', $cycle_name)->firstOrFail();
 
-        $this->addCrumb('CourseController@studyPlans', ucfirst($cycle_name), ['cycle' => $cycle_name]);
+    $this->addCrumb('CourseController@studyPlans', ucfirst( $cycle->name), ['cycle' =>  $cycle->name]);
 
 		return View::make('courses.plans', [
-			'page_title' => $cycle_name.' courses',
+			'page_title' =>  $cycle->name.' courses',
 			'plans' => $cycle->plans,
-            'cycle' => $cycle->name
+      'cycle' => $cycle->name
 		]);
 	}
 

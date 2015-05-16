@@ -29,11 +29,17 @@ class Course extends Eloquent {
 	}
 
     public function getNameAttribute() {
-        return $this->name_en;
+        if (LaravelLocalization::getCurrentLocale() == 'fr')
+            return $this->name_fr;
+        else
+            return $this->name_en;
     }
 
     public function getUrlAttribute() {
-        return $this->url_en;
+        if (LaravelLocalization::getCurrentLocale() == 'fr')
+            return $this->url_fr;
+        else
+            return $this->url_en;
     }
 
 	public function alreadyReviewedBy($student_id) {
