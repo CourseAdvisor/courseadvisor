@@ -13,7 +13,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     {{ HTML::style("css/courseadvisor.css") }}
     {{ HTML::style("css/font-awesome.min.css") }}
-    {{ HTML::style("css/flag-icon.css") }}
   </head>
   <body>
     <div class="navbar navbar-default navbar-static-top">
