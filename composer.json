@@ -8,7 +8,8 @@
 		"laravel/framework": "4.2.*",
 		"barryvdh/laravel-debugbar": "~1.8",
 		"barryvdh/laravel-ide-helper": "~1.11",
-		"creitive/laravel4-breadcrumbs": "~1.0"
+		"creitive/laravel4-breadcrumbs": "~1.0",
+		"mcamara/laravel-localization": "~0.15"
 	},
 	"autoload": {
 		"classmap": [

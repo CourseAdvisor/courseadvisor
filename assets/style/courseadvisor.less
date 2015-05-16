@@ -1,7 +1,8 @@
 // CourseAdvisor style
 // -----------------------------------------------------
-@import "../bower_components/bootstrap/less/bootstrap.less";
-@import "variables.less";
+@import "../bower_components/bootstrap/less/bootstrap";
+@import "variables";
+@import "flag-icons";
 
 // Layout =====================================================================
 
@@ -160,6 +161,10 @@ nav {
     text-align: center;
 }
 
+ul.locale-dropdown {
+    min-width: 0;
+}
+
 // Indicators =================================================================
 
 .difficulty-bar {
@@ -307,6 +312,7 @@ hr {
     margin-top: 10px;
     dt {
         text-align: left;
+        width: 120px;
     }
 }
 
@@ -375,7 +381,7 @@ form div.checkbox-panel {
 
 // Homepage  ==================================================================
 
-&.homepage-login {
+&.homepage-header {
     list-style-type: none;
     text-transform: uppercase;
     margin-top: 16px;

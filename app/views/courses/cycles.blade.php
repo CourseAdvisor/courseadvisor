@@ -8,7 +8,7 @@
   <section class="row">
     <div class="col-xs-12">
       <div class="page">
-        <h1>Choose your cycle</h1>
+        <h1>{{{ trans('courses.cycles-heading') }}}</h1>
 
         <div class="list-group" id="course_list">
         @foreach($cycles as $cycle)

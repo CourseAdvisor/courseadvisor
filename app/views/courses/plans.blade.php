@@ -8,7 +8,7 @@
         <section class="row">
             <div class="col-xs-12">
                 <div class="page">
-                    <h1>{{{ ucfirst($cycle) }}} courses</h1>
+                    <h1>{{{ trans('courses.cycle-plans-heading', ['cycle' => ucfirst($cycle)]) }}}</h1>
                     <div class="list-group" id="course_list">
                         @foreach($plans as $plan)
 

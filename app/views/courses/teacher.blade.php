@@ -9,11 +9,14 @@
         <h1>{{{ $teacher->fullname }}}</h1>
         <p>
             <a href="{{{ $teacher->peoplePageLink }}}" target="_blank"><i class="fa fa-external-link"></i>
-                More about {{{ $teacher->firstname }}}
+                {{{ trans('courses.teacher-more-info', [
+                  'teacher' => $teacher->firstname ]) }}}
             </a>
         </p>
 
-        <h3>{{{$teacher->firstname}}} teaches the following courses</h3>
+        <h3>{{{ trans('courses.teacher-courses-heading', [
+          'teacher' => $teacher->firstname ])
+        }}}</h3>
         @include('global.course_list', ['courses' => $courses])
       </div>
     </div>

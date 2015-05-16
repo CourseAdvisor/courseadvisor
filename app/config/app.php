@@ -133,6 +133,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
 		'Creitive\Breadcrumbs\BreadcrumbsServiceProvider',
+		'Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider',
 	),
 
 	/*
@@ -204,6 +205,7 @@ return array(
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
 		'Breadcrumbs' 		=> 'Creitive\Breadcrumbs\Facades\Breadcrumbs',
+		'LaravelLocalization'   => 'Mcamara\LaravelLocalization\Facades\LaravelLocalization',
 	),
 
 );

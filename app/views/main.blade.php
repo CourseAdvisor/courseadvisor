@@ -5,7 +5,7 @@
 
     <title>
     @section('page_title')
-    {{{ isset($page_title) ? $page_title.' | ' : '' }}} Course Advisor
+    {{{ isset($page_title) ? $page_title.' | ' : '' }}} CourseAdvisor
     @show
     </title>
 
@@ -60,33 +60,65 @@
                 </i>
                 <i class="fa fa-caret-down"></i>
               </a>
-               <ul class="dropdown-menu fa-ul" role="menu">
-                 @if (StudentInfo::isAdmin())
-                   <li><a href="{{{ action('AdminController@index') }}}"<i class="fa fa-lock"></i> Admin</a></li>
-                 @endif
-                 <li><a href="{{{ action('StudentController@dashboard') }}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-                 <li><a href="{{{ action('AuthController@logout') }}}"><i class="fa fa-sign-out"></i> Log out</a></li>
-               </ul>
+              <ul class="dropdown-menu fa-ul" role="menu">
+                @if (StudentInfo::isAdmin())
+                <li><a href="{{{ action('AdminController@index') }}}"<i class="fa fa-lock"></i> Admin</a></li>
+                @endif
+                <li><a href="{{{ action('StudentController@dashboard') }}}"><i class="fa fa-dashboard"></i> {{{ trans('global.dashboard-action') }}}</a></li>
+                <li><a href="{{{ action('AuthController@logout') }}}"><i class="fa fa-sign-out"></i> {{{ trans('global.logout-action') }}}</a></li>
+              </ul>
             </li>
             @else
-              <li><a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}">
-                log in
-              </a></li>
+            <li>
+              <a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}">
+                {{{ trans('global.login-action') }}}
+              </a>
+            </li>
             @endif
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                <i class="flag-icon flag-icon-{{{ LaravelLocalization::getCurrentLocale() }}}" title="choose language"></i>
+                <i class="fa fa-caret-down"></i>
+              </a>
+              <ul class="dropdown-menu locale-dropdown" role="menu">
+                @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                  <li>
+                    <a rel="alternate" hreflang="{{$localeCode}}" href="{{LaravelLocalization::getLocalizedURL($localeCode) }}">
+                      <i class="flag-icon flag-icon-{{{ $localeCode }}}" title="{{{ $properties['native'] }}}"> </i>
+                    </a>
+                  </li>
+                @endforeach
+              </ul>
+            </li>
           </ul>
 
           {{-- mobile nav --}}
           <ul class="nav navbar-nav main-nav visible-xs">
             @if(Tequila::isLoggedIn())
-              <li><a href="{{{ action('StudentController@dashboard') }}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+              <li><a href="{{{ action('StudentController@dashboard') }}}"><i class="fa fa-dashboard"></i> {{{ trans('global.dashboard-action') }}}</a></li>
               <li><a href="{{{ action('AuthController@logout') }}}">
-                <i class="fa fa-sign-out"></i> Log out
+                <i class="fa fa-sign-out"></i> {{{ trans('global.logout-action') }}}
               </a></li>
             @else
               <li><a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}">
-                <i class="fa fa-sign-in"></i> Log in
+                <i class="fa fa-sign-in"></i> {{{ trans('global.login-action') }}}
               </a></li>
             @endif
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                language: <i class="flag-icon flag-icon-{{{ LaravelLocalization::getCurrentLocale() }}}" title="choose language"></i>
+                <i class="fa fa-caret-down"></i>
+              </a>
+              <ul class="dropdown-menu locale-dropdown" role="menu">
+                @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                  <li>
+                    <a rel="alternate" hreflang="{{$localeCode}}" href="{{LaravelLocalization::getLocalizedURL($localeCode) }}">
+                      <i class="flag-icon flag-icon-{{{ $localeCode }}}" title="{{{ $properties['native'] }}}"> </i>
+                    </a>
+                  </li>
+                @endforeach
+              </ul>
+            </li>
           </ul>
 
         </div>
