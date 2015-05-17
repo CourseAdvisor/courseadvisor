@@ -9,7 +9,8 @@
 		"barryvdh/laravel-debugbar": "~1.8",
 		"barryvdh/laravel-ide-helper": "~1.11",
 		"creitive/laravel4-breadcrumbs": "~1.0",
-		"mcamara/laravel-localization": "~0.15"
+		"mcamara/laravel-localization": "~0.15",
+		"jpgraph/jpgraph": "dev-master"
 	},
 	"autoload": {
 		"classmap": [
@@ -21,10 +22,6 @@
 			"app/helpers",
 			"app/vendor/",
 			"app/tests/TestCase.php"
-		],
-		"files" :[
-			"vendor/jpgraph/jpgraph.php",
-			"vendor/jpgraph/jpgraph_pie.php"
 		]
 	},
 	"scripts": {

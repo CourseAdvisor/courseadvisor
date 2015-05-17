@@ -33,3 +33,5 @@ deployment.sh
 
 github_pull.sh
 public/__github_update.php
+npm-debug.log
+
