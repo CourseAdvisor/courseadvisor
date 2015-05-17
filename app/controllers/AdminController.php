@@ -36,9 +36,63 @@ class AdminController extends BaseController {
 
 	public function listStudents() {
 		$this->addCrumb('AdminController@listStudents', 'View registred students');
-		$students = Student::orderBy('id', 'desc')->get();
+		$students = Student::with('reviews')->orderBy('id', 'desc')->get();
 
-		return View::make('admin.listStudents')->withStudents($students);
+		$repartitionSectionGraphData = $this->generateRepartitionSectionGraph($students);
+		$repartitionNbReviewsGraphData = $this->generateRepartitionNbReviewsGraphData($students);
+		return View::make('admin.listStudents')->with([
+			'students' => $students,
+			'repartitionSectionGraphData' => $repartitionSectionGraphData,
+			'repartitionNbReviewsGraphData' => $repartitionNbReviewsGraphData
+		]);
+	}
+
+	private function generateRepartitionSectionGraph($students) {
+		$bySection = $students->groupBy(function($student) {
+			return $student->section->name;
+		})->toArray();
+		$sectionStats = array_map(function($entry) {
+			return sizeof($entry);
+		}, $bySection);
+
+		$graph = new PieGraph(300, 300);
+		$graph->title->Set("Sections");
+
+		$plot = new PiePlot(array_values($sectionStats));
+		$plot->SetLegends(array_keys($sectionStats));
+		$graph->Add($plot);
+		$image = $graph->Stroke(_IMG_HANDLER);
+		ob_start();
+			imagepng($image);
+			$graphData = ob_get_contents();
+		ob_end_clean();
+
+		return base64_encode($graphData);
+	}
+
+	private function generateRepartitionNbReviewsGraphData($students) {
+		$byNbReviews = $students->groupBy(function($student) {
+			return $student->reviews()->count();
+		})->toArray();
+
+		$nbReviewsStats = array_map(function($entry) {
+			return sizeof($entry);
+		}, $byNbReviews);
+
+		$graph = new PieGraph(300, 300);
+		$graph->title->Set("Number of reviews posted");
+
+		$plot = new PiePlot(array_values($nbReviewsStats));
+		$plot->SetLegends(array_keys($nbReviewsStats));
+		$graph->Add($plot);
+		$image = $graph->Stroke(_IMG_HANDLER);
+		ob_start();
+			imagepng($image);
+			$graphData = ob_get_contents();
+		ob_end_clean();
+
+		return base64_encode($graphData);
+
 	}
 
 	/*
