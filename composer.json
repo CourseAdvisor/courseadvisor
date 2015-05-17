@@ -21,6 +21,10 @@
 			"app/helpers",
 			"app/vendor/",
 			"app/tests/TestCase.php"
+		],
+		"files" :[
+			"vendor/jpgraph/jpgraph.php",
+			"vendor/jpgraph/jpgraph_pie.php"
 		]
 	},
 	"scripts": {
