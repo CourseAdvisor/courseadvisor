@@ -207,7 +207,18 @@
           </div>
         @elseif($hasAlreadyReviewed)
           <div class="alert alert-info" role="alert">
-            {{{ trans('courses.already-reviewed-message') }}}
+            {{ trans('courses.already-reviewed-message', [
+            'link-begin' => '<a href="#"
+              data-review-id="'.$studentReview->id.'"
+              data-review-lectures-grade="'.$studentReview->lectures_grade.'"
+              data-review-exercises-grade="'.$studentReview->exercises_grade.'"
+              data-review-content-grade="'.$studentReview->content_grade.'"
+              data-review-title="'.$studentReview->title.'"
+              data-review-difficulty="'.$studentReview->difficulty.'"
+              data-review-anonymous="'.$studentReview->is_anonymous.'"
+              class="edit-review" title="courses.edit-reviews-action">',
+            'link-end' => '</a>'
+            ]) }}
           </div>
         @else
 

@@ -51,7 +51,7 @@ return array(
   'edit-review-heading' => 'Modifier un avis',
   'create-review-heading' => 'Ton avis',
   'login-to-post-prompt' => ':link-beginConnecte-toi:link-end pour poster un avis.',
-  'already-reviewed-message' => 'Tu as déjà posté un avis sur ce cours. Clique ici (todo) pour l\'éditer.',
+  'already-reviewed-message' => 'Tu as déjà posté un avis sur ce cours. Clique:link-begin ici:link-end pour l\'éditer.',
 
   'create-review-message' => 'Merci de prendre deux minutes pour donner ton avis sur ce cours.',
   'review-title-placeholder' => 'Impression générale',
