@@ -21,7 +21,7 @@
   <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
     <input type="text" class="form-control" name="title"
       placeholder="{{{ trans('courses.review-title-placeholder') }}}"
-      value="{{ isset($data['title']) && $data['title'] }}">
+      value="{{ isset($data['title']) ? $data['title'] : '' }}">
     {{ $errors->first('title', '<span class="help-block">:message</span>') }}
   </div>
 
@@ -94,19 +94,19 @@
   <dl class="dl-horizontal">
     <dt>{{{ trans('courses.grading-lectures-label') }}}</dt>
     <dd>
-      <div class="pull-left" data-starbar="lectures_grade" data-value="{{ isset($data['lectures_grade']) && $data['lectures_grade'] }}"
+      <div class="pull-left" data-starbar="lectures_grade" data-value="{{ isset($data['lectures_grade']) ? $data['lectures_grade'] : ''}}"
       data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right"
       data-content="{{{ trans('courses.grade-lectures-helper') }}}"></div>
     </dd>
     <dt>{{{ trans('courses.grading-exercises-label') }}}</dt>
     <dd>
-      <div class="pull-left" data-starbar="exercises_grade"  data-value="{{ isset($data['exercises_grade']) && $data['exercises_grade'] }}"
+      <div class="pull-left" data-starbar="exercises_grade"  data-value="{{ isset($data['exercises_grade']) ? $data['exercises_grade'] : ''}}"
       data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right"
       data-content="{{{ trans('courses.grade-exercises-helper') }}}"></div>
     </dd>
     <dt>{{{ trans('courses.grading-content-label') }}}</dt>
     <dd>
-      <div class="pull-left" data-starbar="content_grade"  data-value="{{ isset($data['content_grade']) && $data['content_grade'] }}"
+      <div class="pull-left" data-starbar="content_grade"  data-value="{{ isset($data['content_grade']) ? $data['content_grade'] : '' }}"
       data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right"
       data-content="{{{ trans('courses.grade-content-helper') }}}"></div>
     </dd>
@@ -117,7 +117,7 @@
 </div>
 <div class="col-sm-10">
   <div class="form-group {{ $errors->has('comment') ? 'has-error' : '' }}">
-    <textarea class="form-control" rows="3" name="comment" placeholder="{{{ trans('courses.review-body-placeholder') }}}">{{ isset($data['comment']) && $data['comment'] }}</textarea>
+    <textarea class="form-control" rows="3" name="comment" placeholder="{{{ trans('courses.review-body-placeholder') }}}">{{ isset($data['comment']) ? $data['comment'] : '' }}</textarea>
     {{ $errors->first('comment', '<span class="help-block">:message</span>') }}
   </div>
 </div>
