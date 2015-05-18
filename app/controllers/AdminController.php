@@ -41,6 +41,7 @@ class AdminController extends BaseController {
 		$students = Student::with('reviews')->orderBy('id', 'desc')->get();
 		JpGraph::load();
 		JpGraph::module('pie');
+		JpGraph::module('bar');
 
 		$repartitionSectionGraphData = $this->generateRepartitionSectionGraph($students);
 		$repartitionNbReviewsGraphData = $this->generateRepartitionNbReviewsGraphData($students);
@@ -83,12 +84,29 @@ class AdminController extends BaseController {
 			return sizeof($entry);
 		}, $byNbReviews);
 
-		$graph = new PieGraph(300, 300);
-		$graph->title->Set("Number of reviews posted");
+		$stats = [];
+		$max = max(array_keys($nbReviewsStats));
+		for($i = 0; $i <= $max; ++$i) {
+			if (isset($nbReviewsStats[$i])) {
+				$stats[] = $nbReviewsStats[$i];
+			}
+			else {
+				$stats[] = 0;
+			}
+		}
 
-		$plot = new PiePlot(array_values($nbReviewsStats));
-		$plot->SetLegends(array_keys($nbReviewsStats));
+		$graph = new Graph(500, 300);
+		$graph->SetScale('intlin');
+		$graph->title->Set("Number of reviews posted");
+		$graph->xaxis->title->Set("Number of reviews posted");
+		$graph->yaxis->title->Set("Number of students");
+
+		$plot = new BarPlot(array_values($stats));
+
+		$graph->SetMargin(40,30,50,40);
 		$graph->Add($plot);
+		$graph->yaxis->scale->SetGrace(30);
+
 		$image = $graph->Stroke(_IMG_HANDLER);
 		ob_start();
 			imagepng($image);
