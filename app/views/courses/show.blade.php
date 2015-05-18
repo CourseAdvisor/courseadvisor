@@ -158,7 +158,7 @@
                     data-review-lectures-grade="{{{ $review->lectures_grade }}}"
                     data-review-exercises-grade="{{{ $review->exercises_grade }}}"
                     data-review-content-grade="{{{ $review->content_grade }}}"
-                    data-review-title="{{ $review->title }}"
+                    data-review-title="{{{ $review->title }}}"
                     data-review-difficulty="{{{ $review->difficulty }}}"
                     data-review-anonymous="{{{ $review->is_anonymous ? 1 : 0 }}}"
                     class="edit-review" title="{{{ trans('courses.edit-reviews-action') }}}">
