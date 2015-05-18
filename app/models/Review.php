@@ -44,10 +44,4 @@ class Review extends Eloquent {
 			'comment' => 'required|min:20'
 		];
 	}
-
-	public static function count() {
-		exit("nope");
-	}
-
-
 }
