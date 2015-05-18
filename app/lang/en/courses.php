@@ -51,7 +51,8 @@ return array(
   'edit-review-heading' => 'Edit your review',
   'create-review-heading' => 'Your review',
   'login-to-post-prompt' => ':link-beginLog in:link-end to post a review.',
-  'already-reviewed-message' => 'You already posted a review for this course! You can (todo) edit it.',
+  'already-reviewed-message' => 'You already posted a review for this course! You can :link-begin edit it:link-end.',
+  'review-moderation-pending-message' => 'Your review for this course is being moderated. In the meantime, you can:link-begin edit it:link-end.',
 
   'create-review-message' => 'Please take a couple of minutes to give your opinion on this course.',
   'review-title-placeholder' => 'Overall impression',

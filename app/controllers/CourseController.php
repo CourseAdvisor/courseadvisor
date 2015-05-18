@@ -66,8 +66,10 @@ class CourseController extends BaseController {
 		$this->addCrumb(Route::current()->getActionName(), $course->name, Route::current()->parameters());
 
 		$hasAlreadyReviewed = false;
+		$studentReview = null;
 		if(Tequila::isLoggedIn()) {
 			$hasAlreadyReviewed = $course->alreadyReviewedBy(Session::get('student_id'));
+			$studentReview = $hasAlreadyReviewed;
 		}
 
 		$reviewsPerPage = Config::get('app.nbReviewsPerPage');
@@ -93,6 +95,7 @@ class CourseController extends BaseController {
 			'distribution' => $distribution,
 			'reviews' => $allReviews->paginate($reviewsPerPage),
 			'hasAlreadyReviewed' => $hasAlreadyReviewed,
+			'studentReview' => $studentReview,
 			'nbReviews' => $allReviews->count(),
 		]);
 	}
@@ -197,7 +200,7 @@ class CourseController extends BaseController {
 		$review->comment = Input::get('comment');
 		$review->title = Input::get('title');
 		$review->lectures_grade = Input::get('lectures_grade');
-		$review->exercises_grade = Input::get('lectures_grade');
+		$review->exercises_grade = Input::get('exercises_grade');
 		$review->content_grade = Input::get('content_grade');
 		$review->difficulty = Input::get('difficulty');
 
