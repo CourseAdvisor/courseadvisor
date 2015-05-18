@@ -1,4 +1,6 @@
 <?php
+use JpGraph\JpGraph;
+
 class AdminController extends BaseController {
 
 	public function __construct() {
@@ -37,6 +39,8 @@ class AdminController extends BaseController {
 	public function listStudents() {
 		$this->addCrumb('AdminController@listStudents', 'View registred students');
 		$students = Student::with('reviews')->orderBy('id', 'desc')->get();
+		JpGraph::load();
+		JpGraph::module('pie');
 
 		$repartitionSectionGraphData = $this->generateRepartitionSectionGraph($students);
 		$repartitionNbReviewsGraphData = $this->generateRepartitionNbReviewsGraphData($students);
