@@ -225,9 +225,8 @@
           </div>
         @else
 
-
         @include('forms.create-review', [
-          'data' => Input::all(),
+          'data' => Input::old(),
           'errors' => $errors,
           'id' => 'create-review-form'
         ])
