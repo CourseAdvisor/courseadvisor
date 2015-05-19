@@ -5,6 +5,7 @@
 
 <div class="container">
   {{ Breadcrumbs::render() }}
+
   <section class="row">
     <div class="col-xs-12">
       <div class="page">
@@ -12,6 +13,54 @@
         <div class="hint">
           {{{ trans('student.logged-in-status', ['student' => $student->fullname]) }}}
         </div>
+
+        <hr>
+
+        <h2>{{{ trans('student.dashboard-plans-picker-heading') }}}</h2>
+
+        {{ Form::open([
+          'class' => 'row form-horizontal',
+          'action' => [
+            'CourseController@findStudyPlan'
+          ]
+        ]) }}
+
+
+          <div class="form-group {{ $errors->has('plan') ? 'has-error' : '' }}">
+            <label for="coursepicker-plan" class="control-label col-sm-2">{{{ trans('student.plans-picker-label') }}}</label>
+            <div class="col-sm-7">
+              <select id="coursepicker-plan" name="plan-id" class="form-control">
+                @foreach($plans as $plan)
+                  <option value="{{{ $plan->id }}}" {{ ($plan->id == $student->studyPlans[0]->id) ? 'selected' : '' }} >
+                    {{{ $plan->studyCycle->name }}} &mdash; {{{ $plan->name }}}
+                  </option>
+                @endforeach
+              </select>
+              {{ $errors->first('cycle', '<span class="help-block">:message</span>') }}
+            </div>
+            <div class="col-sm-2">
+              <button type="submit" class="btn btn-primary">{{{ trans('student.plans-picker-submit-action') }}}</button>
+            </div>
+          </div>
+
+
+        {{ Form::close() }}
+
+        <hr>
+
+        <h2>{{{ trans('student.dashboard-courses-heading') }}}</h2>
+        <a class="btn btn-large btn-default" href="{{{ action("CourseController@studyCycles") }}}">
+          {{{ trans('student.browse-courses-action') }}}
+        </a>
+        <br/><br/>
+        @include('global.course_list', [
+          'courses' => $student->inscriptions()->get()->map(function($inscription) {
+            return $inscription->course;
+          }),
+          'paginate' => FALSE
+        ])
+
+        <hr>
 
         <h2>{{{ trans('student.dashboard-reviews-heading') }}}</h2>
         @if(!count($student->reviews))
@@ -58,17 +107,6 @@
             @endforeach
           </div>
         @endif
-        <br/>
-        <hr/>
-
-        <h2>{{{ trans('student.dashboard-courses-heading') }}}</h2>
-        <a class="btn btn-large btn-default" href="{{{ action("CourseController@studyCycles") }}}">
-          {{{ trans('student.browse-courses-action') }}}
-        </a>
-        <br/><br/>
-        @include('global.course_list', [
-          'courses' => $student->studyPlans()->firstOrFail()->courses()->paginate(10),
-          'paginate' => TRUE])
       </div>
     </div>
   </section>

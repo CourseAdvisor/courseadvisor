@@ -17,6 +17,10 @@ class Student extends Eloquent {
 		return $this->hasMany('Review');
 	}
 
+  public function inscriptions() {
+    return $this->hasMany('Inscription', 'sciper', 'sciper');
+  }
+
 	public function studyPlans() {
 		return $this->belongsToMany('StudyPlan');
 	}
@@ -24,7 +28,6 @@ class Student extends Eloquent {
 	public function getFullnameAttribute() {
 		return $this->firstname . " " . $this->lastname;
 	}
-
 
     public function refreshPlans($section_id = null) {
 
