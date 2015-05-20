@@ -168,7 +168,7 @@
                     'reviewId'=> $review->id,
                     'courseId'=> $course->id,
                     'slug'    => $slug
-                    ]) }}}">
+                    ]) }}}" onclick="return confirm('{{{ trans('courses.delete-reviews-confirm') }}}');">
                     <i class="fa fa-trash-o"></i>
                   </a>
                   </a>

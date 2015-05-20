@@ -73,6 +73,7 @@ return array(
   'review-update-not-allowed' => 'You are not allowed to edit this review.',
   'review-delete-not-allowed' => 'You are not allowed to delete this review.',
   'review-deleted-message' => 'Your review has been successfuly deleted.',
+  'delete-reviews-confirm' => 'Are you sure you want to delete your review?',
 
   'teacher-more-info' => 'More about :teacher',
   'teacher-courses-heading' => ':teacher teaches the following courses'

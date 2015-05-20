@@ -74,6 +74,7 @@ return array(
   'review-update-not-allowed' => 'Impossible d\'éditer cet avis',
   'review-delete-not-allowed' => 'Impossible de supprimer cet avis',
   'review-deleted-message' => 'L\'avis a bien été supprimé',
+  'delete-reviews-confirm' => 'Es-tu sûr de vouloir supprimer ton avis ?',
 
   'teacher-more-info' => 'En savoir plus sur :teacher',
   'teacher-courses-heading' => ':teacher enseigne les cours suivants'
