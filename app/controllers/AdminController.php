@@ -41,14 +41,11 @@ class AdminController extends BaseController {
 		$students = Student::with('reviews')->orderBy('id', 'desc')->get();
 		JpGraph::load();
 		JpGraph::module('pie');
-		JpGraph::module('bar');
 
 		$repartitionSectionGraphData = $this->generateRepartitionSectionGraph($students);
-		$repartitionNbReviewsGraphData = $this->generateRepartitionNbReviewsGraphData($students);
 		return View::make('admin.listStudents')->with([
 			'students' => $students,
-			'repartitionSectionGraphData' => $repartitionSectionGraphData,
-			'repartitionNbReviewsGraphData' => $repartitionNbReviewsGraphData
+			'repartitionSectionGraphData' => $repartitionSectionGraphData
 		]);
 	}
 
@@ -73,49 +70,6 @@ class AdminController extends BaseController {
 		ob_end_clean();
 
 		return base64_encode($graphData);
-	}
-
-	private function generateRepartitionNbReviewsGraphData($students) {
-		$byNbReviews = $students->groupBy(function($student) {
-			return $student->reviews()->count();
-		})->toArray();
-
-		$nbReviewsStats = array_map(function($entry) {
-			return sizeof($entry);
-		}, $byNbReviews);
-
-		$stats = [];
-		$max = max(array_keys($nbReviewsStats));
-		for($i = 0; $i <= $max; ++$i) {
-			if (isset($nbReviewsStats[$i])) {
-				$stats[] = $nbReviewsStats[$i];
-			}
-			else {
-				$stats[] = 0;
-			}
-		}
-
-		$graph = new Graph(500, 300);
-		$graph->SetScale('intlin');
-		$graph->img->SetAntiAliasing(false);
-		$graph->title->Set("Number of reviews posted");
-		$graph->xaxis->title->Set("Number of reviews posted");
-		$graph->yaxis->title->Set("Number of students");
-
-		$plot = new BarPlot(array_values($stats));
-
-		$graph->SetMargin(40,30,50,40);
-		$graph->Add($plot);
-		$graph->yaxis->scale->SetGrace(30);
-
-		$image = $graph->Stroke(_IMG_HANDLER);
-		ob_start();
-			imagepng($image);
-			$graphData = ob_get_contents();
-		ob_end_clean();
-
-		return base64_encode($graphData);
-
 	}
 
 	/*
