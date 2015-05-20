@@ -176,6 +176,7 @@ class CourseController extends BaseController {
 		}
 
 		$newReview->save();
+		Event::fire('review.newReview', [$newReview]);
 
 		// Update averages only if the review is not anonymous
 		if (!$newReview->is_anonymous) {
@@ -232,8 +233,11 @@ class CourseController extends BaseController {
 		$review->updateAverage();
 		$review->save();
 
-		if (!$review->is_anonymous)
+		if ($review->is_anonymous) {
+			Event::fire('review.newAnonymous', [$review]);
+		} else {
 			$review->course->updateAverages();
+		}
 
 		return $courseRedirect
 				->with('message', ['success', $msg]);

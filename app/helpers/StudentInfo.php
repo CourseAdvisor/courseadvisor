@@ -2,6 +2,7 @@
 
 use \Tequila;
 use Illuminate\Support\Facades\Session;
+use \Student;
 
 class StudentInfo {
 
@@ -54,5 +55,11 @@ class StudentInfo {
 		}
 
 		return Session::get('is_admin') == 1;
+	}
+
+	public static function getAdminEmails() {
+		return Student::where('is_admin', '1')->get()->map(function ($student) {
+			return $student->email;
+		})->toArray();
 	}
 }

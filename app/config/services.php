@@ -15,8 +15,8 @@ return array(
 	*/
 
 	'mailgun' => array(
-		'domain' => '',
-		'secret' => '',
+		'domain' => 'courseadvisor.ch',
+		'secret' => 'secret',
 	),
 
 	'mandrill' => array(
@@ -27,5 +27,4 @@ return array(
 		'model'  => 'User',
 		'secret' => '',
 	),
-
 );
