@@ -240,7 +240,6 @@ class CourseController extends BaseController {
 	}
 
 	public function deleteReview($slug, $courseId, $reviewId) {
-		//dd([$slug, $courseId, $reviewId]);
 		$review = Review::findOrFail($reviewId);
 		$courseRedirect = Redirect::action('CourseController@show', [$slug, $courseId]);
 
