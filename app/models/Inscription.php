@@ -4,7 +4,11 @@ class Inscription extends Eloquent {
 
   public $timestamps = false;
 
-  public function courses() {
-    return $this->hasToMany('Course');
+  public function course() {
+    return $this->belongsTo('Course');
+  }
+
+  public function student() {
+    return $this->belongsTo('Student', 'sciper', 'sciper');
   }
 }

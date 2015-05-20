@@ -37,11 +37,9 @@ Route::group([
 	Route::get('/students/{id}', 'StudentController@show');*/
 
 	Route::get('/courses', 'CourseController@studyCycles');
+	Route::post('/courses/studyplan', 'CourseController@findStudyPlan');
 	Route::get('/courses/{cycle}', 'CourseController@studyPlans');
 	Route::get('/courses/{cycle}/{plan_slug}', 'CourseController@studyPlanCourses');
-	// Route::get('/courses/{section_id}', 'CourseController@sectionSemester');
-	// Route::get('/courses', 'CourseController@list');
-	Route::get('/courses/{section_id}/{semester}', 'CourseController@listBySectionSemester');
 	Route::get('/course/{slug}-{id}', 'CourseController@show');
 	Route::get('/teacher/{slug}-{id}', 'CourseController@showTeacher');
 

@@ -6,26 +6,36 @@ class CourseController extends BaseController {
 		$this->addCrumb('CourseController@studyCycles', 'Courses');
 	}
 
-    public function studyPlanCourses($cycle_name, $slug) {
+  public function findStudyPlan() {
+    $plan = StudyPlan::find(Input::get('plan-id'));
+
+    if(is_null($plan)) {
+      return Response::view('errors.missing', array('url' => Request::url()), 404);
+    }
+
+    return Redirect::action('CourseController@studyPlanCourses', ['plan_slug' => $plan->slug, 'cycle' => $plan->studyCycle->name]);
+  }
+
+    public function studyPlanCourses($cycle, $plan_slug) {
         $coursesPerPage = Config::get('app.nbCoursesPerPage');
 
         $plan = StudyPlan::with('studyCycle')
-            ->whereHas('studyCycle', function($q) use($cycle_name)
+            ->whereHas('studyCycle', function($q) use($cycle)
             {
-                $q->where('name_en', $cycle_name)->orWhere('name_fr', $cycle_name);
+                $q->where('name_en', $cycle)->orWhere('name_fr', $cycle);
             })
-            ->where('slug', $slug)
+            ->where('slug', $plan_slug)
             ->firstOrFail();
 
         $this->addCrumb('CourseController@studyPlans', ucfirst($plan->studyCycle->name), ['cycle' => $plan->studyCycle->name]);
         $this->addCrumb('CourseController@studyPlanCourses', ucfirst($plan->name), [
-            'cycle' => $cycle_name,
-            'plan_slug' => $slug]);
+            'cycle' => $cycle,
+            'plan_slug' => $plan_slug]);
 
         return View::make('courses.planCourses', [
-            'page_title' => $cycle_name.' &ndash; '.$plan->name,
+            'page_title' => $cycle.' &ndash; '.$plan->name,
             'plan' => $plan,
-            'cycle' => $cycle_name,
+            'cycle' => $cycle,
             'courses' => $plan->courses()
                 ->with('teacher', 'plans')
                 ->withPivot('semester')
