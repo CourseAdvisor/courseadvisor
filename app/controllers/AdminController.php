@@ -49,6 +49,34 @@ class AdminController extends BaseController {
 		]);
 	}
 
+	public function listReviews() {
+		$student = null;
+
+		if (Input::has('sciper')) {
+			$reviews = Review::whereHas('student', function($q) {
+				return $q->where('sciper', Input::get('sciper'));
+			})->orderBy('id', 'DESC')->get();
+			$student = Student::where('sciper', Input::get('sciper'))->first();
+			if (!$student) {
+				throw new ModelNotFoundException;
+			}
+
+			$crumb = 'See reviews of ' . $student->fullname;
+		}
+		else {
+			$reviews = Review::orderBy('id', 'DESC')->get();
+			$crumb = 'See all reviews';
+		}
+
+		$this->addCrumb('AdminController@listReviews', $crumb);
+
+		return View::make('admin.listReviews')->with([
+			'reviews' => $reviews,
+			'particularStudent' => Input::has('sciper'),
+			'student' => $student
+		]);
+	}
+
 	private function generateRepartitionSectionGraph($students) {
 		$bySection = $students->groupBy(function($student) {
 			return $student->section->name;
