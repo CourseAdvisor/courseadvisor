@@ -11,7 +11,7 @@
  		});*/
 		$this->app['tequila'] = $this->app->share(function ($app) {
 			$auth = new Tequila($app);
-			$auth->setApplicationName('Course advisor');
+			$auth->setApplicationName('CourseAdvisor');
 			$auth->setLoginRedirectUrl(Config::get('tequila.redirect_url'));
 			$auth->setServerUrl(Config::get('tequila.server_url'));
 			$auth->setWantedAttributes(['uniqueid','name','firstname','unit', 'unitid', 'where', 'group', 'email']);
