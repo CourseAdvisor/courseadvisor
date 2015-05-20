@@ -72,6 +72,8 @@ return array(
   'review-updated-message' => 'Ton avis a été édité.',
   'review-updated-anonymous-message' => 'Ton avis a été édité. Il doit maintenant être validé par un modérateur.',
   'review-update-not-allowed' => 'Impossible d\'éditer cet avis',
+  'review-delete-not-allowed' => 'Impossible de supprimer cet avis',
+  'review-deleted-message' => 'L\'avis a bien été supprimé',
 
   'teacher-more-info' => 'En savoir plus sur :teacher',
   'teacher-courses-heading' => ':teacher enseigne les cours suivants'
