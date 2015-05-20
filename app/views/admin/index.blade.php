@@ -22,6 +22,8 @@
 					<li><strong>{{{ $nbAccepted }}}</strong> accepted</li>
 					<li><strong>{{{ $nbRejected }}}</strong> rejected</li>
 				</ul>
+
+				<h3>{{ link_to_action('AdminController@listReviews', 'View all reviews' )}}</h3>
 			</div>
 
 			<div class="admin-panel well col-lg-5 col-lg-offset-1">

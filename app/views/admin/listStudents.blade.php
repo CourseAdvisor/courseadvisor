@@ -22,7 +22,10 @@
 		@foreach($students as $student)
 			<li><b>{{ $student->fullname }}</b> ({{ $student->section->name }})
 			@if ($student->reviews->count() > 0)
-			- {{{ $student->reviews->count() }}} reviews posted
+				-
+				<a href="{{{ action('AdminController@listReviews') }}}?sciper={{{ $student->sciper }}}">
+					{{{ $student->reviews->count() }}} reviews posted
+				</a>
 			@endif
 
 			</li>
