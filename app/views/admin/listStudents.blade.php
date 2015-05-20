@@ -14,7 +14,6 @@
 		<div class="row">
 			<div class="col-lg-10 col-lg-offset-1 col-md-10">
 				<p class="pull-left"><img src="data:image/png;base64,{{ $repartitionSectionGraphData }}" /></p>
-				<p><img src="data:image/png;base64,{{ $repartitionNbReviewsGraphData }}" /></p>
 			</div>
 		</div>
 
