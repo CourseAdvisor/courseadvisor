@@ -250,6 +250,7 @@ class CourseController extends BaseController {
 		}
 
 		$review->delete();
+		$review->course->updateAverages();
 		return $courseRedirect
 			->with('message', ['success', trans('courses.review-deleted-message')]);
 	}
