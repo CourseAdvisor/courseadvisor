@@ -40,7 +40,7 @@ class Review extends Eloquent {
 			'exercises_grade' => $gradeRule,
 			'content_grade' => $gradeRule,
 			'difficulty' => 'integer|between:0,5',
-			'title' => 'required|max:50',
+			'title' => 'required|max:100',
 			'comment' => 'required|min:20'
 		];
 	}
