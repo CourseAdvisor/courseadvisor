@@ -54,9 +54,7 @@
         </a>
         <br/><br/>
         @include('global.course_list', [
-          'courses' => $student->inscriptions()->orderBy('year', 'DESC')->get()->map(function($inscription) {
-            return $inscription->course;
-          }),
+          'courses' => $studentCourses,
           'paginate' => FALSE
         ])
 
