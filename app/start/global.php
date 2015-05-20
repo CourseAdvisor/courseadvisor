@@ -80,3 +80,6 @@ App::down(function()
 */
 
 require app_path().'/filters.php';
+
+/* Events */
+require app_path().'/events.php';

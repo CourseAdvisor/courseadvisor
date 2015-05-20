@@ -10,7 +10,8 @@
 		"barryvdh/laravel-ide-helper": "~1.11",
 		"creitive/laravel4-breadcrumbs": "~1.0",
 		"mcamara/laravel-localization": "~0.15",
-		"jpgraph/jpgraph": "dev-master"
+		"jpgraph/jpgraph": "dev-master",
+		"guzzlehttp/guzzle": "~4.0"
 	},
 	"autoload": {
 		"classmap": [

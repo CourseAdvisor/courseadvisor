@@ -176,6 +176,7 @@ class CourseController extends BaseController {
 		}
 
 		$newReview->save();
+		Event::fire('review.newReview', [$newReview]);
 
 		// Update averages only if the review is not anonymous
 		if (!$newReview->is_anonymous) {
@@ -221,19 +222,22 @@ class CourseController extends BaseController {
 		$review->content_grade = Input::get('content_grade');
 		$review->difficulty = Input::get('difficulty');
 
-    $msg = trans('courses.review-updated-message');
+    	$msg = trans('courses.review-updated-message');
 
 		if (Input::get('anonymous') == true) {
-      $review->is_anonymous = 1;
-      $review->status = 'waiting';
-      $msg = trans('courses.review-updated-anonymous-message');
+	      $review->is_anonymous = 1;
+	      $review->status = 'waiting';
+	      $msg = trans('courses.review-updated-anonymous-message');
 		}
 
 		$review->updateAverage();
 		$review->save();
 
-		if (!$review->is_anonymous)
+		if ($review->is_anonymous) {
+			Event::fire('review.newAnonymous', [$review]);
+		} else {
 			$review->course->updateAverages();
+		}
 
 		return $courseRedirect
 				->with('message', ['success', $msg]);
