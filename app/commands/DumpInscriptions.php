@@ -62,7 +62,6 @@ class DumpInscriptions extends Command {
 
   private function dumpTerm($year, $term)
   {
-
     if (!($raw = $this->curlGet(self::SOURCE_DOMAIN.$term."_".substr($year, -2, 2).".xml"))) {
       return NULL;
     }
@@ -81,24 +80,29 @@ class DumpInscriptions extends Command {
       echo $cobj->name_en."\n";
 
       try {
-        $inscriptions = $course->curricula->cursus->inscriptions->inscription;
+        $cursus = $course->curricula->cursus;
       } catch(Exception $e) {
         echo "Skipping\n";
         continue;
       }
-      $this->dumpInscription($inscriptions, $cobj, $year, $term);
+      $this->dumpCursus($cursus, $cobj, $year, $term);
     }
   }
 
-  private function dumpInscription($inscriptions, $course, $year, $term) {
-    echo "Dumping course: ".$course->name_en." (".count($inscriptions)." inscriptions)\n";
-    foreach ($inscriptions as $inscription) {
-      Inscription::firstOrCreate([
-        "course_id" => $course->id,
-        "year" => $year,
-        "term" => $term,
-        "sciper" => $inscription->sciper
-      ]);
+  private function dumpCursus($cursus, $course, $year, $term) {
+    foreach ($cursus as $cur) {
+      $inscriptions = $cur->inscriptions->inscription;
+      echo "Dumping course: ".$course->name_en." (".count($inscriptions)." inscriptions)\n";
+      foreach ($inscriptions as $inscription) {
+        if ($inscription->active) {
+          Inscription::firstOrCreate([
+            "course_id" => $course->id,
+            "year" => $year,
+            "term" => $term,
+            "sciper" => $inscription->sciper
+          ]);
+        }
+      }
     }
   }
 
