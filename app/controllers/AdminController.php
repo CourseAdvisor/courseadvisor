@@ -97,6 +97,7 @@ class AdminController extends BaseController {
 
 		$graph = new Graph(500, 300);
 		$graph->SetScale('intlin');
+		$graph->img->SetAntiAliasing(false);
 		$graph->title->Set("Number of reviews posted");
 		$graph->xaxis->title->Set("Number of reviews posted");
 		$graph->yaxis->title->Set("Number of students");
