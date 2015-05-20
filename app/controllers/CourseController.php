@@ -221,12 +221,12 @@ class CourseController extends BaseController {
 		$review->content_grade = Input::get('content_grade');
 		$review->difficulty = Input::get('difficulty');
 
-    $msg = trans('courses.review-updated-message');
+    	$msg = trans('courses.review-updated-message');
 
 		if (Input::get('anonymous') == true) {
-      $review->is_anonymous = 1;
-      $review->status = 'waiting';
-      $msg = trans('courses.review-updated-anonymous-message');
+	      $review->is_anonymous = 1;
+	      $review->status = 'waiting';
+	      $msg = trans('courses.review-updated-anonymous-message');
 		}
 
 		$review->updateAverage();
@@ -237,5 +237,20 @@ class CourseController extends BaseController {
 
 		return $courseRedirect
 				->with('message', ['success', $msg]);
+	}
+
+	public function deleteReview($slug, $courseId, $reviewId) {
+		$review = Review::findOrFail($reviewId);
+		$courseRedirect = Redirect::action('CourseController@show', [$slug, $courseId]);
+
+		// Check authorized
+		if ($review->student_id != StudentInfo::getId()) {
+			return $courseRedirect
+				->with('message', ['danger', trans('courses.review-delete-not-allowed')]);
+		}
+
+		$review->delete();
+		return $courseRedirect
+			->with('message', ['success', trans('courses.review-deleted-message')]);
 	}
 }

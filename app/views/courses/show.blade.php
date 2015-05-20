@@ -152,7 +152,7 @@
 
             	<div class="review">
                 @if (Tequila::isLoggedIn() && StudentInfo::getSciper() == $review->student->sciper)
-                <span class="pull-right">
+                <span class="pull-right actions">
                   <a href="#"
                     data-review-id="{{{ $review->id }}}"
                     data-review-lectures-grade="{{{ $review->lectures_grade }}}"
@@ -163,6 +163,14 @@
                     data-review-anonymous="{{{ $review->is_anonymous ? 1 : 0 }}}"
                     class="edit-review" title="{{{ trans('courses.edit-reviews-action') }}}">
                     <i class="fa fa-pencil"></i>
+
+                  <a href="{{{ action("CourseController@deleteReview", [
+                    'reviewId'=> $review->id,
+                    'courseId'=> $course->id,
+                    'slug'    => $slug
+                    ]) }}}">
+                    <i class="fa fa-trash-o"></i>
+                  </a>
                   </a>
                 @endif
                 </span>

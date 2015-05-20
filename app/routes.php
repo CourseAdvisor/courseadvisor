@@ -14,6 +14,8 @@
 
 /* PATTERNS */
 Route::pattern('id', '\d+');
+Route::pattern('courseId', '\d+');
+Route::pattern('reviewId', '\d+');
 Route::pattern('slug', '[a-zA-Z0-9_\-\.]+');
 
 
@@ -56,6 +58,7 @@ Route::group([
 		Route::get('/dashboard', 'StudentController@dashboard');
 		Route::post('/course/{slug}-{id}/createReview', 'CourseController@createReview');
 		Route::post('/course/{slug}-{id}/updateReview', 'CourseController@updateReview');
+		Route::get('/course/{slug}-{courseId}/deleteReview/{reviewId}', 'CourseController@deleteReview');
 	});
 
 });

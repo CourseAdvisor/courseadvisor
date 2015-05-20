@@ -71,6 +71,8 @@ return array(
   'review-updated-message' => 'Your review has been successfuly edited',
   'review-updated-anonymous-message' => 'Your review has been edited. It will now be reviewed by an administrator',
   'review-update-not-allowed' => 'You are not allowed to edit this review.',
+  'review-delete-not-allowed' => 'You are not allowed to delete this review.',
+  'review-deleted-message' => 'Your review has been successfuly deleted.',
 
   'teacher-more-info' => 'More about :teacher',
   'teacher-courses-heading' => ':teacher teaches the following courses'
