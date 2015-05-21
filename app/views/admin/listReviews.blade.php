@@ -36,6 +36,14 @@
 		        (anonymous)
 		      @endif
 
+		      in the course
+		      <a href="{{{ action('CourseController@show',  [
+				'slug' => Str::slug($review->course->name),
+				'id' => $review->course->id
+		      ])}}}">
+		      	{{{ $review->course->name }}}
+		      </a>
+
 			  </div>
 			  <p class="review-content">{{ nl2br(e($review->comment)) }}</p>
 			</div>
