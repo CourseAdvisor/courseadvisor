@@ -29,7 +29,7 @@
           <div class="form-group {{ $errors->has('plan') ? 'has-error' : '' }}">
             <label for="coursepicker-plan" class="control-label col-sm-2">{{{ trans('student.plans-picker-label') }}}</label>
             <div class="col-sm-7">
-              <select id="coursepicker-plan" name="plan-id" class="form-control">
+              <select onchange="this.form.submit()" id="coursepicker-plan" name="plan-id" class="form-control">
                 @foreach($plans as $plan)
                   <option value="{{{ $plan->id }}}" {{ ($plan->id == $student->studyPlans[0]->id) ? 'selected' : '' }} >
                     {{{ $plan->studyCycle->name }}} &mdash; {{{ $plan->name }}}
