@@ -58,7 +58,7 @@ return array(
   'review-title-placeholder' => 'Impression générale',
 
   'review-body-placeholder' => 'Est-ce que ce cours était utile ? Était-il intéressant ? Exprime ton opinion, en essayant d\'être le plus constructif possible.',
-  'incomplete-grading-message' => 'Merci de noter tous les aspects du cours.',
+  'incomplete-grading-message' => 'Merci de noter au moins un aspect du cours.',
   'anonymous-post-label' => 'Poster cet avis anonymement',
   'anonymous-post-helper' => 'Si tu postes en anonyme, ton nom n\'apparaîtra pas mais ton avis devra d\'abord être validé par un administrateur.',
   'grade-lectures-helper' => 'Comment as-tu trouvé les leçons ? Le professeur était il intéressant ? Était-il facile à comprendre ?',
@@ -75,6 +75,7 @@ return array(
   'review-delete-not-allowed' => 'Impossible de supprimer cet avis',
   'review-deleted-message' => 'L\'avis a bien été supprimé',
   'delete-reviews-confirm' => 'Es-tu sûr de vouloir supprimer ton avis ?',
+  'review-no-grade' => 'aucune note donnée',
 
   'teacher-more-info' => 'En savoir plus sur :teacher',
   'teacher-courses-heading' => ':teacher enseigne les cours suivants'

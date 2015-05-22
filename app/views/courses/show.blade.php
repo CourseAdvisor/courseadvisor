@@ -2,6 +2,9 @@
 
 @section('scripts')
 {{ HTML::script('js/show-course.js') }}
+@if (Config::get('app.debug'))
+  {{ HTML::script('js/fill-random-review.js') }}
+@endif
 @stop
 
 @section('content')
@@ -114,15 +117,24 @@
             <dl class="dl-horizontal">
               <dt>{{{ trans('courses.grading-lectures-label') }}}</dt>
               <dd>
-                @include('global.starbar', ['grade' => $course->avg_lectures_grade])
+                @include('global.starbar', [
+                'grade' => $course->avg_lectures_grade,
+                'disabled' => $course->avg_lectures_grade == 0
+                ])
               </dd>
               <dt>{{{ trans('courses.grading-exercises-label') }}}</dt>
               <dd>
-                @include('global.starbar', ['grade' => $course->avg_exercises_grade])
+                @include('global.starbar', [
+                'grade' => $course->avg_exercises_grade,
+                'disabled' => $course->avg_exercises_grade == 0
+                ])
               </dd>
               <dt>{{{ trans('courses.grading-content-label') }}}</dt>
               <dd>
-                @include('global.starbar', ['grade' => $course->avg_content_grade])
+                @include('global.starbar', [
+                'grade' => $course->avg_content_grade,
+                'disabled' => $course->avg_content_grade == 0
+                ])
               </dd>
             </dl>
           </div>
@@ -174,10 +186,12 @@
                   </a>
                 @endif
                 </span>
+
             	  @include('global.starbar', [
                 'grade' => $review->avg_grade,
                 'comment_unsafe' => htmlspecialchars($review->title)
                 ])
+
             	  <div class="clearfix"></div>
             	  <div class="review-author">
                   @if($review->is_anonymous)

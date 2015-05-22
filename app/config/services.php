@@ -16,7 +16,7 @@ return array(
 
 	'mailgun' => array(
 		'domain' => 'courseadvisor.ch',
-		'secret' => 'secret',
+		'secret' => 'key-07d7607ce8774ffccbd0293ba880c88f',
 	),
 
 	'mandrill' => array(
