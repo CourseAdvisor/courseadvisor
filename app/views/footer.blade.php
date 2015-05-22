@@ -14,7 +14,9 @@
         </ul>
       </div>
       <div class="col-lg-5 col-md-5 col-sm-8 col-xs-10 copyright">
-        Ⓢ Satelliteware 2015, <a href="http://christophetd.fr">christophetd</a>, <a href="http://hmil.fr">hmil</a> and <a href="http://rickrolled.fr">contributors</a>.
+        <div class="pull-right">
+          <iframe src="https://ghbtns.com/github-btn.html?user=courseadvisor&repo=courseadvisor&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
+        </div>
       </div>
     </div>
   </div>
