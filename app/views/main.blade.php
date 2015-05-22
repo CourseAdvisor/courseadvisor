@@ -39,17 +39,23 @@
         </div>
         <div class="navbar-collapse collapse" id="navbar-main">
 
-          <form class="navbar-form navbar-right hidden-xs desktop-search" role="search" action="{{{ action('SearchController@search') }}}" method="GET">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search" name="q" value="{{{ Input::get('q') }}}">
-              <span class="input-group-btn">
-                <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
-              </span>
-            </div>
-          </form>
-
           {{-- desktop nav --}}
           <ul class="nav navbar-nav navbar-right hidden-xs">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                <i class="flag-icon flag-icon-{{{ LaravelLocalization::getCurrentLocale() }}}" title="choose language"></i>
+                <i class="fa fa-caret-down"></i>
+              </a>
+              <ul class="dropdown-menu locale-dropdown" role="menu">
+                @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                  <li>
+                    <a rel="alternate" hreflang="{{$localeCode}}" href="{{LaravelLocalization::getLocalizedURL($localeCode) }}">
+                      <i class="flag-icon flag-icon-{{{ $localeCode }}}" title="{{{ $properties['native'] }}}"> </i>
+                    </a>
+                  </li>
+                @endforeach
+              </ul>
+            </li>
             @if(Tequila::isLoggedIn())
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
@@ -75,22 +81,18 @@
               </a>
             </li>
             @endif
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                <i class="flag-icon flag-icon-{{{ LaravelLocalization::getCurrentLocale() }}}" title="choose language"></i>
-                <i class="fa fa-caret-down"></i>
-              </a>
-              <ul class="dropdown-menu locale-dropdown" role="menu">
-                @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
-                  <li>
-                    <a rel="alternate" hreflang="{{$localeCode}}" href="{{LaravelLocalization::getLocalizedURL($localeCode) }}">
-                      <i class="flag-icon flag-icon-{{{ $localeCode }}}" title="{{{ $properties['native'] }}}"> </i>
-                    </a>
-                  </li>
-                @endforeach
-              </ul>
-            </li>
           </ul>
+
+          {{-- desktop search --}}
+          <form class="navbar-form navbar-right hidden-xs desktop-search" role="search" action="{{{ action('SearchController@search') }}}" method="GET">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search" name="q" value="{{{ Input::get('q') }}}">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+              </span>
+            </div>
+          </form>
+
 
           {{-- mobile nav --}}
           <ul class="nav navbar-nav main-nav visible-xs">
