@@ -94,20 +94,20 @@
   <dl class="dl-horizontal">
     <dt>{{{ trans('courses.grading-lectures-label') }}}</dt>
     <dd>
-      <div class="pull-left" data-starbar="lectures_grade" data-value="{{ isset($data['lectures_grade']) ? $data['lectures_grade'] : ''}}"
-      data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right"
+      <div class="pull-left" data-starbar="lectures_grade,clearable" data-value="{{ isset($data['lectures_grade']) ? $data['lectures_grade'] : ''}}"
+      data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom"
       data-content="{{{ trans('courses.grade-lectures-helper') }}}"></div>
     </dd>
     <dt>{{{ trans('courses.grading-exercises-label') }}}</dt>
     <dd>
-      <div class="pull-left" data-starbar="exercises_grade"  data-value="{{ isset($data['exercises_grade']) ? $data['exercises_grade'] : ''}}"
-      data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right"
+      <div class="pull-left" data-starbar="exercises_grade,clearable"  data-value="{{ isset($data['exercises_grade']) ? $data['exercises_grade'] : ''}}"
+      data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom"
       data-content="{{{ trans('courses.grade-exercises-helper') }}}"></div>
     </dd>
     <dt>{{{ trans('courses.grading-content-label') }}}</dt>
     <dd>
-      <div class="pull-left" data-starbar="content_grade"  data-value="{{ isset($data['content_grade']) ? $data['content_grade'] : '' }}"
-      data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right"
+      <div class="pull-left" data-starbar="content_grade,clearable"  data-value="{{ isset($data['content_grade']) ? $data['content_grade'] : '' }}"
+      data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom"
       data-content="{{{ trans('courses.grade-content-helper') }}}"></div>
     </dd>
   </dl>

@@ -14,7 +14,8 @@ var StarBar = (function() {
     value: 0,
     interactive: true,
     input: true,
-    inputName: 'rating'
+    inputName: 'rating',
+    clearable: false
   };
 
   function applyDefaults(opts) {
@@ -31,6 +32,7 @@ var StarBar = (function() {
 
     var fillings = this._fillings = new Array(5);
     var star;
+    var _this = this;
 
     this._changeCb = opts.onChange;
     this.value = opts.value;
@@ -42,6 +44,14 @@ var StarBar = (function() {
 
     el.addClass('starbar');
     if (opts.interactive) el.addClass('clickable');
+    if (opts.clearable) {
+      var clearBtn = $('<a href="#" class="starbar-clear"><i class="fa fa-close"></i></a>');
+      clearBtn.on('click', function(evt) {
+        evt.preventDefault();
+        _this.setValue(0);
+      });
+      el.parent().append(clearBtn);
+    }
 
     for (var i = 0; i < 5; ++i) {
       star = makeStar(this, i+1);
