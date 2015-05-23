@@ -8,7 +8,7 @@
             <li><a href="{{{ action('AuthController@login') }}}">{{{ trans('global.login-action') }}}</a></li>
           @else
             <li><a href="{{{ action('StudentController@dashboard') }}}">{{{ trans('global.dashboard-action') }}}</a></li>
-            <li><a href="{{{ action('AuthController@logout', ['next' => Request::url()]) }}}">{{{ trans('global.logout-action') }}}</a></li>
+            <li><a href="{{{ action('AuthController@logout', ['next' => Request::root()]) }}}">{{{ trans('global.logout-action') }}}</a></li>
           @endif
           <li><a href="#">{{{ trans('global.about-action') }}}</a></li>
         </ul>

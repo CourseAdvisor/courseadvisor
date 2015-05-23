@@ -68,10 +68,16 @@
               </a>
               <ul class="dropdown-menu fa-ul" role="menu">
                 @if (StudentInfo::isAdmin())
-                <li><a href="{{{ action('AdminController@index') }}}"<i class="fa fa-lock"></i> Admin</a></li>
+                <li><a href="{{{ action('AdminController@index') }}}">
+                  <i class="fa fa-lock"></i> Admin</a>
+                </li>
                 @endif
-                <li><a href="{{{ action('StudentController@dashboard') }}}"><i class="fa fa-dashboard"></i> {{{ trans('global.dashboard-action') }}}</a></li>
-                <li><a href="{{{ action('AuthController@logout', ['next' => Request::root()]) }}}"><i class="fa fa-sign-out"></i> {{{ trans('global.logout-action') }}}</a></li>
+                <li><a href="{{{ action('StudentController@dashboard') }}}">
+                  <i class="fa fa-dashboard"></i> {{{ trans('global.dashboard-action') }}}
+                </a></li>
+                <li><a href="{{{ action('AuthController@logout', ['next' => Request::root()]) }}}">
+                  <i class="fa fa-sign-out"></i> {{{ trans('global.logout-action') }}}
+                </a></li>
               </ul>
             </li>
             @else
