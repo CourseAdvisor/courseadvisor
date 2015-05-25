@@ -44,9 +44,9 @@ class Review extends Eloquent {
 
 	public static function rules() {
 		return [
-			'lectures_grade' => 'integer|between:1,5',
-			'exercises_grade' => 'integer|between:1,5',
-			'content_grade' =>'integer|between:1,5',
+			'lectures_grade' => 'integer|between:0,5',
+			'exercises_grade' => 'integer|between:0,5',
+			'content_grade' =>'integer|between:0,5',
 			'difficulty' => 'integer|between:0,5',
 			'title' => 'required|max:100',
 			'comment' => 'required|min:20'
@@ -56,15 +56,15 @@ class Review extends Eloquent {
 	public static function getValidator($data) {
 		$v = Validator::make($data, self::rules());
 
-		$v->sometimes('lectures_grade', 'required', function ($input) {
+		$v->sometimes('lectures_grade', ['required', 'not_in:0'], function ($input) {
 			return empty($input->content_grade) && empty($input->exercises_grade);
 		});
 
-		$v->sometimes('content_grade', 'required', function ($input) {
+		$v->sometimes('content_grade', ['required', 'not_in:0'], function ($input) {
 			return empty($input->lectures_grade) && empty($input->exercises_grade);
 		});
 
-		$v->sometimes('exercises_grade', 'required', function ($input) {
+		$v->sometimes('exercises_grade', ['required', 'not_in:0'], function ($input) {
 			return empty($input->content_grade) && empty($input->lectures_grade);
 		});
 

@@ -1,6 +1,8 @@
 <?php
 
 Event::listen('review.newReview', function($review) {
+	if (Config::get('app.debug')) return;
+
 	$data = [
 		'courseUrl' => action('CourseController@show', [
 			'slug' => Str::slug($review->course->name),
@@ -22,6 +24,8 @@ Event::listen('review.newReview', function($review) {
 });
 
 Event::listen('review.newAnonymous', function($review) {
+	if (Config::get('app.debug')) return;
+
 	$data = [
 		'moderationUrl' => action('AdminController@moderate'),
 		'studentName' => $review->student->fullname,
