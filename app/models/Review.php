@@ -44,9 +44,9 @@ class Review extends Eloquent {
 
 	public static function rules() {
 		return [
-			'lectures_grade' => 'integer|between:0,5',
-			'exercises_grade' => 'integer|between:0,5',
-			'content_grade' =>'integer|between:0,5',
+			'lectures_grade' => 'integer|between:1,5',
+			'exercises_grade' => 'integer|between:1,5',
+			'content_grade' =>'integer|between:1,5',
 			'difficulty' => 'integer|between:0,5',
 			'title' => 'required|max:100',
 			'comment' => 'required|min:20'
