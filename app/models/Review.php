@@ -42,6 +42,20 @@ class Review extends Eloquent {
 		return $q->where('status', 'accepted');
 	}
 
+	/* overrides */
+	public function save(array $options = []) {
+		if ($this->exercises_grade == 0)
+			$this->exercises_grade = null;
+
+		if ($this->lectures_grade == 0)
+			$this->lectures_grade = null;
+
+		if ($this->content_grade == 0)
+			$this->content_grade == null;
+
+		parent::save($options);
+	}
+
 	public static function rules() {
 		return [
 			'lectures_grade' => 'integer|between:0,5',
