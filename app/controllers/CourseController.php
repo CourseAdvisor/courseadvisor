@@ -136,7 +136,7 @@ class CourseController extends BaseController {
 	}
 
 	public function createReview($slug, $courseId) {
-		$validator = Validator::make(Input::all(), Review::rules());
+		$validator = Review::getValidator(Input::all());
 		$goToCourse = Redirect::action('CourseController@show', [$slug, $courseId]);
 		if ($validator->fails()) {
 			return Redirect::to(URL::previous() . "#my-review")
@@ -208,7 +208,7 @@ class CourseController extends BaseController {
 		}
 
 		// Check input data
-		$validator = Validator::make(Input::all(), Review::rules());
+		$validator = Review::getValidator(Input::all());
 		if ($validator->fails()) {
 			return Redirect::to(URL::previous() . "#!edit-" . $review->id)
 					->withInput()

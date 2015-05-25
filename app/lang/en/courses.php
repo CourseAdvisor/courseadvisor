@@ -57,7 +57,7 @@ return array(
   'create-review-message' => 'Please take a couple of minutes to give your opinion on this course.',
   'review-title-placeholder' => 'Overall impression',
   'review-body-placeholder' => 'Was this course useful to you? Did you find it interesting? Express your own opinion.',
-  'incomplete-grading-message' => 'Please grade all aspects of this course.',
+  'incomplete-grading-message' => 'Please grade at least one aspect of this course.',
   'anonymous-post-label' => 'Post anonymously',
   'anonymous-post-helper' => 'If you post anonymously, your review will be moderated by an administrator before being published.',
   'grade-lectures-helper' => 'How did you find the lectures? Was the teacher interesting? Was he understandable?',
@@ -74,6 +74,7 @@ return array(
   'review-delete-not-allowed' => 'You are not allowed to delete this review.',
   'review-deleted-message' => 'Your review has been successfuly deleted.',
   'delete-reviews-confirm' => 'Are you sure you want to delete your review?',
+  'review-no-grade' => 'no grade given',
 
   'teacher-more-info' => 'More about :teacher',
   'teacher-courses-heading' => ':teacher teaches the following courses'

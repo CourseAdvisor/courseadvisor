@@ -48,6 +48,6 @@ function showEditModal(openingLink) {
 		modal.find('input#anonymous').attr('checked', 'checked');
 	}
 	for(var gradeType in reviewGrades) {
-		modal.find('[data-starbar=' + gradeType + '_grade]').data('starbar').setValue(reviewGrades[gradeType]);
+		modal.find('[data-starbar^=' + gradeType + '_grade]').data('starbar').setValue(reviewGrades[gradeType]);
 	}
 }

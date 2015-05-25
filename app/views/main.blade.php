@@ -160,7 +160,18 @@
       // Initialize starbars
       $('[data-starbar]').each(function(el){
         var el = $(this);
-        var starbar = new StarBar(el, {inputName: el.attr('data-starbar')});
+
+        // Parse starbar attributes
+        var data = el.attr('data-starbar').split(',');
+        var attrs = {
+          inputName: data.splice(0, 1)[0]
+        };
+        for (var i in data) {
+          var splitted = data[i].split('=');
+          attrs[splitted[0]] = splitted[1] || true;
+        }
+
+        var starbar = new StarBar(el, attrs);
         var initialValue = el.attr('data-value');
         if(typeof initialValue !== 'undefined') {
           starbar.setValue(initialValue);

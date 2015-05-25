@@ -289,6 +289,22 @@ dl {
     text-align: right;
 }
 
+* > .starbar-clear {
+    display: none;
+}
+*:hover > .starbar-clear {
+    display: inline-block;
+}
+.starbar-clear {
+    vertical-align: middle;
+    color: @gray-lighter;
+    &:hover {
+        color: @gray-light;
+    }
+    margin-top: 2px;
+    margin-left: 3px;
+}
+
 
 .nomargin {
     margin: 0;
