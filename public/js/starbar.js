@@ -45,7 +45,7 @@ var StarBar = (function() {
     el.addClass('starbar');
     if (opts.interactive) el.addClass('clickable');
     if (opts.clearable) {
-      var clearBtn = $('<a href="#" class="starbar-clear"><i class="fa fa-close"></i></a>');
+      var clearBtn = $('<a href="#" class="starbar-clear"><i class="fa fa-times"></i></a>');
       clearBtn.on('click', function(evt) {
         evt.preventDefault();
         _this.setValue(0);
