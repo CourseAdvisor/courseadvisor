@@ -163,12 +163,16 @@ class CourseController extends BaseController {
 
 
 		// Check if we should use 'mobile_difficulty'
-		if(empty($newReview->difficulty)) {
+		/*if(empty($newReview->difficulty)) {
 			$newReview->difficulty = Input::get('difficulty_mobile');
 		}
 		// difficulty 0 means N/A
 		if ($newReview->difficulty == 0)
 			unset($newReview->difficulty);
+		*/
+		if (Input::has('difficulty_mobile') && Input::get('difficulty_mobile') != 0) {
+			$newReview->difficulty = Input::get('difficulty_mobile');
+		}
 
 		if(Input::get('anonymous') == true) {
 			$newReview->is_anonymous = 1;
@@ -186,7 +190,6 @@ class CourseController extends BaseController {
 		else {
 			$msg = trans('courses.review-posted-anonymous-message');
 		}
-
 
 		return $goToCourse->with('message', ['success', $msg]);
 	}
