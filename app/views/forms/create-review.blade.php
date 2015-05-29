@@ -131,7 +131,7 @@
       </label>
       <span data-trigger="hover" data-toggle="popover" data-placement="right"
         data-content="Your name will not be displayed in your review if you choose this option.">
-          <a href="{{{ action('StaticController@faq') }}}"><i class="fa fa-question-circle" ></i></a>
+          <a href="{{{ action('StaticController@about') }}}"><i class="fa fa-question-circle" ></i></a>
       </span>
       <span class="help-block warning hidden" id="anonymous-warning">
         {{{ trans('courses.anonymous-post-helper') }}}
