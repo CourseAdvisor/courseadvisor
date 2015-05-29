@@ -85,7 +85,7 @@ class AdminController extends BaseController {
 			return sizeof($entry);
 		}, $bySection);
 
-		$graph = new PieGraph(300, 300);
+		$graph = new PieGraph(800, 300);
 		$graph->title->Set("Sections");
 
 		$plot = new PiePlot(array_values($sectionStats));
