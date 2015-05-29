@@ -31,7 +31,7 @@ Route::group([
   });
 
 	Route::get('/', 'StaticController@homepage');
-	Route::get('/faq', 'StaticController@faq');
+	Route::get('/about', 'StaticController@about');
 
 	Route::get('/search', 'SearchController@search');
 
