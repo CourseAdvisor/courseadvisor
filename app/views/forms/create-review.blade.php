@@ -44,7 +44,7 @@
       <option value="5" {{ isset($data['difficulty']) && $data['difficulty'] == 5 ? 'selected' : ''}}>
         {{{ trans('courses.difficulty-5-label') }}}
       </option>
-      <option value="0" {{ isset($data['difficulty']) && $data['difficulty'] == 0 ? 'selected' : ''}}>
+      <option value="0" {{ !isset($data['difficulty']) || $data['difficulty'] == 0 ? 'selected' : ''}}>
         {{{ trans('courses.difficulty-na-label') }}}
       </option>
     </select>
@@ -83,7 +83,7 @@
       &nbsp;&nbsp;&nbsp;
       <label class="radio-inline">
         <input type="radio" name="difficulty" id="difficulty-0" value="0"
-          {{ isset($data['difficulty']) && $data['difficulty'] == 0 ? 'checked' : ''}}>
+          {{ !isset($data['difficulty']) || $data['difficulty'] == 0 ? 'checked' : ''}}>
         <span class="hint">{{{ trans('courses.difficulty-na-label') }}}</span>
       </label>
     </div>
