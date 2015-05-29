@@ -51,8 +51,10 @@ class Review extends Eloquent {
 			$this->lectures_grade = null;
 
 		if ($this->content_grade == 0)
-			$this->content_grade == null;
+			$this->content_grade = null;
 
+		if ($this->difficulty == 0)
+			$this->difficulty = null;
 		parent::save($options);
 	}
 
