@@ -4,14 +4,15 @@ return array(
 	'heading' => 'À propos',
 	'authors' => "
 	<p><strong>Le contenu présent sur ce site n'est en aucun cas rédigé, ou même approuvé par l'EPFL.</strong></p>
-	<p>Ce site a été créé, dans un but purement non lucratif. Le projet est open-source, et le code source du site est disponible
-	à l'adresse <a href='https://github.com/CourseAdvisor/courseadvisor'>https://github.com/CourseAdvisor/courseadvisor</a>.</p>
-	<p>Pour toute suggestion ou rapport de bug, merci <a href='https://github.com/CourseAdvisor/courseadvisor/issues'>d'ouvrir un ticket</a>
-	 sur Github.</p>
+	<p>Ce site est maintenu bénévolement par des étudiants de l'EPFL. Le projet est open-source, et disponible sur
+	<a href='https://github.com/CourseAdvisor/courseadvisor'>github</a>. Les contributions sont bienvenues!</p>
+	<p>Pour rapporter un bug, merci <a href='https://github.com/CourseAdvisor/courseadvisor/issues'>d'ouvrir un ticket</a> ou d'envoyer un mail à
+	<a href=\"mailto:courseadvisor@groupes.epfl.ch\">courseadvisor@groupes.epfl.ch</a>.<br />
+	Pour toute autre suggestion ou remarque, envoyez-nous un email!</p>
 	",
 	'policy-heading' => 'Conditions d\'utilisation',
 	'policy' => "<p>
-	En utilisant le service, vous vous engagez implicitement à :
+	En postant sur ce site, vous attestez:
 	<ul>
 	<li>être étudiant à l'EPFL ;</li>
 	<li>ne poster que des avis reflétant votre opinion personnelle ;</li>
