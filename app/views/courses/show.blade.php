@@ -40,14 +40,14 @@
                 ]) }}}">{{{ $course->teacher->fullname }}}</a></dd>
         <dt>{{{ trans('courses.studyplans-label') }}}</dt>
         <dd>
-        	@foreach($course->plans as $plan)
-        		<a href="{{{ action('CourseController@studyPlanCourses', [
+          @foreach($course->plans as $plan)
+            <a href="{{{ action('CourseController@studyPlanCourses', [
               'cycle' => $plan->studyCycle->name,
               'plan_slug' => $plan->slug
             ])}}}">
               {{{ $plan->string_id }}}-{{{ $plan->pivot->semester }}}
             </a>
-        	@endforeach
+          @endforeach
         </dd>
       </dl>
       <h2>{{{ trans('courses.summary-heading') }}}</h2>
@@ -144,6 +144,8 @@
     </div>
   </section>
 
+
+  {{-- Reviews --}}
   <section class="row">
     <div class="col-xs-12">
       <div class="page">
@@ -162,51 +164,58 @@
               <?php $review = $reviews[$i]; ?>
               @if($i != 0) <hr> @endif
 
-            	<div class="review">
-                @if (Tequila::isLoggedIn() && StudentInfo::getSciper() == $review->student->sciper)
-                <span class="pull-right actions">
-                  <a href="#"
-                    data-review-id="{{{ $review->id }}}"
-                    data-review-lectures-grade="{{{ $review->lectures_grade }}}"
-                    data-review-exercises-grade="{{{ $review->exercises_grade }}}"
-                    data-review-content-grade="{{{ $review->content_grade }}}"
-                    data-review-title="{{{ $review->title }}}"
-                    data-review-difficulty="{{{ $review->difficulty }}}"
-                    data-review-anonymous="{{{ $review->is_anonymous ? 1 : 0 }}}"
-                    class="edit-review" title="{{{ trans('courses.edit-reviews-action') }}}">
-                    <i class="fa fa-pencil"></i>
+              <div class="review">
+                <div class="review-score">
+                  <i class="fa fa-arrow-up"></i><br>
+                  12  <br>
+                  <i class="fa fa-arrow-down"></i>
+                </div>
+                <div class="review-body">
+                  @if (Tequila::isLoggedIn() && StudentInfo::getSciper() == $review->student->sciper)
+                  <span class="pull-right actions">
+                    <a href="#"
+                      data-review-id="{{{ $review->id }}}"
+                      data-review-lectures-grade="{{{ $review->lectures_grade }}}"
+                      data-review-exercises-grade="{{{ $review->exercises_grade }}}"
+                      data-review-content-grade="{{{ $review->content_grade }}}"
+                      data-review-title="{{{ $review->title }}}"
+                      data-review-difficulty="{{{ $review->difficulty }}}"
+                      data-review-anonymous="{{{ $review->is_anonymous ? 1 : 0 }}}"
+                      class="edit-review" title="{{{ trans('courses.edit-reviews-action') }}}">
+                      <i class="fa fa-pencil"></i>
 
-                  <a href="{{{ action("CourseController@deleteReview", [
-                    'reviewId'=> $review->id,
-                    'courseId'=> $course->id,
-                    'slug'    => $slug
-                    ]) }}}" onclick="return confirm('{{{ trans('courses.delete-reviews-confirm') }}}');">
-                    <i class="fa fa-trash-o"></i>
-                  </a>
-                  </a>
-                @endif
-                </span>
-
-            	  @include('global.starbar', [
-                'grade' => $review->avg_grade,
-                'comment_unsafe' => htmlspecialchars($review->title)
-                ])
-
-            	  <div class="clearfix"></div>
-            	  <div class="review-author">
-                  @if($review->is_anonymous)
-                    {{{ trans('courses.review-anonymous-author', ['section' => $review->student->section->name])}}}
-                  @else
-                  {{
-                    trans('courses.review-author', [
-                      'author' => '<a target="_blank" href="http://people.epfl.ch/'.e($review->student->sciper).'">'.e($review->student->fullname).'</a>',
-                      'section' => '<span class="hint">'.$review->student->section->name.'</span>'
-                      ])
-                  }}
+                    <a href="{{{ action("CourseController@deleteReview", [
+                      'reviewId'=> $review->id,
+                      'courseId'=> $course->id,
+                      'slug'    => $slug
+                      ]) }}}" onclick="return confirm('{{{ trans('courses.delete-reviews-confirm') }}}');">
+                      <i class="fa fa-trash-o"></i>
+                    </a>
+                    </a>
                   @endif
-            	  </div>
-            	  <p class="review-content">{{ nl2br(e($review->comment)) }}</p>
-            	</div>
+                  </span>
+
+                  @include('global.starbar', [
+                  'grade' => $review->avg_grade,
+                  'comment_unsafe' => htmlspecialchars($review->title)
+                  ])
+
+                  <div class="clearfix"></div>
+                  <div class="review-author">
+                    @if($review->is_anonymous)
+                      {{{ trans('courses.review-anonymous-author', ['section' => $review->student->section->name])}}}
+                    @else
+                    {{
+                      trans('courses.review-author', [
+                        'author' => '<a target="_blank" href="http://people.epfl.ch/'.e($review->student->sciper).'">'.e($review->student->fullname).'</a>',
+                        'section' => '<span class="hint">'.$review->student->section->name.'</span>'
+                        ])
+                    }}
+                    @endif
+                  </div>
+                  <p class="review-content">{{ nl2br(e($review->comment)) }}</p>
+                </div>
+              </div>
             @endfor
           </div>
         @endif

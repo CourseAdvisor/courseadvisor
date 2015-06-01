@@ -332,6 +332,15 @@ hr {
 }
 
 .review {
+
+    @score-width: 60px;
+
+    .review-score {
+        float: left;
+    }
+    .review-body {
+        margin-left: @score-width;
+    }
     .review-author {
         padding-left: 15px;
         margin-bottom: 5px;
