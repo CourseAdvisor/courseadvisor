@@ -165,10 +165,20 @@
               @if($i != 0) <hr> @endif
 
               <div class="review">
-                <div class="review-score">
-                  <i class="fa fa-arrow-up"></i><br>
-                  12  <br>
-                  <i class="fa fa-arrow-down"></i>
+                <div class="review-vote">
+                  <div>
+                    <a href="#" data-vote-btn="up:{{{ $review->id }}}"
+                      class="vote-btn upvote {{{ ($review->hasUpVote(Session::get('student_id'))) ? 'voted' : '' }}}"
+                      ><i class="fa fa-arrow-up"></i
+                    ></a>
+                  </div>
+                  <div data-vote-score="{{{ $review->id }}}" class="review-score">{{{ $review->score }}}</div>
+                  <div>
+                    <a href="#" data-vote-btn="down:{{{ $review->id }}}"
+                      class="vote-btn downvote {{{ ($review->hasDownVote(Session::get('student_id'))) ? 'voted' : '' }}}"
+                      ><i class="fa fa-arrow-down"></i
+                    ></a>
+                  </div>
                 </div>
                 <div class="review-body">
                   @if (Tequila::isLoggedIn() && StudentInfo::getSciper() == $review->student->sciper)

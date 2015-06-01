@@ -333,13 +333,44 @@ hr {
 
 .review {
 
-    @score-width: 60px;
-
-    .review-score {
+    .review-vote {
         float: left;
+
+        @vote-up-color: #3D9B38;
+        @vote-down-color: #BF1B1B;
+
+        .vote-btn {
+            color: initial;
+
+            &.downvote {
+                &:hover {
+                    color: darken(@vote-down-color, 20%);
+                }
+
+                &.voted, &.voted:hover {
+                    color: @vote-down-color;
+                }
+            }
+
+            &.upvote {
+                &:hover {
+                    color: darken(@vote-up-color, 20%);
+                }
+
+                &.voted, &.voted:hover {
+                    color: @vote-up-color;
+                }
+            }
+        }
+
+        .review-score {
+            text-align: center;
+        }
     }
     .review-body {
-        margin-left: @score-width;
+        margin-left: 10px;
+        display: inline-block;
+        width: 90%;
     }
     .review-author {
         padding-left: 15px;

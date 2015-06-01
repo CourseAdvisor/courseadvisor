@@ -72,6 +72,17 @@ Route::group(['before' => 'admin_check'], function() {
 	Route::get('/admin/reviews', 'AdminController@listReviews');
 });
 
+// AJAX api
+Route::group([
+	'prefix' => 'api'
+], function() {
+
+	Route::group(array('before' => 'force_login'), function() {
+		Route::post('/vote', 'ReviewController@vote');
+	});
+
+});
+
 Route::when('*', 'csrf', array('post', 'put', 'delete'));
 
 Route::filter('admin_check', function() {

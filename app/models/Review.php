@@ -16,6 +16,16 @@ class Review extends Eloquent {
   	return $this->hasMany('Vote');
   }
 
+  public function hasUpVote($student_id) {
+    return $this->hasVote('up', $student_id);
+  }
+  public function hasDownVote($student_id) {
+    return $this->hasVote('down', $student_id);
+  }
+  public function hasVote($type, $student_id) {
+    return $this->votes()->where(array('student_id' => $student_id, 'type' => $type))->first() != null;
+  }
+
   public function updateAverage() {
     $total = 0;
     $count = 0;
@@ -71,6 +81,7 @@ class Review extends Eloquent {
 
     if ($this->difficulty == 0)
       $this->difficulty = null;
+
     parent::save($options);
   }
 
