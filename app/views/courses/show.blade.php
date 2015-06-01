@@ -57,7 +57,7 @@
       @if($nbReviews > 0)
         <hr class="nomargin">
         <div class="row">
-          <div class="col-xs-6 col-xs-offset-1 col-sm-offset-0">
+          <div class="col-xs-11 col-xs-offset-1 col-sm-6 col-sm-offset-0">
             <h2>{{{ trans('courses.distribution-heading') }}}</h2>
             <dl class="course-stats dl-horizontal">
               <dt>{{{ trans('courses.grading-5-label') }}}</dt>
@@ -112,7 +112,7 @@
             </dl>
             {{-- <p class="formula">s²=1.344 <span class="overline">x</span>=3.7 x̃=4 Q1=3</p> --}}
           </div>
-          <div class="col-xs-5 col-sm-6">
+          <div class="col-xs-11 col-xs-offset-1 col-sm-6 col-sm-offset-0">
             <h2>{{{ trans('courses.rating-heading') }}}</h2>
             <dl class="dl-horizontal">
               <dt>{{{ trans('courses.grading-lectures-label') }}}</dt>
