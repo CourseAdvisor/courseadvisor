@@ -231,18 +231,21 @@
           <div class="alert alert-info" role="alert">
             <div class="review">
               <p class="review-content hidden">{{{ $studentReview->comment }}}</p>
-            {{ trans($studentReview->status == 'waiting' ? 'courses.review-moderation-pending-message' : 'courses.already-reviewed-message', [
-            'link-begin' => '<a href="#"
-              data-review-id="'.$studentReview->id.'"
-              data-review-lectures-grade="'.$studentReview->lectures_grade.'"
-              data-review-exercises-grade="'.$studentReview->exercises_grade.'"
-              data-review-content-grade="'.$studentReview->content_grade.'"
-              data-review-title="'.htmlspecialchars($studentReview->title).'"
-              data-review-difficulty="'.$studentReview->difficulty.'"
-              data-review-anonymous="'.$studentReview->is_anonymous.'"
-              class="edit-review" title="courses.edit-reviews-action">',
-            'link-end' => '</a>'
-            ]) }}
+              <p>
+                {{ trans($studentReview->status == 'waiting' ? 'courses.review-moderation-pending-message' : 'courses.already-reviewed-message',
+                  [
+                  'link-begin' => '<a href="#"
+                    data-review-id="'.$studentReview->id.'"
+                    data-review-lectures-grade="'.$studentReview->lectures_grade.'"
+                    data-review-exercises-grade="'.$studentReview->exercises_grade.'"
+                    data-review-content-grade="'.$studentReview->content_grade.'"
+                    data-review-title="'.htmlspecialchars($studentReview->title).'"
+                    data-review-difficulty="'.$studentReview->difficulty.'"
+                    data-review-anonymous="'.$studentReview->is_anonymous.'"
+                    class="edit-review" title="courses.edit-reviews-action">',
+                  'link-end' => '</a>'
+                  ]) }}
+              </p>
             </div>
           </div>
         @else
