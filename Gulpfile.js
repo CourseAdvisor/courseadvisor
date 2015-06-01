@@ -18,7 +18,7 @@ var coffeeify = require('coffeeify');
 /* meta tasks */
 
 gulp.task('default', ['watch']);
-gulp.task('publish', ['build:style', 'publish:thirdparty', 'publish:images']);
+gulp.task('publish', ['build:style', 'build:script', 'publish:thirdparty', 'publish:images']);
 gulp.task('clean', ['clean:style', 'clean:thirdparty', 'clean:images']);
 
 
