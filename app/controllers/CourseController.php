@@ -103,7 +103,8 @@ class CourseController extends BaseController {
 			];
 		}
 
-		$allReviews = $course->reviews()->with('student', 'student.section')->published();
+		$allReviews = $course->reviews()->orderBy('score', 'desc')
+			->with('student', 'student.section')->published();
 
 		return View::make('courses.show', [
 			'page_title' => $course->name,
