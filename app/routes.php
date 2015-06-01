@@ -77,7 +77,7 @@ Route::group([
 	'prefix' => 'api'
 ], function() {
 
-	Route::group(array('before' => 'force_login'), function() {
+	Route::group(array('before' => 'auth'), function() {
 		Route::post('/vote', 'ReviewController@vote');
 	});
 

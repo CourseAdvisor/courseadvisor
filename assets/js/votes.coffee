@@ -24,8 +24,9 @@ $ -> # jQuery onLoad
           $score.text(data.score)
           next()
 
-      .fail ->
-        console.log("TODO: Ajax failure")
+      .fail (xhr) ->
+        if (xhr.statusCode().status == 401) # Unauthorized
+          $('#login-to-vote-modal').modal('show')
 
       .always ->
         $score.animate(opacity: 1)

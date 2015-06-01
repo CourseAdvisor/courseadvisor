@@ -77,5 +77,8 @@ return array(
   'review-no-grade' => 'no grade given',
 
   'teacher-more-info' => 'More about :teacher',
-  'teacher-courses-heading' => ':teacher teaches the following courses'
+  'teacher-courses-heading' => ':teacher teaches the following courses',
+
+  'login-required-heading' => 'Login required',
+  'login-to-vote-body' => 'You must be logged-in in order to vote.'
 );

@@ -71,6 +71,8 @@ class AuthController extends Controller {
 	}
 
 	public function logout() {
+		Session::forget('student_id');
+		Session::forget('is_admin');
 		return Tequila::logout();
 	}
 }

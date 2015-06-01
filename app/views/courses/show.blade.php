@@ -297,4 +297,26 @@
   </div>
 </div>
 
+<div class="modal fade" id="login-to-vote-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" ><span>&times;</span></button>
+        <h4 class="modal-title">{{{ trans('courses.login-required-heading') }}}</h4>
+      </div>
+      <div class="modal-body">
+        <p>
+          {{{ trans('courses.login-to-vote-body') }}}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+          {{{ trans('global.cancel-action') }}}
+        </button>
+        <a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}" class="btn btn-primary">{{{ trans('global.login-action') }}}</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 @stop

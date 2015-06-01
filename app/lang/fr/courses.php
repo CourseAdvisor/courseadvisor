@@ -78,5 +78,8 @@ return array(
   'review-no-grade' => 'aucune note donnée',
 
   'teacher-more-info' => 'En savoir plus sur :teacher',
-  'teacher-courses-heading' => ':teacher enseigne les cours suivants'
+  'teacher-courses-heading' => ':teacher enseigne les cours suivants',
+
+  'login-required-heading' => 'Connexion requise',
+  'login-to-vote-body' => 'Tu dois être connecté pour pouvoir voter.'
 );
