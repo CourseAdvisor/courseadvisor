@@ -33,8 +33,5 @@
     "gulp-uglify": "~1.2.0",
     "browserify": "~10.2.3",
     "coffeeify": "~1.1.0"
-  },
-  "devDependencies": {
-    "gulp-tap": "~0.1.3"
   }
 }

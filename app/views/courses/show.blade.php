@@ -218,7 +218,7 @@
                     {{
                       trans('courses.review-author', [
                         'author' => '<a target="_blank" href="http://people.epfl.ch/'.e($review->student->sciper).'">'.e($review->student->fullname).'</a>',
-                        'section' => '<span class="hint">'.$review->student->section->name.'</span>'
+                        'section' => $review->student->section->name
                         ])
                     }}
                     @endif
