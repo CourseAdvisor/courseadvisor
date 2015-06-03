@@ -55,8 +55,8 @@ return array(
   'review-moderation-pending-message' => 'Your review for this course is being moderated. In the meantime, you can:link-begin edit it:link-end.',
 
   'create-review-message' => 'Please take a couple of minutes to give your opinion on this course.',
-  'review-title-placeholder' => 'Overall impression',
-  'review-body-placeholder' => 'Was this course useful to you? Did you find it interesting? Express your own opinion.',
+  'review-title-placeholder' => '(Optional) Overall impression',
+  'review-body-placeholder' => '(Optional) Was this course useful to you? Did you find it interesting? Express your own opinion.',
   'incomplete-grading-message' => 'Please grade at least one aspect of this course.',
   'anonymous-post-label' => 'Post anonymously',
   'anonymous-post-helper' => 'If you post anonymously, your review will be moderated by an administrator before being published.',
