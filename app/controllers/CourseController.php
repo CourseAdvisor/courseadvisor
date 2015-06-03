@@ -107,15 +107,19 @@ class CourseController extends BaseController {
 			->orderBy('score', 'desc')->orderBy('created_at', 'desc')
 			->with('student', 'student.section')->published();
 
+		// Warning: keep statements in this order as laravel query builder is not immutable (shame on them!)
+		$nbReviews = $allReviews->count();
+		$reviews = $allReviews->where('title', '!=', '')->paginate($reviewsPerPage);
+
 		return View::make('courses.show', [
 			'page_title' => $course->name,
 			'course' => $course,
 			'slug' 	=> $slug,
 			'distribution' => $distribution,
-			'reviews' => $allReviews->paginate($reviewsPerPage),
+			'reviews' => $reviews,
 			'hasAlreadyReviewed' => $hasAlreadyReviewed,
 			'studentReview' => $studentReview,
-			'nbReviews' => $allReviews->count(),
+			'nbReviews' => $nbReviews,
 		]);
 	}
 
