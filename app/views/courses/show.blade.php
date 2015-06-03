@@ -161,7 +161,9 @@
         @else
           <div class="reviews">
             @for($i = 0 ; $i < count($reviews) ; $i++)
-              <?php $review = $reviews[$i]; ?>
+              <?php $review = $reviews[$i];
+              if (empty($review->title) && empty($review->comment)) continue;
+              ?>
               @if($i != 0) <hr> @endif
 
               <div class="review">

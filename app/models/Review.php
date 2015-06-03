@@ -90,9 +90,11 @@ class Review extends Eloquent {
       'lectures_grade' => 'integer|between:0,5',
       'exercises_grade' => 'integer|between:0,5',
       'content_grade' =>'integer|between:0,5',
-      'difficulty' => 'integer|between:0,5',
+      'difficulty' => 'integer|between:0,5'
+      /*,
       'title' => 'required|max:100',
       'comment' => 'required|min:20'
+      */
     ];
   }
 
@@ -109,6 +111,10 @@ class Review extends Eloquent {
 
     $v->sometimes('exercises_grade', ['required', 'not_in:0'], function ($input) {
       return empty($input->content_grade) && empty($input->lectures_grade);
+    });
+
+    $v->sometimes('title', ['required'], function($input) {
+      return !empty($input->comment);
     });
 
     return $v;
