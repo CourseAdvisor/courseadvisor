@@ -18,8 +18,10 @@ $ -> # jQuery onLoad
         review: id
         _token: TOKEN
       .done (resp) ->
-        $el.addClass('voted')
         data = JSON.parse(resp)
+        if (!data.cancelled)
+          $el.addClass('voted');
+
         $score.queue (next) ->
           $score.text(data.score)
           next()

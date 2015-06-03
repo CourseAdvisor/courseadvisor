@@ -12,13 +12,16 @@ class ReviewController extends BaseController {
       'student_id' => $student_id
     ])->first();
 
+    $cancelled = false;
     if ($vote != null) {
       if ($vote->type == Input::get('type')) {
-        // Nothing to do
-        return "{}";
+        // Cancel vote
+        $vote->delete();
+        $cancelled = true;
       } else {
         // Just need to update
         $vote->type = Input::get('type');
+        $vote->save();
       }
     } else {
       // Create a new one
@@ -27,15 +30,14 @@ class ReviewController extends BaseController {
         'review_id' => $review_id,
         'student_id' => $student_id
       ]);
+      $vote->save();
     }
-
-    $vote->save();
 
     $review = Review::find($review_id);
     $review->updateScore();
     $review->save();
 
-    return json_encode(array('score' => $review->score));
+    return json_encode(array('score' => $review->score, 'cancelled' => $cancelled));
   }
 
 }
