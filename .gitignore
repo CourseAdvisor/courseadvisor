@@ -15,21 +15,15 @@ node_modules
 .idea
 _ide_helper.php
 
-
-#####################################
-##           Assets files          ##
-##  empty on deployment branches   ##
-#####################################
-
 /bootstrap/compiled.php
 /vendor
 public/css/*
 public/js/vendor/*
+public/js/app.*
 public/img/*
 public/fonts/*
 deployment.sh
 
-## END assets
 
 github_pull.sh
 public/__github_update.php

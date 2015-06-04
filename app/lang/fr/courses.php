@@ -55,9 +55,9 @@ return array(
   'review-moderation-pending-message' => 'Ton avis pour ce cours est en cours de modération. En attendant, tu peux:link-begin l\'éditer:link-end.',
 
   'create-review-message' => 'Merci de prendre deux minutes pour donner ton avis sur ce cours.',
-  'review-title-placeholder' => 'Impression générale',
+  'review-title-placeholder' => '(facultatif) Impression générale',
 
-  'review-body-placeholder' => 'Est-ce que ce cours était utile ? Était-il intéressant ? Exprime ton opinion, en essayant d\'être le plus constructif possible.',
+  'review-body-placeholder' => '(facultatif) Est-ce que ce cours était utile ? Était-il intéressant ? Exprime ton opinion, en essayant d\'être le plus constructif possible.',
   'incomplete-grading-message' => 'Merci de noter au moins un aspect du cours.',
   'anonymous-post-label' => 'Poster cet avis anonymement',
   'anonymous-post-helper' => 'Si tu postes en anonyme, ton nom n\'apparaîtra pas mais ton avis devra d\'abord être validé par un administrateur.',
@@ -78,5 +78,8 @@ return array(
   'review-no-grade' => 'aucune note donnée',
 
   'teacher-more-info' => 'En savoir plus sur :teacher',
-  'teacher-courses-heading' => ':teacher enseigne les cours suivants'
+  'teacher-courses-heading' => ':teacher enseigne les cours suivants',
+
+  'login-required-heading' => 'Connexion requise',
+  'login-to-vote-body' => 'Tu dois être connecté pour pouvoir voter.'
 );

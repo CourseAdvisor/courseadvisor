@@ -3,6 +3,7 @@
 return array(
   'login-action' => 'Log in',
   'logout-action' => 'Log out',
+  'cancel-action' => 'Cancel',
 
   'browse-courses-action' => 'Browse courses',
   'dashboard-action' => 'Dashboard',
