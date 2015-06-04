@@ -194,14 +194,6 @@
                       data-review-anonymous="{{{ $review->is_anonymous ? 1 : 0 }}}"
                       class="edit-review" title="{{{ trans('courses.edit-reviews-action') }}}">
                       <i class="fa fa-pencil"></i>
-
-                    <a href="{{{ action("CourseController@deleteReview", [
-                      'reviewId'=> $review->id,
-                      'courseId'=> $course->id,
-                      'slug'    => $slug
-                      ]) }}}" onclick="return confirm('{{{ trans('courses.delete-reviews-confirm') }}}');">
-                      <i class="fa fa-trash-o"></i>
-                    </a>
                     </a>
                   @endif
                   </span>
@@ -285,18 +277,15 @@
 <div class="modal fade bs-example-modal-lg" id="edit-review-modal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" ><span>&times;</span></button>
-        <h4 class="modal-title">{{{ trans('courses.edit-review-heading') }}}</h4>
-      </div>
-      <div class="modal-body">
+
       @include('forms.create-review', [
         'edit' => true,
+        'modal' => true,
         'data' => Input::old(),
         'errors' => $errors,
         'id' => 'edit-review-form'
       ])
-      </div>
+
     </div>
   </div>
 </div>
@@ -306,7 +295,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" ><span>&times;</span></button>
-        <h4 class="modal-title">{{{ trans('courses.login-required-heading') }}}</h4>
+        <h3 class="modal-title">{{{ trans('courses.login-required-heading') }}}</h3>
       </div>
       <div class="modal-body">
         <p>

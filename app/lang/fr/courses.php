@@ -64,7 +64,9 @@ return array(
   'grade-lectures-helper' => 'Comment as-tu trouvé les leçons ? Le professeur était il intéressant ? Était-il facile à comprendre ?',
   'grade-exercises-helper' => 'Les exercices étaient-il en rapport avec le cours ? T\'ont-ils aidé à mieux comprendre le sujet ?',
   'grade-content-helper' => 'Le contenu du cours est-il intéressant et/ou utile pour tes études ?',
-  'submit-review-action' => 'Envoyer mon avis',
+  'create-review-action' => 'Envoyer mon avis',
+  'update-review-action' => 'Modifier',
+  'delete-review-action' => 'Supprimer cet avis',
 
   'review-posted-message' => 'Ton avis a été posté. Merci de ta participation !',
   'review-posted-anonymous-message' => 'Merci ! Ton avis a été envoyé à la modération. Il devrait apparaître ici dans peu de temps.',
