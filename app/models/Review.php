@@ -90,11 +90,8 @@ class Review extends Eloquent {
       'lectures_grade' => 'integer|between:0,5',
       'exercises_grade' => 'integer|between:0,5',
       'content_grade' =>'integer|between:0,5',
-      'difficulty' => 'integer|between:0,5'
-      /*,
-      'title' => 'required|max:100',
-      'comment' => 'required|min:20'
-      */
+      'difficulty' => 'integer|between:0,5',
+      'title' => 'max:100'
     ];
   }
 
