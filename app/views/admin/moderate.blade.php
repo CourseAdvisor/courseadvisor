@@ -36,6 +36,12 @@
 							<h3>{{{ $review->title }}}</h3>
 							<p>By <i>{{{ $review->student->fullname }}} ({{{ $review->student->section->string_id }}}-{{{ $review->student->semester }}})</i>,
 								for course {{ link_to_action('CourseController@show', $review->course->name, [Str::slug($review->course->name), $review->course->id])}}
+								<br>
+								@if ($review->student->isRegistered($review->course_id))
+									<i class="fa fa-check"></i> Is registered to this course
+								@else
+									<i class="fa fa-exclamation-triangle"></i> Warning: student has no registration for this course
+								@endif
 							</p>
 							<p>{{ nl2br(e($review->comment)) }}</p>
 						</div>

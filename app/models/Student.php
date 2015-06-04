@@ -27,6 +27,10 @@ class Student extends Eloquent {
 		return $this->firstname . " " . $this->lastname;
 	}
 
+  public function isRegistered($course_id) {
+    return $this->inscriptions()->where('course_id', $course_id)->first() != null;
+  }
+
     public function refreshPlans($section_id = null) {
 
         if ($section_id == null) {
