@@ -18,14 +18,8 @@
   @if(!$is_editing)
     <p>{{{ trans('courses.create-review-message') }}}</p>
   @endif
-  <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
-    <input type="text" class="form-control" name="title"
-      placeholder="{{{ trans('courses.review-title-placeholder') }}}"
-      value="{{ isset($data['title']) ? $data['title'] : '' }}">
-    {{ $errors->first('title', '<span class="help-block">:message</span>') }}
-  </div>
 
-  {{-- mobile friendly difficulty picker --}}
+    {{-- mobile friendly difficulty picker --}}
   <div class="form-group visible-xs {{ $errors->has('difficulty_mobile') ? 'has-error' : '' }}">
     <label for="difficulty_mobile" class="control-label">{{{ trans('courses.difficulty-label') }}}</label>
     <select id="difficulty-mobile" name="difficulty_mobile" class="form-control">
@@ -88,6 +82,13 @@
       </label>
     </div>
     {{ $errors->first('difficulty', '<span class="help-block">:message</span>') }}
+  </div>
+
+  <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
+    <input type="text" class="form-control" name="title"
+      placeholder="{{{ trans('courses.review-title-placeholder') }}}"
+      value="{{ isset($data['title']) ? $data['title'] : '' }}">
+    {{ $errors->first('title', '<span class="help-block">:message</span>') }}
   </div>
 </div>
 <div class="col-md-4">
