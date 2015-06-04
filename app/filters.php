@@ -88,3 +88,14 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
+Route::filter('mixpanel_identity', function() {
+	if (Tequila::isLoggedIn()) {
+		$mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+		$mp->identify(StudentInfo::getSciper());
+		$mp->people->set(StudentInfo::getSciper(), [
+			'name' => StudentInfo::getFullName(),
+			'section' => StudentInfo::getFullSection()
+		]);
+	}
+});

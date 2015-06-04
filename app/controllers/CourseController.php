@@ -111,6 +111,11 @@ class CourseController extends BaseController {
 		$nbReviews = $allReviews->count();
 		$reviews = $allReviews->where('title', '!=', '')->paginate($reviewsPerPage);
 
+        $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+        $mp->track('Viewed a course', [
+            'Course name' => $course->name
+        ]);
+
 		return View::make('courses.show', [
 			'page_title' => $course->name,
 			'course' => $course,
@@ -196,6 +201,16 @@ class CourseController extends BaseController {
 		else {
 			$msg = trans('courses.review-posted-anonymous-message');
 		}
+
+        $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+        $mp->track('Posted a review', [
+            'Course name' => $course->name,
+            'Average grade' => $newReview->avg_grade,
+            'Exercises grade' => $newReview->exercises_grade,
+            'Lectures grade' => $newReview->lectures_grade,
+            'Content grade' => $newReview->content_grade,
+            'Difficulty' => $newReview->difficulty
+        ]);
 
 		return $goToCourse->with('message', ['success', $msg]);
 	}

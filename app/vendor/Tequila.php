@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Request;
 class Tequila {
 
 	private $app;
-	
+
 	private $appName;
 	private $redirectUrl;
 	private $wantedAttributes = [];
@@ -50,26 +50,7 @@ class Tequila {
 		return Session::get('tequila.' . $attr, false);
 	}
 
-	// Try to restore the attributes only using the token in the cookie
-	protected function tryRestore() {
-		$key = Cookie::get($this->cookieName);
-		if(!$key) {
-			return false;
-		}
-
-		$result = $this->fetchAttributes($key);
-
-		// Unable to restore, the key is no longer valid
-		if(!$result) {
-			Cookie::forget($this->cookieName);
-		}
-	}
-
 	public function isLoggedIn() {
-		if(!Session::has('tequila')) {
-			$this->tryRestore();
-		}
-		
 		return Session::get('tequila.logged_in', 0) == 1;
 	}
 
@@ -79,8 +60,8 @@ class Tequila {
 		}
 
 		$params = [
-			'urlaccess' => $this->redirectUrl, 
-			'service'	=> $this->appName, 
+			'urlaccess' => $this->redirectUrl,
+			'service'	=> $this->appName,
 			'request'	=> implode(',', $this->wantedAttributes)
 		];
 
@@ -119,7 +100,7 @@ class Tequila {
 		}
 
 		$attributes = explode("\n", $response);
-		
+
 		foreach($attributes as $attr) {
 			if(empty($attr) || strpos($attr, '=') < 0) {
 				continue;
@@ -187,7 +168,7 @@ class Tequila {
 		}
 
 		$ch = curl_init ();
-		    
+
 	    curl_setopt ($ch, CURLOPT_HEADER,         false);
 	    curl_setopt ($ch, CURLOPT_POST,           true);
 	    curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);

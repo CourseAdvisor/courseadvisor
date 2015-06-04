@@ -117,6 +117,13 @@ class SearchController extends BaseController {
 			unset($course['teacher_fullname']);
 		}
 
+		$mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+
+		$mp->track('Searched a course', [
+			'keywords' => Input::get('q'),
+			'number of results' => sizeof($courses)
+		]);
+
 		return View::make('courses.search', [
 			'page_title' => $term.' &ndash; Search courses',
 			'paginator' => $paginated,
