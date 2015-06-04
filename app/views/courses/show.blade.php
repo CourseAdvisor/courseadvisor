@@ -21,6 +21,7 @@
           'grade' => $course->avg_overall_grade,
           'comment_unsafe' => '<a href="#reviews">'.
             Lang::choice('courses.reviews-counter', $nbReviews, ['count' => $nbReviews]).
+            ' ('.Lang::choice('courses.votes-counter', $nbVotes, ['count' => $nbVotes]).') '.
             '</a>'
         ])
       @else

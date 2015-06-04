@@ -12,6 +12,7 @@ return array(
   'search-no-result' => 'No results',
 
   'reviews-counter' => ':count review | :count reviews',
+  'votes-counter' => ':count rating | :count ratings',
   'no-review-message' => 'No reviews for this course.',
 
   'difficulty-label' => 'Difficulty',

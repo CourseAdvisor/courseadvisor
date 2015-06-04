@@ -12,6 +12,7 @@ return array(
   'search-no-result' => 'Aucun résultat',
 
   'reviews-counter' => ':count avis',
+  'votes-counter' => ':count note | :count notes',
   'no-review-message' => 'Aucun avis sur ce cours.',
 
   'difficulty-label' => 'Difficulté',
