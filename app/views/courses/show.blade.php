@@ -55,7 +55,7 @@
       <p>{{ nl2br(e($course->description)) }}<br />
       <a target="_blank" href="{{{ $course->url }}}" title="coursebook page"><i class="fa fa-external-link"></i> {{{ trans('courses.read-more-action') }}}</a></p>
 
-      @if($nbReviews > 0)
+      @if($nbVotes > 0)
         <hr class="nomargin">
         <div class="row">
           <div class="col-xs-11 col-xs-offset-1 col-sm-6 col-sm-offset-0">
