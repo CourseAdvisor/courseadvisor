@@ -108,8 +108,10 @@ class CourseController extends BaseController {
 			->with('student', 'student.section')->published();
 
 		// Warning: keep statements in this order as laravel query builder is not immutable (shame on them!)
+		$nbVotes = $allReviews->count();
+		$allReviews->where('title', '!=', '');
 		$nbReviews = $allReviews->count();
-		$reviews = $allReviews->where('title', '!=', '')->paginate($reviewsPerPage);
+		$reviews = $allReviews->paginate($reviewsPerPage);
 
 		return View::make('courses.show', [
 			'page_title' => $course->name,
@@ -120,6 +122,7 @@ class CourseController extends BaseController {
 			'hasAlreadyReviewed' => $hasAlreadyReviewed,
 			'studentReview' => $studentReview,
 			'nbReviews' => $nbReviews,
+			'nbVotes' => $nbVotes
 		]);
 	}
 

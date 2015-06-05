@@ -1,4 +1,8 @@
-<?php $is_editing = isset($edit) && $edit; ?>
+<?php
+  $is_editing = isset($edit) && $edit;
+  $is_modal = isset($modal) && $modal;
+?>
+
 
 {{ Form::open([
   'class' => 'row form-horizontal',
@@ -8,6 +12,15 @@
     $course->id],
   'id' => isset($id) ? $id : ''
   ]) }}
+
+
+@if ($is_modal)
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" ><span>&times;</span></button>
+  <h3 class="modal-title">{{{ trans('courses.edit-review-heading') }}}</h3>
+</div>
+<div class="modal-body container-fluid">
+@endif
 
 @if ($is_editing)
 <input type="hidden" name="reviewId" />
@@ -140,13 +153,59 @@
     </div>
   </div>
 </div>
-<div class="col-sm-12">
-  <input type="submit" class="btn btn-primary center-block" value="{{{ trans('courses.submit-review-action') }}}">
-</div>
+
+@if (!$is_modal) {{-- otherwise place actions in modal footer --}}
+  <div class="col-sm-12">
+    @if ($is_editing)
+      <a  href="{{{ action("CourseController@deleteReview", [
+            'reviewId'=> 'REVIEW_ID', /* See js/show-course.js */
+            'courseId'=> $course->id,
+            'slug' => $slug]) }}}"
+          data-action="delete-review"
+          onclick="return confirm('{{{ trans('courses.delete-reviews-confirm') }}}');"
+          class="pull-left"
+      >
+        <i class="fa fa-trash-o"></i>
+        {{{ trans('courses.delete-review-action') }}}
+      </a>
+      <input type="submit" class="btn btn-primary center-block" value="{{{ trans('courses.create-review-action') }}}">
+    @else
+      <input type="submit" class="btn btn-primary center-block" value="{{{ trans('courses.create-review-action') }}}">
+    @endif
+  </div>
+@endif
 
 @if (!$is_editing)
 <div class="col-sm-12">
   {{-- TODO: <p class="hint">Make sure that you understand and agree with our <a href="#">review policy</a> before submitting your review.</p> --}}
 </div>
 @endif
+
+@if ($is_modal)
+</div> {{-- .modal-body --}}
+<div class="modal-footer">
+  @if ($is_editing)
+    <a  href="{{{ action("CourseController@deleteReview", [
+          'reviewId'=> 'REVIEW_ID', /* See js/show-course.js */
+          'courseId'=> $course->id,
+          'slug' => $slug]) }}}"
+        data-action="delete-review"
+        onclick="return confirm('{{{ trans('courses.delete-reviews-confirm') }}}');"
+        class="pull-left"
+    >
+      <i class="fa fa-trash-o"></i>
+      {{{ trans('courses.delete-review-action') }}}
+    </a>
+  @endif
+  <button type="button" class="btn btn-default" data-dismiss="modal">
+    {{{ trans('global.cancel-action') }}}
+  </button>
+  @if ($is_editing)
+    <input type="submit" class="btn btn-primary" value="{{{ trans('courses.update-review-action') }}}">
+  @else
+    <input type="submit" class="btn btn-primary" value="{{{ trans('courses.create-review-action') }}}">
+  @endif
+</div>
+@endif
+
 {{ Form::close() }}

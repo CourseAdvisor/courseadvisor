@@ -42,6 +42,8 @@ function showEditModal(openingLink) {
   modal.find('textarea[name=comment]').val(reviewContent);
   modal.find('input[name=difficulty][value='+reviewDifficulty+']').attr('checked', 'checked');
   modal.find('input[name=reviewId]').val(reviewId);
+  var deleteLink = modal.find('[data-action=delete-review]');
+  deleteLink.attr('href', deleteLink.attr('href').replace('REVIEW_ID', reviewId));
 
   if (reviewAnonymous === 1) {
     modal.find('input#anonymous').attr('checked', 'checked');

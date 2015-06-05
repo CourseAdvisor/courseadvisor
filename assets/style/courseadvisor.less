@@ -28,6 +28,9 @@ footer {
     ul {
         list-style-type: none;
         padding-left: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+
         & > li {
             display: inline-block;
             margin-right: 30px;
@@ -58,6 +61,7 @@ footer {
 // Navbar =====================================================================
 
 .navbar-brand {
+    font-family: @font-family-sans-serif;
     font-size: 22px;
 
     .epfl-logo {
@@ -126,6 +130,10 @@ h2 {
 
 h3 {
     color: @gray;
+}
+
+h1, h2, h3 {
+    font-family: @font-family-sans-serif;
 }
 
 .logo-course {
@@ -219,7 +227,7 @@ dd > .difficulty-bar {
 
     @media (max-width: @screen-sm-min) {
         padding: 5px 10px;
-        margin: 10 -10px;
+        margin: 10px -10px;
 
         .form-horizontal .form-group {
             margin-left: 0;
@@ -250,6 +258,7 @@ dd > .difficulty-bar {
 }
 
 dl {
+    font-family: @font-family-sans-serif;
     margin-bottom: 10px;
     dt {
         font-size: 18px;
@@ -257,6 +266,22 @@ dl {
     }
     dd {
         font-size: 16px;
+    }
+
+    // HACK: save description list appearance on mobile
+    @media(max-width: @screen-sm-min) {
+        dt {
+            float: left;
+            width: 90px;
+            clear: left;
+            text-align: right;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        dd:extend(dd) {
+            margin-left: @dl-horizontal-offset;
+        }
     }
 }
 
@@ -274,6 +299,7 @@ dl {
     color: #f5df41;
 }
 .starbar {
+    font-family: @font-family-sans-serif;
     font-size: 13px;
 
     &.disabled {
@@ -281,6 +307,7 @@ dl {
     }
 }
 .starbar-comment {
+    font-family: @font-family-sans-serif;
     font-size: 18px;
     margin-left: 8px;
     // min-width: 35px;
@@ -341,6 +368,8 @@ hr {
 
         .vote-btn {
             color: initial;
+            transition-property: color;
+            transition-duration: 300ms;
 
             &.downvote {
                 &:hover {
@@ -365,6 +394,7 @@ hr {
 
         .review-score {
             text-align: center;
+            font-weight: bold;
         }
     }
     .review-body {
@@ -440,6 +470,7 @@ form div.checkbox-panel {
     list-style-type: none;
     text-transform: uppercase;
     margin-top: 16px;
+    font-family: @font-family-sans-serif;
 }
 
 #splash {

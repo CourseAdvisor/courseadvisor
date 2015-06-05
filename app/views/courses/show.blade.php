@@ -21,6 +21,7 @@
           'grade' => $course->avg_overall_grade,
           'comment_unsafe' => '<a href="#reviews">'.
             Lang::choice('courses.reviews-counter', $nbReviews, ['count' => $nbReviews]).
+            ' ('.Lang::choice('courses.votes-counter', $nbVotes, ['count' => $nbVotes]).') '.
             '</a>'
         ])
       @else
@@ -57,7 +58,7 @@
       @if($nbReviews > 0)
         <hr class="nomargin">
         <div class="row">
-          <div class="col-xs-6 col-xs-offset-1 col-sm-offset-0">
+          <div class="col-xs-11 col-xs-offset-1 col-sm-6 col-sm-offset-0">
             <h2>{{{ trans('courses.distribution-heading') }}}</h2>
             <dl class="course-stats dl-horizontal">
               <dt>{{{ trans('courses.grading-5-label') }}}</dt>
@@ -112,7 +113,7 @@
             </dl>
             {{-- <p class="formula">s²=1.344 <span class="overline">x</span>=3.7 x̃=4 Q1=3</p> --}}
           </div>
-          <div class="col-xs-5 col-sm-6">
+          <div class="col-xs-11 col-xs-offset-1 col-sm-6 col-sm-offset-0">
             <h2>{{{ trans('courses.rating-heading') }}}</h2>
             <dl class="dl-horizontal">
               <dt>{{{ trans('courses.grading-lectures-label') }}}</dt>
@@ -194,14 +195,6 @@
                       data-review-anonymous="{{{ $review->is_anonymous ? 1 : 0 }}}"
                       class="edit-review" title="{{{ trans('courses.edit-reviews-action') }}}">
                       <i class="fa fa-pencil"></i>
-
-                    <a href="{{{ action("CourseController@deleteReview", [
-                      'reviewId'=> $review->id,
-                      'courseId'=> $course->id,
-                      'slug'    => $slug
-                      ]) }}}" onclick="return confirm('{{{ trans('courses.delete-reviews-confirm') }}}');">
-                      <i class="fa fa-trash-o"></i>
-                    </a>
                     </a>
                   @endif
                   </span>
@@ -251,18 +244,21 @@
           <div class="alert alert-info" role="alert">
             <div class="review">
               <p class="review-content hidden">{{{ $studentReview->comment }}}</p>
-            {{ trans($studentReview->status == 'waiting' ? 'courses.review-moderation-pending-message' : 'courses.already-reviewed-message', [
-            'link-begin' => '<a href="#"
-              data-review-id="'.$studentReview->id.'"
-              data-review-lectures-grade="'.$studentReview->lectures_grade.'"
-              data-review-exercises-grade="'.$studentReview->exercises_grade.'"
-              data-review-content-grade="'.$studentReview->content_grade.'"
-              data-review-title="'.htmlspecialchars($studentReview->title).'"
-              data-review-difficulty="'.$studentReview->difficulty.'"
-              data-review-anonymous="'.$studentReview->is_anonymous.'"
-              class="edit-review" title="courses.edit-reviews-action">',
-            'link-end' => '</a>'
-            ]) }}
+              <p>
+                {{ trans($studentReview->status == 'waiting' ? 'courses.review-moderation-pending-message' : 'courses.already-reviewed-message',
+                  [
+                  'link-begin' => '<a href="#"
+                    data-review-id="'.$studentReview->id.'"
+                    data-review-lectures-grade="'.$studentReview->lectures_grade.'"
+                    data-review-exercises-grade="'.$studentReview->exercises_grade.'"
+                    data-review-content-grade="'.$studentReview->content_grade.'"
+                    data-review-title="'.htmlspecialchars($studentReview->title).'"
+                    data-review-difficulty="'.$studentReview->difficulty.'"
+                    data-review-anonymous="'.$studentReview->is_anonymous.'"
+                    class="edit-review" title="courses.edit-reviews-action">',
+                  'link-end' => '</a>'
+                  ]) }}
+              </p>
             </div>
           </div>
         @else
@@ -282,18 +278,15 @@
 <div class="modal fade bs-example-modal-lg" id="edit-review-modal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" ><span>&times;</span></button>
-        <h4 class="modal-title">{{{ trans('courses.edit-review-heading') }}}</h4>
-      </div>
-      <div class="modal-body">
+
       @include('forms.create-review', [
         'edit' => true,
+        'modal' => true,
         'data' => Input::old(),
         'errors' => $errors,
         'id' => 'edit-review-form'
       ])
-      </div>
+
     </div>
   </div>
 </div>
@@ -303,7 +296,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" ><span>&times;</span></button>
-        <h4 class="modal-title">{{{ trans('courses.login-required-heading') }}}</h4>
+        <h3 class="modal-title">{{{ trans('courses.login-required-heading') }}}</h3>
       </div>
       <div class="modal-body">
         <p>
