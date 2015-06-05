@@ -99,7 +99,7 @@
 
 
               <h2> {{{ $review->course->name }}} </h2>
-              <h3> {{{ $review->title }}}</h3>
+              <h3> {{{ $review->title }}}&nbsp;</h3>
 
             </a>
             @endforeach
