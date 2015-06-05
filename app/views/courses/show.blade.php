@@ -16,7 +16,7 @@
       <div class="page">
       <h1>{{{ $course->name }}}</h1>
 
-      @if($nbReviews > 0)
+      @if($nbVotes > 0)
         @include('global.starbar', [
           'grade' => $course->avg_overall_grade,
           'comment_unsafe' => '<a href="#reviews">'.
