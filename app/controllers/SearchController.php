@@ -132,7 +132,8 @@ class SearchController extends BaseController {
 			'joined_selected_semesters' => $joined_selected_semesters,
 			'selected_semesters' => $selected_semesters,
 			'was_filtered' => count(Input::except('page', 'q')) > 0,
-			'student_section_id' => $student_section_id
+			'student_section_id' => $student_section_id,
+			'Locale' => LaravelLocalization::getCurrentLocale()
 		]);
 	}
 }

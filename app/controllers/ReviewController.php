@@ -39,10 +39,12 @@ class ReviewController extends BaseController {
 
     if (!$cancelled) {
       $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
-      $mp->track('Voted a review '.$vote->type, [
+      $mp->track('Voted a review', [
         'Course name' => $review->course->name,
-        'Review author' => $review->student->fullname,
-        'Review text' => $review->comment
+        'Course' => $review->course->id,
+        'Type' => $vote->type,
+        'Review author' => $review->student->sciper,
+        'Review' => $review->id
       ]);
     }
 

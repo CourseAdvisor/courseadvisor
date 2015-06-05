@@ -39,6 +39,10 @@ Route::filter('auth', function()
 	{
 		if (Request::ajax())
 		{
+			$mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+      $mp->track('Unauthorized action ', [
+        'route' => Route::getCurrentRoute()->getPath(),
+      ]);
 			return Response::make('Unauthorized', 401);
 		}
 		else

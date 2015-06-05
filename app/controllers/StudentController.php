@@ -29,6 +29,11 @@ class StudentController extends BaseController {
       return $inscription->course;
     });
 
+    $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+    $mp->track('Dashboard shown', [
+        'Locale' => LaravelLocalization::getCurrentLocale()
+    ]);
+
     return View::make('student.dashboard', [
       'page_title' => 'dashboard',
       'student' => $student,
