@@ -94,12 +94,17 @@ Route::filter('csrf', function()
 });
 
 Route::filter('mixpanel_identity', function() {
+	$mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+	if (!Session::has('mp_id')) {
+		Session::put('mp_id', uniqid('mp', true));
+	}
+	$mp->identify(Session::get('mp_id'));
+
 	if (Tequila::isLoggedIn()) {
-		$mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
-		$mp->identify(StudentInfo::getSciper());
-		$mp->people->set(StudentInfo::getSciper(), [
+		$mp->people->set(Session::get('mp_id'), [
 			'name' => StudentInfo::getFullName(),
-			'section' => StudentInfo::getFullSection()
+			'section' => StudentInfo::getFullSection(),
+			'sciper' => StudentInfo::getSciper()
 		]);
 	}
 });
