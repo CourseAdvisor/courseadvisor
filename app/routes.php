@@ -84,6 +84,7 @@ Route::group([
 });
 
 Route::when('*', 'csrf', array('post', 'put', 'delete'));
+Route::when('*', 'mixpanel_identity', array('post', 'put', 'delete', 'get'));
 
 Route::filter('admin_check', function() {
 	if (!StudentInfo::isAdmin()) {

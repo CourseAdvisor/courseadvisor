@@ -6,6 +6,8 @@ use \Student;
 
 class StudentInfo {
 
+	private static $fullname = null;
+
 	public static function getFullSection() {
 		return explode(',', Tequila::get('unit'))[0];
 	}
@@ -15,6 +17,15 @@ class StudentInfo {
 
 	public static function getSemester() {
 		return explode('-', self::getFullSection())[1];
+	}
+
+	public static function getFullName() {
+		if (!Tequila::isLoggedIn()) return '(no name)';
+		if (self::$fullname == null) {
+			self::$fullname = Student::findOrFail(self::getId())->fullname;
+		}
+
+		return self::$fullname;
 	}
 
     public static function getStudyCycle() {

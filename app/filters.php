@@ -39,6 +39,10 @@ Route::filter('auth', function()
 	{
 		if (Request::ajax())
 		{
+			$mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+      $mp->track('Unauthorized action ', [
+        'route' => Route::getCurrentRoute()->getPath(),
+      ]);
 			return Response::make('Unauthorized', 401);
 		}
 		else
@@ -86,5 +90,16 @@ Route::filter('csrf', function()
 	if (Session::token() !== Input::get('_token'))
 	{
 		throw new Illuminate\Session\TokenMismatchException;
+	}
+});
+
+Route::filter('mixpanel_identity', function() {
+	if (Tequila::isLoggedIn()) {
+		$mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+		$mp->identify(StudentInfo::getSciper());
+		$mp->people->set(StudentInfo::getSciper(), [
+			'name' => StudentInfo::getFullName(),
+			'section' => StudentInfo::getFullSection()
+		]);
 	}
 });

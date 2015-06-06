@@ -37,6 +37,17 @@ class ReviewController extends BaseController {
     $review->updateScore();
     $review->save();
 
+    if (!$cancelled) {
+      $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+      $mp->track('Voted a review', [
+        'Course name' => $review->course->name,
+        'Course' => $review->course->id,
+        'Type' => $vote->type,
+        'Review author' => $review->student->sciper,
+        'Review' => $review->id
+      ]);
+    }
+
     return json_encode(array('score' => $review->score, 'cancelled' => $cancelled));
   }
 

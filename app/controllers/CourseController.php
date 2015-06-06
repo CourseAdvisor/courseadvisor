@@ -85,8 +85,8 @@ class CourseController extends BaseController {
 		$hasAlreadyReviewed = false;
 		$studentReview = null;
 		if(Tequila::isLoggedIn()) {
-			$hasAlreadyReviewed = $course->alreadyReviewedBy(Session::get('student_id'));
-			$studentReview = $hasAlreadyReviewed;
+			$studentReview = $course->alreadyReviewedBy(Session::get('student_id'));
+			$hasAlreadyReviewed = $studentReview != null;
 		}
 
 		$reviewsPerPage = Config::get('app.nbReviewsPerPage');
@@ -112,6 +112,15 @@ class CourseController extends BaseController {
 		$allReviews->where('title', '!=', '');
 		$nbReviews = $allReviews->count();
 		$reviews = $allReviews->paginate($reviewsPerPage);
+
+        $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+        $mp->track('Viewed a course', [
+            'Course name' => $course->name,
+            'Nb reviews' => $nbReviews,
+            'Grade' => $course->avg_overall_grade,
+            'Has reviewed' => $hasAlreadyReviewed,
+            'Locale' => LaravelLocalization::getCurrentLocale()
+        ]);
 
 		return View::make('courses.show', [
 			'page_title' => $course->name,
@@ -200,6 +209,19 @@ class CourseController extends BaseController {
 			$msg = trans('courses.review-posted-anonymous-message');
 		}
 
+        $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+        $mp->track('Posted a review', [
+            'Course name' => $course->name,
+            'Average grade' => $newReview->avg_grade,
+            'Exercises grade' => $newReview->exercises_grade,
+            'Lectures grade' => $newReview->lectures_grade,
+            'Content grade' => $newReview->content_grade,
+            'Difficulty' => $newReview->difficulty,
+            'Is review' => $newReview->isReview(),
+            'Anonymous' => $newReview->is_anonymous == 1,
+            'Locale' => LaravelLocalization::getCurrentLocale()
+        ]);
+
 		return $goToCourse->with('message', ['success', $msg]);
 	}
 
@@ -250,6 +272,19 @@ class CourseController extends BaseController {
 		} else {
 			$review->course->updateAverages();
 		}
+
+    $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+    $mp->track('Updated a review', [
+      'Course name' => $review->course->name,
+      'Average grade' => $review->avg_grade,
+      'Exercises grade' => $review->exercises_grade,
+      'Lectures grade' => $review->lectures_grade,
+      'Content grade' => $review->content_grade,
+      'Difficulty' => $review->difficulty,
+      'Is review' => $review->isReview(),
+      'Anonymous' => $review->is_anonymous == 1,
+      'Locale' => LaravelLocalization::getCurrentLocale()
+    ]);
 
 		return $courseRedirect
 				->with('message', ['success', $msg]);

@@ -10,8 +10,13 @@ class StaticController extends BaseController {
         if (Tequila::isLoggedIn()) {
             return Redirect::action('StudentController@dashboard');
         } else {
+            $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+            $mp->track('Homepage landing', [
+                'Locale' => LaravelLocalization::getCurrentLocale()
+            ]);
             return View::make('homepage');
         }
+
     }
 
 }

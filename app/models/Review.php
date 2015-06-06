@@ -26,6 +26,10 @@ class Review extends Eloquent {
     return $this->votes()->where(array('student_id' => $student_id, 'type' => $type))->first() != null;
   }
 
+  public function isReview() {
+    return !empty($this->title);
+  }
+
   public function updateAverage() {
     $total = 0;
     $count = 0;
