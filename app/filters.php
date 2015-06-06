@@ -101,7 +101,7 @@ Route::filter('mixpanel_identity', function() {
 	$mp->identify(Session::get('mp_id'));
 
 	if (Tequila::isLoggedIn()) {
-		$mp->people->set(Session::get('mp_id'), [
+		$mp->people->set(StudentInfo::getSciper(), [
 			'name' => StudentInfo::getFullName(),
 			'section' => StudentInfo::getFullSection(),
 			'sciper' => StudentInfo::getSciper()
