@@ -1,6 +1,14 @@
 <?php
 use JpGraph\JpGraph;
 
+if(!function_exists('imageantialias'))
+{
+	// Quick and dirty fix for JpGraph... TODO: refactor
+	function imageantialias($a, $b) {
+		return true;
+	}
+}
+
 class AdminController extends BaseController {
 
 	public function __construct() {
