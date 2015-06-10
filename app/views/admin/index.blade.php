@@ -3,43 +3,57 @@
 @section('content')
 
 <div class="container">
-	{{ Breadcrumbs::render() }}
+  {{ Breadcrumbs::render() }}
   <section class="row">
     <div class="col-xs-12">
       <div class="page">
-		<h1 class="text-center">Administration</h1>
+        <h1><i class="fa fa-institution"></i> Administration</h1>
 
-		<div class="row">
-			<p>Hello, {{{ Tequila::get('firstname') }}}! What do you want to do?</p>
-		</div>
+        <h2>Anonymous Reviews</h2>
+        <dl class="dl-horizontal">
+          <dt>Accepted</dt>
+          <dd><span class="label label-success" >{{{ $nbAccepted }}}</span></dd>
+          <dt>Rejected</dt>
+          <dd><span class="label label-danger" >{{{ $nbRejected }}}</span></dd>
+        </dl>
+        <a class="btn btn-primary" href="{{{action('AdminController@moderate')}}}">
+          <i class="fa fa-thumbs-o-up"></i> Moderate
+          @if($nbWaiting > 0)
+            <span class="badge">{{{ $nbWaiting }}}</span>
+          @endif
+        </a>
+      </div>
+    </div>
+  </section>
+  <section class="row">
+    <div class="col-xs-12">
+      <div class="page">
+        <h1><i class="fa fa-line-chart"></i> Statistics</h1>
+        <div class="row">
 
-		<div class="row">
-			<div class="admin-panel well col-lg-6">
-				<span class="pull-right"><i class="fa fa-comments fa-2x"></i></span>
-				<h3>{{ link_to_action('AdminController@moderate', 'Moderate reviews' )}}</h3>
-				<ul>
-					<li><strong>{{{ $nbWaiting }}}</strong> pending</li>
-					<li><strong>{{{ $nbAccepted }}}</strong> accepted</li>
-					<li><strong>{{{ $nbRejected }}}</strong> rejected</li>
-				</ul>
-
-				<h3>{{ link_to_action('AdminController@listReviews', 'View all reviews' )}}</h3>
-			</div>
-
-			<div class="admin-panel well col-lg-5 col-lg-offset-1">
-				<span class="pull-right"><i class="fa fa-bar-chart fa-2x"></i></span>
-				<h3>Statistics</h3>
-				<ul>
-					<li><strong>{{{ $stats['nb_courses'] }}}</strong> courses</li>
-					<li><strong>{{{ $stats['nb_reviews'] }}}</strong> reviews</li>
-					<li>
-						<a href="{{{ action('AdminController@listStudents') }}}">
-							<strong>{{{ $stats['nb_students'] }}}</strong> registred students
-						</a>
-					</li>
-				</ul>
-			</div>
-		</div>
+          <div class="col-lg-4 col-lg-offset-1 col-sm-5 col-sm-offset-0 col-xs-12">
+            <h2>Reviews ({{{ $stats['nb_reviews'] }}})</h2>
+            <div class="img-awesome">
+              <a href="#" data-theater="fullscreen">
+                <img src="data:image/png;base64,{{ $reviewsGraph }}" />
+              </a>
+            </div>
+            <a class="btn btn-default" href="{{{action('AdminController@listReviews')}}}">
+              View all
+            </a>
+          </div>
+          <div class="col-lg-4 col-sm-offset-2 col-sm-5 col-xs-offset-0 col-xs-12">
+            <h2>Students ({{{ $stats['nb_students'] }}})</h2>
+            <div class="img-awesome">
+              <a href="#" data-theater="fullscreen">
+                <img src="data:image/png;base64,{{ $studentsGraph }}" />
+              </a>
+            </div>
+            <a class="btn btn-default" href="{{{ action('AdminController@listStudents') }}}">
+              View all
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>

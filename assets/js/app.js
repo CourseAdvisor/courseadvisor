@@ -1,1 +1,2 @@
 require('./votes');
+require('./theater');

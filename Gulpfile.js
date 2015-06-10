@@ -60,13 +60,13 @@ gulp.task('build:script', function () {
   });
 
   return b.bundle()
-    .pipe(source('app.js'))
+    .pipe(source('js/app.js'))
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(uglify())
     .on('error', gutil.log)
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('public/js/'));
+    .pipe(gulp.dest('public/'));
 });
 
 /* 3rd party assets */

@@ -11,12 +11,6 @@
 
 		<p>There are {{{ $students->count() }}} registred students.</p>
 
-		<div class="row">
-			<div class="col-lg-10 col-lg-offset-1 col-md-10">
-				<p class="pull-left"><img src="data:image/png;base64,{{ $repartitionSectionGraphData }}" /></p>
-			</div>
-		</div>
-
 		<p>
 		<ul>
 		@foreach($students as $student)
