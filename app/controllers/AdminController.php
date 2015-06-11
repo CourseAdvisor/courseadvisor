@@ -97,15 +97,23 @@ class AdminController extends BaseController {
               ->from('reviews')
               ->whereRaw('reviews.course_id = courses.id');
       })->first()->covered;
+    $coveredWithText = Db::table('courses')
+      ->select(DB::raw('COUNT(*) AS covered'))
+      ->whereExists(function($query) {
+        $query->select(DB::raw(1))
+              ->from('reviews')
+              ->whereRaw('reviews.course_id = courses.id')
+              ->where('reviews.comment', '!=', '');
+      })->first()->covered;
 
     JpGraph::module('pie');
     $graph = new PieGraph(300, 300);
     $graph->title->Set("Courses");
 
-    $plot = new PiePlot([$covered, $total - $covered]);
-    $plot->SetLegends(['rated', 'unrated']);
+    $plot = new PiePlot([$coveredWithText, $covered - $coveredWithText, $total - $covered]);
+    $plot->SetLegends(['commented', 'rated', 'unrated']);
     $graph->Add($plot);
-    $plot->SetSliceColors(['#c61c1c', '#654040']);
+    $plot->SetSliceColors(['#c61c1c', '#b57070', '#655050']);
     $image = $graph->Stroke(_IMG_HANDLER);
     ob_start();
       imagepng($image);
