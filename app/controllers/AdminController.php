@@ -3,183 +3,218 @@ use JpGraph\JpGraph;
 
 if(!function_exists('imageantialias'))
 {
-	// Quick and dirty fix for JpGraph... TODO: refactor
-	function imageantialias($a, $b) {
-		return true;
-	}
+  // Quick and dirty fix for JpGraph... TODO: refactor
+  function imageantialias($a, $b) {
+    return true;
+  }
 }
 
 class AdminController extends BaseController {
 
-	public function __construct() {
-		parent::__construct();
-		$this->addCrumb('AdminController@index', 'Administration');
-	}
+  public function __construct() {
+    parent::__construct();
+    $this->addCrumb('AdminController@index', 'Administration');
+  }
 
-	public function index() {
-		$nbWaiting = Review::waiting()->count();
-		$nbRejected = Review::rejected()->count();
-		$nbAccepted = Review::accepted()->count();
+  public function index() {
+    $nbWaiting = Review::waiting()->count();
+    $nbRejected = Review::rejected()->count();
+    $nbAccepted = Review::accepted()->count();
 
-		$stats = [
-			'nb_courses'  => DB::table('courses')->count(),
-			'nb_reviews'  => DB::table('reviews')->count(),
-			'nb_students' => DB::table('students')->count()
-		];
+    $stats = [
+      'nb_courses'  => DB::table('courses')->count(),
+      'nb_reviews'  => DB::table('reviews')->count(),
+      'nb_students' => DB::table('students')->count()
+    ];
 
-		JpGraph::load();
+    JpGraph::load();
 
 
-		return View::make('admin.index')->with([
-			'nbWaiting' => $nbWaiting,
-			'nbRejected' => $nbRejected,
-			'nbAccepted' => $nbAccepted,
-			'stats' => $stats,
-			'reviewsGraph' => $this->generateReviewsGrowthGraph(),
-			'studentsGraph' => $this->generateRepartitionSectionGraph()
-		]);
-	}
+    return View::make('admin.index')->with([
+      'nbWaiting' => $nbWaiting,
+      'nbRejected' => $nbRejected,
+      'nbAccepted' => $nbAccepted,
+      'stats' => $stats,
+      'nbCourses' => Course::count(),
+      'reviewsGraph' => $this->generateReviewsGrowthGraph(),
+      'studentsGraph' => $this->generateRepartitionSectionGraph(),
+      'coursesGraph' => $this->generateCourseCoverageGraph()
+    ]);
+  }
 
-	public function moderate() {
-		$this->addCrumb('AdminController@moderate', 'Moderate reviews');
-		$reviews = Review::with('student', 'student.section')->waiting()->get();
+  public function moderate() {
+    $this->addCrumb('AdminController@moderate', 'Moderate reviews');
+    $reviews = Review::with('student', 'student.section')->waiting()->get();
 
-		return View::make('admin.moderate')->with([
-			'reviews' => $reviews
-		]);
-	}
+    return View::make('admin.moderate')->with([
+      'reviews' => $reviews
+    ]);
+  }
 
-	public function listStudents() {
-		$this->addCrumb('AdminController@listStudents', 'View registred students');
-		$students = Student::with('reviews')->orderBy('id', 'desc')->get();
+  public function listStudents() {
+    $this->addCrumb('AdminController@listStudents', 'View registred students');
+    $students = Student::with('reviews')->orderBy('id', 'desc')->get();
 
-		return View::make('admin.listStudents')->with([
-			'students' => $students
-		]);
-	}
+    return View::make('admin.listStudents')->with([
+      'students' => $students
+    ]);
+  }
 
-	public function listReviews() {
-		$student = null;
+  public function listReviews() {
+    $student = null;
 
-		if (Input::has('sciper')) {
-			$reviews = Review::whereHas('student', function($q) {
-				return $q->where('sciper', Input::get('sciper'));
-			})->orderBy('id', 'DESC')->get();
-			$student = Student::where('sciper', Input::get('sciper'))->first();
-			if (!$student) {
-				throw new ModelNotFoundException;
-			}
+    if (Input::has('sciper')) {
+      $reviews = Review::whereHas('student', function($q) {
+        return $q->where('sciper', Input::get('sciper'));
+      })->orderBy('id', 'DESC')->get();
+      $student = Student::where('sciper', Input::get('sciper'))->first();
+      if (!$student) {
+        throw new ModelNotFoundException;
+      }
 
-			$crumb = 'See reviews of ' . $student->fullname;
-		}
-		else {
-			$reviews = Review::orderBy('id', 'DESC')->get();
-			$crumb = 'See all reviews';
-		}
+      $crumb = 'See reviews of ' . $student->fullname;
+    }
+    else {
+      $reviews = Review::orderBy('id', 'DESC')->get();
+      $crumb = 'See all reviews';
+    }
 
-		$this->addCrumb('AdminController@listReviews', $crumb);
+    $this->addCrumb('AdminController@listReviews', $crumb);
 
-		return View::make('admin.listReviews')->with([
-			'reviews' => $reviews,
-			'particularStudent' => Input::has('sciper'),
-			'student' => $student
-		]);
-	}
+    return View::make('admin.listReviews')->with([
+      'reviews' => $reviews,
+      'particularStudent' => Input::has('sciper'),
+      'student' => $student
+    ]);
+  }
 
-	private function generateRepartitionSectionGraph() {
-		$students = Student::get();
-		$bySection = $students->groupBy(function($student) {
-			return $student->section->name;
-		})->toArray();
-		$sectionStats = array_map(function($entry) {
-			return sizeof($entry);
-		}, $bySection);
+  private function generateCourseCoverageGraph() {
+    $total = Course::count();
+    $covered = Db::table('courses')
+      ->select(DB::raw('COUNT(*) AS covered'))
+      ->whereExists(function($query) {
+        $query->select(DB::raw(1))
+              ->from('reviews')
+              ->whereRaw('reviews.course_id = courses.id');
+      })->first()->covered;
 
-		JpGraph::module('pie');
-		$graph = new PieGraph(800, 300);
-		$graph->title->Set("Sections");
+    JpGraph::module('pie');
+    $graph = new PieGraph(300, 300);
+    $graph->title->Set("Courses");
 
-		$plot = new PiePlot(array_values($sectionStats));
-		$plot->SetLegends(array_keys($sectionStats));
-		$graph->Add($plot);
-		$image = $graph->Stroke(_IMG_HANDLER);
-		ob_start();
-			imagepng($image);
-			$graphData = ob_get_contents();
-		ob_end_clean();
+    $plot = new PiePlot([$covered, $total - $covered]);
+    $plot->SetLegends(['rated', 'unrated']);
+    $graph->Add($plot);
+    $plot->SetSliceColors(['#c61c1c', '#654040']);
+    $image = $graph->Stroke(_IMG_HANDLER);
+    ob_start();
+      imagepng($image);
+      $graphData = ob_get_contents();
+    ob_end_clean();
 
-		return base64_encode($graphData);
-	}
+    return base64_encode($graphData);
+  }
 
-	private function generateReviewsGrowthGraph() {
+  private function generateRepartitionSectionGraph() {
+    $students = Student::get();
+    $bySection = $students->groupBy(function($student) {
+      return $student->section->string_id;
+    })->toArray();
+    $sectionStats = array_map(function($entry) {
+      return sizeof($entry);
+    }, $bySection);
 
-		$byDate = DB::table('reviews')
-				->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as total'))
-				->groupBy(DB::raw('DATE(created_at)'))
-				->get();
+    array_multisort($sectionStats, SORT_DESC);
 
-		// plot data
-		$data = array();
-		$keys = array();
+    JpGraph::module('bar');
+    $graph = new Graph(800, 300);
+    $graph->SetScale("textlin");
+    $graph->title->Set("Sections");
+    $graph->xaxis->SetTickLabels(array_keys($sectionStats));
 
-		$i = 0; // index in data
-		$acc = 0; // accumulate totals
+    $plot = new BarPlot(array_values($sectionStats));
+    $graph->Add($plot);
+    $plot->SetColor("white");
+    $plot->SetFillColor('#c61c1c');
+    $image = $graph->Stroke(_IMG_HANDLER);
+    ob_start();
+      imagepng($image);
+      $graphData = ob_get_contents();
+    ob_end_clean();
 
-		// Iterate from Mon 2015/05/04 until now
-		$date = new DateTime("2015-05-04");
-		$now = new DateTime();
-		$step = new DateInterval('P1D');
-		while($date < $now) {
-			// Only write mondays in legend
-			$keys[] = ($date->format("D") == "Mon") ? $date->format("d/m") : "";
-			// If we have some data for this day
-			if (isset($byDate[$i]) && $byDate[$i]->date == $date->format("Y-m-d")) {
-				// accumulate
-				$data[] = ($acc += $byDate[$i]->total);
-				$i++;
-			} else {
-				// otherwise, keep the same amount
-				$data[] = $acc;
-			}
-			$date->add($step);
-		}
+    return base64_encode($graphData);
+  }
 
-		$graph = new Graph(800, 300);
-		$graph->SetScale("textlin");
-		$graph->xaxis->SetTickLabels($keys);
+  private function generateReviewsGrowthGraph() {
 
-		JpGraph::module('line');
-		$plot = new LinePlot($data);
-		$graph->Add($plot);
-		$image = $graph->Stroke(_IMG_HANDLER);
-		ob_start();
-			imagepng($image);
-			$graphData = ob_get_contents();
-		ob_end_clean();
+    $byDate = DB::table('reviews')
+        ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as total'))
+        ->groupBy(DB::raw('DATE(created_at)'))
+        ->get();
 
-		return base64_encode($graphData);
-	}
+    // plot data
+    $data = array();
+    $keys = array();
 
-	/*
-	 * Should be called using ajax
-	 */
-	public function doModerate($reviewId, $decision) {
-		$matchings = [
-			'accept' => 'accepted',
-			'reject' => 'rejected'
-		];
-		if (!array_key_exists($decision, $matchings) || !Request::ajax()) {
-			return Redirect::to(URL::previous());
-		}
+    $i = 0; // index in data
+    $acc = 0; // accumulate totals
 
-		$review = Review::findOrFail($reviewId);
-		$review->status = $matchings[$decision];
-		$review->save();
+    // Iterate from Mon 2015/05/04 until now
+    $date = new DateTime("2015-05-04");
+    $now = new DateTime();
+    $step = new DateInterval('P1D');
+    while($date < $now) {
+      // Only write mondays in legend
+      $keys[] = ($date->format("D") == "Mon") ? $date->format("d/m") : "";
+      // If we have some data for this day
+      if (isset($byDate[$i]) && $byDate[$i]->date == $date->format("Y-m-d")) {
+        // accumulate
+        $data[] = ($acc += $byDate[$i]->total);
+        $i++;
+      } else {
+        // otherwise, keep the same amount
+        $data[] = $acc;
+      }
+      $date->add($step);
+    }
 
-		if ($decision == 'accept') {
-			$review->course->updateAverages();
-		}
+    $graph = new Graph(800, 300);
+    $graph->SetScale("textlin");
+    $graph->xaxis->SetTickLabels($keys);
 
-		return ['result' => 'ok'];
-	}
+    JpGraph::module('line');
+    $plot = new LinePlot($data);
+    $graph->Add($plot);
+    $plot->SetColor('#c61c1c');
+    $image = $graph->Stroke(_IMG_HANDLER);
+    ob_start();
+      imagepng($image);
+      $graphData = ob_get_contents();
+    ob_end_clean();
+
+    return base64_encode($graphData);
+  }
+
+  /*
+   * Should be called using ajax
+   */
+  public function doModerate($reviewId, $decision) {
+    $matchings = [
+      'accept' => 'accepted',
+      'reject' => 'rejected'
+    ];
+    if (!array_key_exists($decision, $matchings) || !Request::ajax()) {
+      return Redirect::to(URL::previous());
+    }
+
+    $review = Review::findOrFail($reviewId);
+    $review->status = $matchings[$decision];
+    $review->save();
+
+    if ($decision == 'accept') {
+      $review->course->updateAverages();
+    }
+
+    return ['result' => 'ok'];
+  }
 }

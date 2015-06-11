@@ -31,7 +31,7 @@ $ ->
       evt.preventDefault();
       $img.attr('src', $myImg.attr('src'))
       $backdrop.fadeIn()
-      $('body').css('overflow', 'hidden');
+      #$('body').css('overflow', 'hidden');
 
   hide = ->
     $backdrop.fadeOut().queue (next) ->

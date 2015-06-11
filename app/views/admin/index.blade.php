@@ -31,27 +31,36 @@
         <h1><i class="fa fa-line-chart"></i> Statistics</h1>
         <div class="row">
 
-          <div class="col-lg-4 col-lg-offset-1 col-sm-5 col-sm-offset-0 col-xs-12">
+          <div class="col-lg-3 col-sm-5 col-sm-offset-0 col-xs-12">
             <h2>Reviews ({{{ $stats['nb_reviews'] }}})</h2>
             <div class="img-awesome">
               <a href="#" data-theater="fullscreen">
-                <img src="data:image/png;base64,{{ $reviewsGraph }}" />
+                <img src="data:image/png;base64,{{ $reviewsGraph }}" class="pull-right" />
               </a>
             </div>
             <a class="btn btn-default" href="{{{action('AdminController@listReviews')}}}">
               View all
             </a>
           </div>
-          <div class="col-lg-4 col-sm-offset-2 col-sm-5 col-xs-offset-0 col-xs-12">
+          <div class="col-lg-3 col-sm-offset-1 col-sm-5 col-xs-offset-0 col-xs-12">
             <h2>Students ({{{ $stats['nb_students'] }}})</h2>
             <div class="img-awesome">
               <a href="#" data-theater="fullscreen">
-                <img src="data:image/png;base64,{{ $studentsGraph }}" />
+                <img src="data:image/png;base64,{{ $studentsGraph }}" class="pull-left" />
               </a>
             </div>
             <a class="btn btn-default" href="{{{ action('AdminController@listStudents') }}}">
               View all
             </a>
+          </div>
+
+          <div class="col-lg-3 col-lg-offset-1 col-sm-5 col-sm-offset-0 col-xs-12">
+            <h2>Courses ({{{ $nbCourses }}})</h2>
+            <div class="img-awesome">
+              <a href="#" data-theater="fullscreen">
+                <img src="data:image/png;base64,{{ $coursesGraph }}" />
+              </a>
+            </div>
           </div>
         </div>
       </div>
