@@ -6,10 +6,14 @@ return array(
   'logout-action' => 'Déconnexion',
   'cancel-action' => 'Annuler',
 
+  'locale_code' => 'fr_FR',
+
   'browse-courses-action' => 'Parcourir les cours',
   'dashboard-action' => 'Tableau de bord',
   'about-action' => 'À propos',
 
   'welcome-message' => 'Bienvenue sur CourseAdvisor !',
   'welcome-back-message' => 'Content de te revoir, :name !',
+
+  'social-invite' => 'Tu aimes CourseAdvisor ? Soutiens nous !',
 );
