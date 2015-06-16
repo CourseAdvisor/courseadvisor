@@ -2,6 +2,7 @@
 
 return array(
   'login-action' => 'Log in',
+  'login-action-alt' => 'Log in with tequila',
   'logout-action' => 'Log out',
   'cancel-action' => 'Cancel',
 

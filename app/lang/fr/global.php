@@ -2,6 +2,7 @@
 
 return array(
   'login-action' => 'Connexion',
+  'login-action-alt' => 'Connexion avec Tequila',
   'logout-action' => 'Déconnexion',
   'cancel-action' => 'Annuler',
 

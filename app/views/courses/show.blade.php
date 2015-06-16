@@ -307,7 +307,12 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">
           {{{ trans('global.cancel-action') }}}
         </button>
-        <a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}" class="btn btn-primary">{{{ trans('global.login-action') }}}</a>
+        <a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}" class="btn btn-primary"
+          >@if(Session::get('ab_group') == 'A')
+          {{{ trans('global.login-action') }}}
+          @else
+          {{{ trans('global.login-action-alt') }}}
+          @endif</a>
       </div>
     </div>
   </div>

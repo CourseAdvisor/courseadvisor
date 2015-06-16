@@ -42,6 +42,7 @@ Route::filter('auth', function()
 			$mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
       $mp->track('Unauthorized action ', [
         'route' => Route::getCurrentRoute()->getPath(),
+        'ab_group' => Session::get('ab_group')
       ]);
 			return Response::make('Unauthorized', 401);
 		}
@@ -106,5 +107,11 @@ Route::filter('mixpanel_identity', function() {
 			'section' => StudentInfo::getFullSection(),
 			'sciper' => StudentInfo::getSciper()
 		]);
+	}
+});
+
+Route::filter('ab_testing', function() {
+	if (!Session::has('ab_group')) {
+		Session::put('ab_group', rand(0, 1) == 0 ? 'A' : 'B');
 	}
 });

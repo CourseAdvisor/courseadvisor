@@ -40,7 +40,6 @@
           </button>
         </div>
         <div class="navbar-collapse collapse" id="navbar-main">
-
           {{-- desktop nav --}}
           <ul class="nav navbar-nav navbar-right hidden-xs">
             <li class="dropdown">

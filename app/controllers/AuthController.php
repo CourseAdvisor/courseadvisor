@@ -68,7 +68,8 @@ class AuthController extends Controller {
     $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
     $mp->track('Logged in', [
       'Sciper' => $sciper,
-      'Next url' => $next_url
+      'Next url' => $next_url,
+      'ab_group' => Session::get('ab_group')
     ]);
 
     return Redirect::to($next_url);
