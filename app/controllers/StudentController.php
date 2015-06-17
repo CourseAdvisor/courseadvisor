@@ -34,9 +34,16 @@ class StudentController extends BaseController {
         'Locale' => LaravelLocalization::getCurrentLocale()
     ]);
 
+    $studentPlans = $student->studyPlans;
+    if (count($studentPlans) > 0) {
+      $studyPlanId = $studentPlans[0]->id;
+    } else {
+      $studyPlanId = 0;
+    }
     return View::make('student.dashboard', [
       'page_title' => 'dashboard',
       'student' => $student,
+      'studyPlanId' => $studyPlanId,
       'studentCourses' => $studentCourses,
       'plans' => StudyPlan::with('studyCycle', 'studyCycle.plans.courses')->get(),
     ]);

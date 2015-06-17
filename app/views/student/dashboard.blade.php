@@ -31,7 +31,7 @@
             <div class="col-sm-7">
               <select onchange="this.form.submit()" id="coursepicker-plan" name="plan-id" class="form-control">
                 @foreach($plans as $plan)
-                  <option value="{{{ $plan->id }}}" {{ ($plan->id == $student->studyPlans[0]->id) ? 'selected' : '' }} >
+                  <option value="{{{ $plan->id }}}" {{ ($plan->id == $studyPlanId) ? 'selected' : '' }} >
                     {{{ $plan->studyCycle->name }}} &mdash; {{{ $plan->name }}}
                   </option>
                 @endforeach
