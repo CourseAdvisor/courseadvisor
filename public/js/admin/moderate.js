@@ -1,11 +1,14 @@
 // Acceptation
 $('.moderate[data-action=accept]').click(function() {
+	var review_id = $(this).data('review-id');
 	var data = {
-		review_id: $(this).data('review-id'),
+		review_id: review_id,
 		decision: 'accept',
 		_token: TOKEN
 	};
 	$.post('/admin/moderate', data);
+	$('body').find('div.review[data-review-id='+review_id+']').fadeOut();
+	decrementRemainingReviews();
 })
 
 // Rejection
