@@ -24,7 +24,7 @@
 		@endif
 
 		@foreach ($reviews as $review)
-			<div class="row display-table review">
+			<div class="row display-table review" data-review-id="{{{ $review->id }}}">
 				<div class="col-lg-1 display-cell">
 					<a href="#" class="moderate" data-action="accept" data-review-id="{{{ $review->id }}}">
 						<i class="fa fa-thumbs-up fa-2x" style="color: green;"></i>
@@ -56,7 +56,8 @@
 					</div>
 				</div>
 				<div class="col-lg-1 display-cell">
-					<a href="#" class="moderate" data-action="reject" data-review-id="{{{ $review->id }}}">
+					<a href="#" class="moderate" data-toggle="modal" data-target="#reasonModal"
+						data-review_id="{{{ $review->id }}}">
 						<i class="fa fa-thumbs-down fa-2x" style="color: red;"></i>
 					</a>
 				</div>
@@ -65,6 +66,35 @@
       </div>
     </div>
   </section>
+<!-- Modal -->
+<div class="modal fade" id="reasonModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+        <h4 class="modal-title" id="reasonModal">Reject this review</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <input type="hidden" id="review_id" name="review_id" />
+          <div class="form-group">
+            <label for="message-text" class="control-label">Reason, French (HTML-enabled):</label>
+            <textarea class="form-control" id="reason_fr" name="reason_fr" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Reason, English (HTML-enabled):</label>
+            <textarea class="form-control" id="reason_en" name="reason_en" required></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary submit">Reject this review</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End modal -->
 </div>
 
 @stop
