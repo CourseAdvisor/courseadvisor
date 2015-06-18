@@ -37,3 +37,23 @@ Event::listen('review.newAnonymous', function($review) {
 				->subject("Un avis est en attente de validation sur CourseAdvisor");
 	});
 });
+
+Event::listen('review.rejected', function($review, $reasons) {
+	$data = [
+		'review' => $review,
+		'reasons' => $reasons
+	];
+	Mail::send('emails.rejectedReview', $data, function($message) use($review) {
+		$message->to($review->student->email)
+				->from('noreply@courseadvisor.ch', "CourseAdvisor")
+				->subject("CourseAdvisor - ".trans('emails.title_rejected_review'));
+	});
+});
+
+Event::listen('review.accepted', function($review) {
+	Mail::send('emails.acceptedReview', ['review' => $review], function($message) use($review) {
+		$message->to($review->student->email)
+				->from('noreply@courseadvisor.ch', "CourseAdvisor")
+				->subject("CourseAdvisor - ".trans('emails.title_accepted_review'));
+	});
+});

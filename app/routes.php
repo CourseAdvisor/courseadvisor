@@ -67,7 +67,7 @@ Route::group([
 Route::group(['before' => 'admin_check'], function() {
 	Route::get('/admin', 'AdminController@index');
 	Route::get('/admin/moderate', 'AdminController@moderate');
-	Route::get('/admin/moderate/{id}/{decision}', 'AdminController@doModerate');
+	Route::post('/admin/moderate', 'AdminController@doModerate');
 	Route::get('/admin/students', 'AdminController@listStudents');
 	Route::get('/admin/reviews', 'AdminController@listReviews');
 });

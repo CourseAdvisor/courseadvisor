@@ -206,7 +206,11 @@ class AdminController extends BaseController {
   /*
    * Should be called using ajax
    */
-  public function doModerate($reviewId, $decision) {
+  public function doModerate() {
+    $decision = Input::get('decision');
+    $reasons = Input::get('reason', trans('emails.no_reason'));
+    $reviewId = Input::get('review_id');
+
     $matchings = [
       'accept' => 'accepted',
       'reject' => 'rejected'
@@ -220,7 +224,11 @@ class AdminController extends BaseController {
     $review->save();
 
     if ($decision == 'accept') {
+      Event::fire('review.accepted', [$review]);
       $review->course->updateAverages();
+    }
+    else {
+      Event::fire('review.rejected', [$review, $reasons]);
     }
 
     return ['result' => 'ok'];
