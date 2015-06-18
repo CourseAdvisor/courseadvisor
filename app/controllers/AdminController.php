@@ -211,24 +211,17 @@ class AdminController extends BaseController {
     $reasons = Input::get('reason', trans('emails.no_reason'));
     $reviewId = Input::get('review_id');
 
-    $matchings = [
-      'accept' => 'accepted',
-      'reject' => 'rejected'
-    ];
-    if (!array_key_exists($decision, $matchings) || !Request::ajax()) {
-      return Redirect::to(URL::previous());
-    }
-
     $review = Review::findOrFail($reviewId);
-    $review->status = $matchings[$decision];
-    $review->save();
-
     if ($decision == 'accept') {
-      Event::fire('review.accepted', [$review]);
+      $review->status = 'accepted';
+      $review->save();
       $review->course->updateAverages();
-    }
-    else {
+      Event::fire('review.accepted', [$review]);
+    } else if ($decision == 'reject') {
+      $review->delete();
       Event::fire('review.rejected', [$review, $reasons]);
+    } else {
+      return Redirect::to(URL::previous());
     }
 
     return ['result' => 'ok'];
