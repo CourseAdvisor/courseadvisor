@@ -37,7 +37,7 @@ function clickHandler(modal) {
 	$('body').find('div.review[data-review-id='+review_id+']').fadeOut();
 	decrementRemainingReviews();
 	form.find('#reason_fr').val('');
-	en: form.find('#reason_en').val('');
+	form.find('#reason_en').val('');
 }
 
 function decrementRemainingReviews() {
