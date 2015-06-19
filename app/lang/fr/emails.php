@@ -1,6 +1,6 @@
 <?php
 return array(
 	'no_reason' => '(Pas de raison donnée)',
-	'title_rejected_review' => 'Votre avis a été refusé',
-	'title_accepted_review' => 'Votre avis a été accepté !'
+	'title_rejected_review' => 'Ton avis a été refusé',
+	'title_accepted_review' => 'Ton avis a été accepté !'
 );
