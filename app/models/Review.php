@@ -1,5 +1,5 @@
 <?php
-class Review extends Eloquent {
+class Review extends Commentable {
   protected $table = 'reviews';
 
   protected $fillable = ['lectures_grade', 'exercises_grade', 'content_grade', 'difficulty', 'title', 'comment'];
@@ -10,20 +10,6 @@ class Review extends Eloquent {
 
   public function course() {
     return $this->belongsTo('Course');
-  }
-
-  public function votes() {
-  	return $this->hasMany('Vote');
-  }
-
-  public function hasUpVote($student_id) {
-    return $this->hasVote('up', $student_id);
-  }
-  public function hasDownVote($student_id) {
-    return $this->hasVote('down', $student_id);
-  }
-  public function hasVote($type, $student_id) {
-    return $this->votes()->where(array('student_id' => $student_id, 'type' => $type))->first() != null;
   }
 
   public function isReview() {
@@ -42,18 +28,6 @@ class Review extends Eloquent {
     }
 
     $this->avg_grade = $count == 0 ? 0 : $total / $count;
-  }
-
-  public function updateScore() {
-    $score = 0;
-    foreach($this->votes as $vote) {
-      if ($vote->isUp()) {
-        $score++;
-      } else {
-        $score--;
-      }
-    }
-    $this->score = $score;
   }
 
   public function scopePublished($q) {
