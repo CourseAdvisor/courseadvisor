@@ -59,6 +59,7 @@ Route::group([
 		Route::post('/course/{slug}-{id}/createReview', 'CourseController@createReview');
 		Route::post('/course/{slug}-{id}/updateReview', 'CourseController@updateReview');
 		Route::get('/course/{slug}-{courseId}/deleteReview/{reviewId}', 'CourseController@deleteReview');
+
 	});
 
 });
@@ -79,8 +80,9 @@ Route::group([
 
 	Route::group(array('before' => 'auth'), function() {
 		Route::post('/vote', 'ReviewController@vote');
-	});
 
+		Route::post('/comment', 'ReviewController@createComment');
+	});
 });
 
 Route::when('*', 'csrf', array('post', 'put', 'delete'));

@@ -2,15 +2,43 @@
 class ReviewController extends BaseController {
 
 
+  public function createComment() {
+    $validator = Comment::getValidator(Input::all());
+    if ($validator->fails()) {
+      return Redirect::to(URL::previous())
+          ->withInput()
+          ->withErrors($validator);
+    }
+
+    $comment = new Comment(Input::all());
+    $comment->student_id = Session::get('student_id');
+
+    $comment->save();
+
+    return Redirect::to(URL::previous())->with('message', ['success', 'Your comment has been posted.']);
+  }
+
   public function vote() {
 
     $review_id = Input::get('review');
+    $comment_id = Input::get('comment');
     $student_id = Session::get('student_id');
 
+    // Determines target (review or comment)
+    $target = 'review';
+    if ((empty($review_id) && empty($comment_id)) ||
+        (!empty($review_id) && !empty($comment_id))) {
+      return Response::make('bad request', 400);
+    } else if(!empty($comment_id)) {
+      $target = 'comment';
+    }
+
     $vote = Vote::where([
-      'review_id' => $review_id,
-      'student_id' => $student_id
-    ])->first();
+          'student_id' => $student_id,
+          'review_id' => $review_id,
+          'comment_id' => $comment_id
+        ])
+        ->first();
 
     $cancelled = false;
     if ($vote != null) {
@@ -28,27 +56,30 @@ class ReviewController extends BaseController {
       $vote = new Vote([
         'type' => Input::get('type'),
         'review_id' => $review_id,
+        'comment_id' => $comment_id,
         'student_id' => $student_id
       ]);
       $vote->save();
     }
 
-    $review = Review::find($review_id);
-    $review->updateScore();
-    $review->save();
+    $commentable = ($target == 'review')
+        ? Review::find($review_id)
+        : Comment::find($comment_id);
+
+    $commentable->updateScore();
+    $commentable->save();
 
     if (!$cancelled) {
       $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
-      $mp->track('Voted a review', [
-        'Course name' => $review->course->name,
-        'Course' => $review->course->id,
+      $mp->track('Voted', [
         'Type' => $vote->type,
-        'Review author' => $review->student->sciper,
-        'Review' => $review->id
+        'Target' => $target,
+        'Review author' => $commentable->student->sciper,
+        'Review' => $commentable->id
       ]);
     }
 
-    return json_encode(array('score' => $review->score, 'cancelled' => $cancelled));
+    return json_encode(array('score' => $commentable->score, 'cancelled' => $cancelled));
   }
 
 }

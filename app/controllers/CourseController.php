@@ -105,7 +105,7 @@ class CourseController extends BaseController {
 
     $allReviews = $course->reviews()
       ->orderBy('score', 'desc')->orderBy('created_at', 'desc')
-      ->with('student', 'student.section')->published();
+      ->with('comments', 'student', 'student.section')->published();
 
     // Warning: keep statements in this order as laravel query builder is not immutable (shame on them!)
     $nbVotes = $allReviews->count();

@@ -19,4 +19,18 @@ class Comment extends Commentable {
   public function review() {
     return $this->belongsTo('Review');
   }
+
+
+  // Validation
+
+  public static function rules() {
+    return [
+      'body' => 'max:2048'
+    ];
+  }
+
+  public static function getValidator($data) {
+    return Validator::make($data, self::rules());
+  }
+
 }

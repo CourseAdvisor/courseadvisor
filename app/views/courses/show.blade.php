@@ -169,14 +169,14 @@
               <div class="review">
                 <div class="review-vote">
                   <div>
-                    <a href="#" data-vote-btn="up:{{{ $review->id }}}"
+                    <a href="#" data-vote-btn="up:review:{{{ $review->id }}}"
                       class="vote-btn upvote {{{ ($review->hasUpVote(Session::get('student_id'))) ? 'voted' : '' }}}"
                       ><i class="fa fa-arrow-up"></i
                     ></a>
                   </div>
-                  <div data-vote-score="{{{ $review->id }}}" class="review-score">{{{ $review->score }}}</div>
+                  <div data-vote-score="review:{{{ $review->id }}}" class="review-score">{{{ $review->score }}}</div>
                   <div>
-                    <a href="#" data-vote-btn="down:{{{ $review->id }}}"
+                    <a href="#" data-vote-btn="down:review:{{{ $review->id }}}"
                       class="vote-btn downvote {{{ ($review->hasDownVote(Session::get('student_id'))) ? 'voted' : '' }}}"
                       ><i class="fa fa-arrow-down"></i
                     ></a>
@@ -212,7 +212,7 @@
                     @else
                     {{
                       trans('courses.review-author', [
-                        'author' => '<a target="_blank" href="http://people.epfl.ch/'.e($review->student->sciper).'">'.e($review->student->fullname).'</a>',
+                        'author' => '<a target="_blank" href="'.e($review->student->pageURL).'">'.e($review->student->fullname).'</a>',
                         'section' => $review->student->section->name
                         ])
                     }}
@@ -224,71 +224,18 @@
 
                 <!-- Comments mockup design, work in progress -->
 
-                <?php $nb_comments = 3; ?>
                 <div class="review-comments">
-                  <h4>{{{ $nb_comments }}} comments
-                    &ndash; <a href="#">Comment this review {{-- Might ab test different solutions for this button --}}</a>
+                  <h4>{{{ count($review->comments) }}} comments
+                    &ndash; <a data-comment-action="review:{{{ $review->id }}}" href="#">Comment this review</a>
                   </h4>
-                  <div class="comments">
-                    @for($i = 0 ; $i < $nb_comments ; $i++)
-                      <div class="comment">
-                        <div class="comment-vote">
-                          <!-- this is copy-pasted, TODO: adapt voting logic -->
-                          <div>
-                            <a href="#" data-vote-btn="up:{{{ $review->id }}}"
-                              class="vote-btn upvote {{{ ($review->hasUpVote(Session::get('student_id'))) ? 'voted' : '' }}}"
-                              ><i class="fa fa-arrow-up"></i
-                            ></a>
-                          </div>
-                          <div>
-                            <a href="#" data-vote-btn="down:{{{ $review->id }}}"
-                              class="vote-btn downvote {{{ ($review->hasDownVote(Session::get('student_id'))) ? 'voted' : '' }}}"
-                              ><i class="fa fa-arrow-down"></i
-                            ></a>
-                          </div>
-                        </div>
-                        <div class="comment-header">
-                          <a href="#">Mario Parti</a>
-                          &ndash; 12 points, 14 mai 2015
-                          &ndash; <a href="#">modifier</a>
-                          &ndash; <a href="#">reply</a>
-                        </div>
-                        <div class="comment-body">
-                          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit impedit, hic dolor ipsa similique laudantium dolores maiores. Eveniet delectus consectetur sapiente, voluptatibus enim perferendis beatae ad sed maiores, ea at.
-                        </div>
-                        <div class="comments">
-                          <div class="comment">
-                            <div class="comment-vote">
-                              <div>
-                                <a href="#" data-vote-btn="up:{{{ $review->id }}}"
-                                  class="vote-btn upvote {{{ ($review->hasUpVote(Session::get('student_id'))) ? 'voted' : '' }}}"
-                                  ><i class="fa fa-arrow-up"></i
-                                ></a>
-                              </div>
-                              <div>
-                                <a href="#" data-vote-btn="down:{{{ $review->id }}}"
-                                  class="vote-btn downvote {{{ ($review->hasDownVote(Session::get('student_id'))) ? 'voted' : '' }}}"
-                                  ><i class="fa fa-arrow-down"></i
-                                ></a>
-                              </div>
-                            </div>
-                            <div class="comment-header">
-                              <a href="#">Luidgi Revenu</a>
-                              &ndash; 2 points, 2 août 2015
-                              &ndash; <a href="#">reply</a>
-                            </div>
-                            <div class="comment-body">
-                              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit impedit, hic dolor ipsa similique laudantium dolores maiores. Eveniet delectus consectetur sapiente, voluptatibus enim perferendis beatae ad sed maiores, ea at.
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    @endfor
+                  <div data-comment-form="review:{{{ $review->id }}}" class="hidden">
+                    @include('forms.comment', ['target_review' => $review->id ])
                   </div>
+                  @include('components.comments_thread', ['commentable' => $review])
                 </div>
               </div>
             @endfor
-          </div>
+          </div> {{-- reviews --}}
         @endif
         {{ $reviews->fragment('reviews')->links()}}
       </div> {{-- page --}}
