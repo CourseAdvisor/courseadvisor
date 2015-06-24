@@ -17,7 +17,7 @@
       <h1>{{{ $course->name }}}</h1>
 
       @if($nbVotes > 0)
-        @include('global.starbar', [
+        @include('components.starbar', [
           'grade' => $course->avg_overall_grade,
           'comment_unsafe' => '<a href="#reviews">'.
             Lang::choice('courses.reviews-counter', $nbReviews, ['count' => $nbReviews]).
@@ -25,7 +25,7 @@
             '</a>'
         ])
       @else
-        @include('global.starbar', [
+        @include('components.starbar', [
           'disabled' => TRUE,
           'comment_unsafe' => e(trans('courses.no-review-message')),
         ])
@@ -33,7 +33,7 @@
       <div class="clearfix"></div>
       <dl class="dl-horizontal course-attrs">
         <dt>{{{ trans('courses.difficulty-label') }}}</dt><dd>
-          @include('global.difficulty_bar', ['difficulty' => $course->avg_difficulty])
+          @include('components.difficulty_bar', ['difficulty' => $course->avg_difficulty])
         </dd>
         <dt>{{{ trans('courses.teacher-label') }}}</dt><dd><a href="{{{ action('CourseController@showTeacher', [
                 'id' => $course->teacher['id'],
@@ -118,21 +118,21 @@
             <dl class="dl-horizontal">
               <dt>{{{ trans('courses.grading-lectures-label') }}}</dt>
               <dd>
-                @include('global.starbar', [
+                @include('components.starbar', [
                 'grade' => $course->avg_lectures_grade,
                 'disabled' => $course->avg_lectures_grade == 0
                 ])
               </dd>
               <dt>{{{ trans('courses.grading-exercises-label') }}}</dt>
               <dd>
-                @include('global.starbar', [
+                @include('components.starbar', [
                 'grade' => $course->avg_exercises_grade,
                 'disabled' => $course->avg_exercises_grade == 0
                 ])
               </dd>
               <dt>{{{ trans('courses.grading-content-label') }}}</dt>
               <dd>
-                @include('global.starbar', [
+                @include('components.starbar', [
                 'grade' => $course->avg_content_grade,
                 'disabled' => $course->avg_content_grade == 0
                 ])
@@ -152,7 +152,7 @@
       <div class="page">
         <h2 id="reviews">
           {{{ trans('courses.reviews-heading') }}}
-        @if($nbReviews > 0)
+        @if($nbReviews > 0 && !$hasAlreadyReviewed)
           <a href="#my-review" class="pull-right btn btn-primary btn-large"><i class="fa fa-plus"></i> {{{ trans('courses.review-this-action') }}}</a>
         @endif
         </h2>
@@ -183,23 +183,24 @@
                   </div>
                 </div>
                 <div class="review-body">
-                  @if (Tequila::isLoggedIn() && StudentInfo::getSciper() == $review->student->sciper)
-                  <span class="pull-right actions">
-                    <a href="#"
-                      data-review-id="{{{ $review->id }}}"
-                      data-review-lectures-grade="{{{ $review->lectures_grade }}}"
-                      data-review-exercises-grade="{{{ $review->exercises_grade }}}"
-                      data-review-content-grade="{{{ $review->content_grade }}}"
-                      data-review-title="{{{ $review->title }}}"
-                      data-review-difficulty="{{{ $review->difficulty }}}"
-                      data-review-anonymous="{{{ $review->is_anonymous ? 1 : 0 }}}"
-                      class="edit-review" title="{{{ trans('courses.edit-reviews-action') }}}">
-                      <i class="fa fa-pencil"></i>
-                    </a>
-                  @endif
-                  </span>
 
-                  @include('global.starbar', [
+                  @if (Tequila::isLoggedIn() && StudentInfo::getSciper() == $review->student->sciper)
+                    <span class="pull-right actions">
+                      <a href="#"
+                        data-review-id="{{{ $review->id }}}"
+                        data-review-lectures-grade="{{{ $review->lectures_grade }}}"
+                        data-review-exercises-grade="{{{ $review->exercises_grade }}}"
+                        data-review-content-grade="{{{ $review->content_grade }}}"
+                        data-review-title="{{{ $review->title }}}"
+                        data-review-difficulty="{{{ $review->difficulty }}}"
+                        data-review-anonymous="{{{ $review->is_anonymous ? 1 : 0 }}}"
+                        class="edit-review" title="{{{ trans('courses.edit-review-action') }}}">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                    </span>
+                    @endif
+
+                  @include('components.starbar', [
                   'grade' => $review->avg_grade,
                   'comment_unsafe' => htmlspecialchars($review->title)
                   ])
@@ -218,6 +219,72 @@
                     @endif
                   </div>
                   <p class="review-content">{{ nl2br(e($review->comment)) }}</p>
+                </div>
+
+
+                <!-- Comments mockup design, work in progress -->
+
+                <?php $nb_comments = 3; ?>
+                <div class="review-comments">
+                  <h4>{{{ $nb_comments }}} comments
+                    &ndash; <a href="#">Comment this review {{-- Might ab test different solutions for this button --}}</a>
+                  </h4>
+                  <div class="comments">
+                    @for($i = 0 ; $i < $nb_comments ; $i++)
+                      <div class="comment">
+                        <div class="comment-vote">
+                          <!-- this is copy-pasted, TODO: adapt voting logic -->
+                          <div>
+                            <a href="#" data-vote-btn="up:{{{ $review->id }}}"
+                              class="vote-btn upvote {{{ ($review->hasUpVote(Session::get('student_id'))) ? 'voted' : '' }}}"
+                              ><i class="fa fa-arrow-up"></i
+                            ></a>
+                          </div>
+                          <div>
+                            <a href="#" data-vote-btn="down:{{{ $review->id }}}"
+                              class="vote-btn downvote {{{ ($review->hasDownVote(Session::get('student_id'))) ? 'voted' : '' }}}"
+                              ><i class="fa fa-arrow-down"></i
+                            ></a>
+                          </div>
+                        </div>
+                        <div class="comment-header">
+                          <a href="#">Mario Parti</a>
+                          &ndash; 12 points, 14 mai 2015
+                          &ndash; <a href="#">modifier</a>
+                          &ndash; <a href="#">reply</a>
+                        </div>
+                        <div class="comment-body">
+                          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit impedit, hic dolor ipsa similique laudantium dolores maiores. Eveniet delectus consectetur sapiente, voluptatibus enim perferendis beatae ad sed maiores, ea at.
+                        </div>
+                        <div class="comments">
+                          <div class="comment">
+                            <div class="comment-vote">
+                              <div>
+                                <a href="#" data-vote-btn="up:{{{ $review->id }}}"
+                                  class="vote-btn upvote {{{ ($review->hasUpVote(Session::get('student_id'))) ? 'voted' : '' }}}"
+                                  ><i class="fa fa-arrow-up"></i
+                                ></a>
+                              </div>
+                              <div>
+                                <a href="#" data-vote-btn="down:{{{ $review->id }}}"
+                                  class="vote-btn downvote {{{ ($review->hasDownVote(Session::get('student_id'))) ? 'voted' : '' }}}"
+                                  ><i class="fa fa-arrow-down"></i
+                                ></a>
+                              </div>
+                            </div>
+                            <div class="comment-header">
+                              <a href="#">Luidgi Revenu</a>
+                              &ndash; 2 points, 2 août 2015
+                              &ndash; <a href="#">reply</a>
+                            </div>
+                            <div class="comment-body">
+                              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit impedit, hic dolor ipsa similique laudantium dolores maiores. Eveniet delectus consectetur sapiente, voluptatibus enim perferendis beatae ad sed maiores, ea at.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    @endfor
+                  </div>
                 </div>
               </div>
             @endfor

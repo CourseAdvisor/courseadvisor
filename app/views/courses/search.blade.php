@@ -98,7 +98,7 @@
 	  	</div>
 		</section>
 
-		@include('global.course_list', [
+		@include('components.course_list', [
 			'courses' => $courses,
 			'paginator' => $paginator,
 			'pagination_links_appendings' => Input::all()

@@ -15,7 +15,7 @@
                     }}}</h1>
                     @foreach($courses as $semester => $_courses)
                         <h2>{{{ $semester }}}</h2>
-                        @include('global.course_list', [
+                        @include('components.course_list', [
                         'courses' => $_courses,
                         'paginate' => FALSE])
 
