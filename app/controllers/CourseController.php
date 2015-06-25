@@ -256,12 +256,14 @@ class CourseController extends BaseController {
     $review->content_grade = Input::get('content_grade');
     $review->difficulty = Input::get('difficulty');
 
-      $msg = trans('courses.review-updated-message');
+    $msg = trans('courses.review-updated-message');
 
     if (Input::get('anonymous') == true) {
         $review->is_anonymous = 1;
         $review->status = 'waiting';
         $msg = trans('courses.review-updated-anonymous-message');
+    } else {
+    	$review->is_anonymous = 0;
     }
 
     $review->updateAverage();
@@ -269,9 +271,9 @@ class CourseController extends BaseController {
 
     if ($review->is_anonymous) {
       Event::fire('review.newAnonymous', [$review]);
-    } else {
-      $review->course->updateAverages();
     }
+
+    $review->course->updateAverages();
 
     $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
     $mp->track('Updated a review', [
