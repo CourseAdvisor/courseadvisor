@@ -20,7 +20,6 @@ class ReviewController extends BaseController {
 
   public function updateComment() {
     $id = Input::get('comment_id');
-
     $comment = Comment::findOrFail($id);
 
     if ($comment->student_id != StudentInfo::getId()) {
@@ -39,6 +38,19 @@ class ReviewController extends BaseController {
     $comment->save();
 
     return Redirect::to(URL::previous())->with('message', ['success', 'Your comment has been edited.']);
+  }
+
+  public function deleteComment() {
+    $id = Input::get('comment_id');
+    $comment = Comment::findOrFail($id);
+
+    if ($comment->student_id != StudentInfo::getId()) {
+      return Redirect::to(URL::previous())->with('message', ['danger', 'Cannot delete this comment.']);
+    }
+
+    $comment->delete();
+
+    return Redirect::to(URL::previous())->with('message', ['success', 'Your comment has been deleted.']);
   }
 
   public function vote() {

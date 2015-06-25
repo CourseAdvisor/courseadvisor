@@ -21,9 +21,7 @@
 ?>
 
 {{ Form::open([
-  'class' => '',
-  'action' => ['ReviewController@' . ($is_editing ? 'update' : 'create') . 'Comment'],
-  'id' => isset($id) ? $id : ''
+  'action' => ['ReviewController@' . ($is_editing ? 'update' : 'create') . 'Comment']
   ]) }}
 
   @if($root->student->id == StudentInfo::getId() && $root->is_anonymous)
@@ -42,5 +40,12 @@
 
   <button class="btn btn-primary" type="submit">Send</button>
   <a href="#" data-form-action="cancel">cancel</a>
+  <button
+      formaction="{{{ action('ReviewController@deleteComment') }}}"
+      onclick="return confirm('{{{ trans('courses.delete-comment-confirm') }}}');"
+      class="btn btn-link"
+      type="submit">
+    <i class="fa fa-trash"></i>
+  </button>
 
 {{ Form::close() }}

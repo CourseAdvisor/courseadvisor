@@ -78,6 +78,7 @@ Route::group([
 	// comments
 	Route::post('/comment', 'ReviewController@createComment');
 	Route::post('/comment/edit', 'ReviewController@updateComment');
+	Route::post('/comment/delete', 'ReviewController@deleteComment');
 
 
 	// --- AJAX API ---
