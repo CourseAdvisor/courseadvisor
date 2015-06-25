@@ -3,6 +3,7 @@
 
   params:
   commentable: a Commentable sub-class.
+  root: The review to comment
 
 --}}
 
@@ -10,7 +11,6 @@
   @foreach($commentable->comments->sortByDesc('score') as $comment)
     <div class="comment">
       <div class="comment-vote">
-        <!-- this is copy-pasted, TODO: adapt voting logic -->
         <div>
           <a href="#" data-vote-btn="up:comment:{{{ $comment->id }}}"
             class="vote-btn upvote {{{ ($comment->hasUpVote(Session::get('student_id'))) ? 'voted' : '' }}}"
@@ -35,10 +35,10 @@
       </div>
       <div class="comment-body">{{{ $comment->body }}}</div>
       <div data-comment-form="comment:{{{ $comment->id }}}" class="hidden">
-        @include('forms.comment', ['target_comment' => $comment->id ])
+        @include('forms.comment', ['target_comment' => $comment, 'root_review' => $root ])
       </div>
       @if (count($comment->comments) > 0)
-        @include('components.comments_thread', ["commentable" => $comment])
+        @include('components.comments_thread', ['commentable' => $comment, 'root' => $root])
       @endif
     </div>
   @endforeach

@@ -221,17 +221,14 @@
                   <p class="review-content">{{ nl2br(e($review->comment)) }}</p>
                 </div>
 
-
-                <!-- Comments mockup design, work in progress -->
-
                 <div class="review-comments">
                   <h4>{{{ count($review->comments) }}} comments
                     &ndash; <a data-comment-action="review:{{{ $review->id }}}" href="#">Comment this review</a>
                   </h4>
                   <div data-comment-form="review:{{{ $review->id }}}" class="hidden">
-                    @include('forms.comment', ['target_review' => $review->id ])
+                    @include('forms.comment', ['target_review' => $review ])
                   </div>
-                  @include('components.comments_thread', ['commentable' => $review])
+                  @include('components.comments_thread', ['commentable' => $review, 'root' => $review])
                 </div>
               </div>
             @endfor
