@@ -25,7 +25,7 @@
   ]) }}
 
   @if($root->student->id == StudentInfo::getId() && $root->is_anonymous)
-  <span class="alert-danger">You are about to comment a review that you posted anonymously but comments are not anonymous. Beware not to jeopardize your review.</span>
+  <span class="alert-danger">{{{ trans('courses.comment-anonymous-break-alert') }}}</span>
   @endif
 
   <input type="hidden" name="review_id" value="{{{ isset($target_review) ? $target_review->id : '' }}}" />
@@ -38,14 +38,16 @@
   --}}@endif</textarea>
   </div>
 
-  <button class="btn btn-primary" type="submit">Send</button>
-  <a href="#" data-form-action="cancel">cancel</a>
+  <button class="btn btn-primary" type="submit">{{{ trans('courses.comment-publish-action') }}}</button>
+  <a href="#" data-form-action="cancel">{{{ trans('global.cancel-action') }}}</a>
+  @if($is_editing)
   <button
       formaction="{{{ action('ReviewController@deleteComment') }}}"
-      onclick="return confirm('{{{ trans('courses.delete-comment-confirm') }}}');"
+      onclick="return confirm('{{{ trans('courses.comment-delete-confirm') }}}');"
       class="btn btn-link"
       type="submit">
     <i class="fa fa-trash"></i>
   </button>
+  @endif
 
 {{ Form::close() }}

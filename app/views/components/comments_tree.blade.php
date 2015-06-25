@@ -30,9 +30,9 @@
           &ndash; <span data-vote-score="comment:{{{ $comment->id }}}">{{{ $comment->score }}}</span> points,
           {{{ $comment->created_at }}}
           @if($comment->student->id == StudentInfo::getId())
-            &ndash; <a href="#" data-comment-action="edit:comment:{{{ $comment->id }}}">modifier</a>
+            &ndash; <a href="#" data-comment-action="edit:comment:{{{ $comment->id }}}">{{{ trans('courses.comment-edit-action') }}}</a>
           @endif
-          &ndash; <a href="#" data-comment-action="reply:comment:{{{ $comment->id }}}">reply</a>
+          &ndash; <a href="#" data-comment-action="reply:comment:{{{ $comment->id }}}">{{{ trans('courses.comment-reply-action') }}}</a>
         </div>
         <div data-comment-body="{{{ $comment->id }}}">{{{ $comment->body }}}</div>
         @if($comment->student->id == StudentInfo::getId())
@@ -45,7 +45,7 @@
         </div>
       </div>
       @if (count($comment->comments) > 0)
-        @include('components.comments_thread', ['commentable' => $comment, 'root' => $root])
+        @include('components.comments_tree', ['commentable' => $comment, 'root' => $root])
       @endif
     </div>
   @endforeach

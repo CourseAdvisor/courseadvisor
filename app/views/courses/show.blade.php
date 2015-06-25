@@ -222,13 +222,13 @@
                 </div>
 
                 <div class="review-comments">
-                  <h4>{{{ count($review->comments) }}} comments
-                    &ndash; <a data-comment-action="reply:review:{{{ $review->id }}}" href="#">Comment this review</a>
+                  <h4>{{{ Lang::choice('courses.comments-tree-heading', count($review->comments), ['count' => count($review->comments)]) }}}
+                    &ndash; <a data-comment-action="reply:review:{{{ $review->id }}}" href="#">{{{ trans('courses.comment-review-action') }}}</a>
                   </h4>
                   <div data-comment-form="reply:review:{{{ $review->id }}}" class="hidden">
                     @include('forms.comment', ['target_review' => $review ])
                   </div>
-                  @include('components.comments_thread', ['commentable' => $review, 'root' => $review])
+                  @include('components.comments_tree', ['commentable' => $review, 'root' => $review])
                 </div>
               </div>
             @endfor
