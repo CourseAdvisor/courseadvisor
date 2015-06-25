@@ -181,13 +181,6 @@ class CourseController extends BaseController {
 
 
     // Check if we should use 'mobile_difficulty'
-    /*if(empty($newReview->difficulty)) {
-      $newReview->difficulty = Input::get('difficulty_mobile');
-    }
-    // difficulty 0 means N/A
-    if ($newReview->difficulty == 0)
-      unset($newReview->difficulty);
-    */
     if (Input::has('difficulty_mobile') && Input::get('difficulty_mobile') != 0) {
       $newReview->difficulty = Input::get('difficulty_mobile');
     }
@@ -209,18 +202,18 @@ class CourseController extends BaseController {
       $msg = trans('courses.review-posted-anonymous-message');
     }
 
-        $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
-        $mp->track('Posted a review', [
-            'Course name' => $course->name,
-            'Average grade' => $newReview->avg_grade,
-            'Exercises grade' => $newReview->exercises_grade,
-            'Lectures grade' => $newReview->lectures_grade,
-            'Content grade' => $newReview->content_grade,
-            'Difficulty' => $newReview->difficulty,
-            'Is review' => $newReview->isReview(),
-            'Anonymous' => $newReview->is_anonymous == 1,
-            'Locale' => LaravelLocalization::getCurrentLocale()
-        ]);
+    $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+    $mp->track('Posted a review', [
+        'Course name' => $course->name,
+        'Average grade' => $newReview->avg_grade,
+        'Exercises grade' => $newReview->exercises_grade,
+        'Lectures grade' => $newReview->lectures_grade,
+        'Content grade' => $newReview->content_grade,
+        'Difficulty' => $newReview->difficulty,
+        'Is review' => $newReview->isReview(),
+        'Anonymous' => $newReview->is_anonymous == 1,
+        'Locale' => LaravelLocalization::getCurrentLocale()
+    ]);
 
     return $goToCourse->with('message', ['success', $msg]);
   }
@@ -302,8 +295,23 @@ class CourseController extends BaseController {
         ->with('message', ['danger', trans('courses.review-delete-not-allowed')]);
     }
 
+    $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+    $mp->track('Deleted a review', [
+        'Course name' => $review->course->name,
+        'Comments' => count($review->comments),
+        'Average grade' => $review->avg_grade,
+        'Exercises grade' => $review->exercises_grade,
+        'Lectures grade' => $review->lectures_grade,
+        'Content grade' => $review->content_grade,
+        'Difficulty' => $review->difficulty,
+        'Is review' => $review->isReview(),
+        'Anonymous' => $review->is_anonymous == 1,
+        'Locale' => LaravelLocalization::getCurrentLocale()
+    ]);
+
     $review->delete();
     $review->course->updateAverages();
+
     return $courseRedirect
       ->with('message', ['success', trans('courses.review-deleted-message')]);
   }

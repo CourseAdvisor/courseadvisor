@@ -3,7 +3,7 @@
 class Comment extends Commentable {
   protected $table = 'comments';
 
-  protected $fillable = ['review_id', 'comment_id', 'body'];
+  protected $fillable = ['comment_id', 'body'];
 
 
   // Relations
@@ -13,11 +13,11 @@ class Comment extends Commentable {
   }
 
   public function parent() {
-    return $this->belongsTo('Comment');
+    return $this->belongsTo('Comment', 'comment_id');
   }
 
   public function review() {
-    return $this->belongsTo('Review');
+    return $this->belongsTo('Review', 'review_id');
   }
 
 
@@ -25,7 +25,8 @@ class Comment extends Commentable {
 
   public static function rules() {
     return [
-      'body' => 'max:2048'
+      'body' => 'max:2048',
+      'review_id' => 'required'
     ];
   }
 

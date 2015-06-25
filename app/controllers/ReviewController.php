@@ -3,17 +3,37 @@ class ReviewController extends BaseController {
 
 
   public function createComment() {
-    $validator = Comment::getValidator(Input::all());
+
+    $comment = new Comment([
+      'body' => Input::get('body'),
+      'review_id' => Input::get('review_id'),
+      'comment_id' => Input::get('comment_id') ? Input::get('comment_id') : null
+    ]);
+    $comment->student_id = Session::get('student_id');
+
+    if ($comment->comment_id) { // Has parent
+      // Inherit review id
+      $comment->review_id = Comment::findOrFail($comment->comment_id)->review_id;
+    } else {
+      $comment->review_id = Input::get('review_id');
+    }
+
+    $validator = Comment::getValidator($comment->toArray());
     if ($validator->fails()) {
       return Redirect::to(URL::previous())
           ->withInput()
           ->withErrors($validator);
     }
-
-    $comment = new Comment(Input::all());
-    $comment->student_id = Session::get('student_id');
-
     $comment->save();
+
+    $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+    $mp->track('Posted a comment', [
+        'Owner' => $comment->student_id,
+        'Parent review' => $comment->review_id,
+        'Parent comment' => $comment->comment_id
+    ]);
+
+    Event::fire('comment.newComment', [$comment]);
 
     return Redirect::to(URL::previous())->with('message', ['success', 'Your comment has been posted.']);
   }
@@ -47,6 +67,14 @@ class ReviewController extends BaseController {
     if ($comment->student_id != StudentInfo::getId()) {
       return Redirect::to(URL::previous())->with('message', ['danger', 'Cannot delete this comment.']);
     }
+
+    $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+    $mp->track('Deleted a comment', [
+        'Children' => count($comment->comments),
+        'Owner' => $comment->student_id,
+        'Parent review' => $comment->review_id,
+        'Parent comment' => $comment->comment_id
+    ]);
 
     $comment->delete();
 
@@ -95,16 +123,8 @@ class ReviewController extends BaseController {
         'student_id' => $student_id
       ]);
       $vote->save();
-    }
 
-    $commentable = ($target == 'review')
-        ? Review::find($review_id)
-        : Comment::find($comment_id);
-
-    $commentable->updateScore();
-    $commentable->save();
-
-    if (!$cancelled) {
+      // Only track new votes
       $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
       $mp->track('Voted', [
         'Type' => $vote->type,
@@ -113,6 +133,13 @@ class ReviewController extends BaseController {
         'Review' => $commentable->id
       ]);
     }
+
+    $commentable = ($target == 'review')
+        ? Review::find($review_id)
+        : Comment::find($comment_id);
+
+    $commentable->updateScore();
+    $commentable->save();
 
     return json_encode(array('score' => $commentable->score, 'cancelled' => $cancelled));
   }

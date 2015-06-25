@@ -4,6 +4,10 @@ class Review extends Commentable {
 
   protected $fillable = ['lectures_grade', 'exercises_grade', 'content_grade', 'difficulty', 'title', 'comment'];
 
+  public function comments() {
+    return parent::comments()->whereNull('comment_id');
+  }
+
   public function student() {
     return $this->belongsTo('Student');
   }

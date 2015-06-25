@@ -9,7 +9,7 @@
 
 <div class="comments">
   @foreach($commentable->comments->sortByDesc('score') as $comment)
-    <div class="comment">
+    <div class="comment" id="comment-{{{ $comment->id }}}">
       <div class="comment-vote">
         <div>
           <a href="#" data-vote-btn="up:comment:{{{ $comment->id }}}"
