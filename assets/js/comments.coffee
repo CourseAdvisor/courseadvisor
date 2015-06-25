@@ -1,3 +1,4 @@
+modals = require('./modals')
 
 $ ->
 
@@ -37,3 +38,10 @@ $ ->
       hiddenBody.hide()
 
     $("[data-comment-form=\"#{target}\"").slideDown()
+
+    # Now also check that the user is authenticated
+    $.get('/api/is_auth')
+      .fail (xhr) ->
+        if (xhr.statusCode().status == 401) # Unauthorized
+          modals.show('login-to-comment')
+          closeAll()

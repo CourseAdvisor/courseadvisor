@@ -73,17 +73,26 @@ Route::group([
 	'prefix' => 'api'
 ], function() {
 
-	// --- Regular API ---
+	// Public
 
-	// comments
-	Route::post('/comment', 'ReviewController@createComment');
-	Route::post('/comment/edit', 'ReviewController@updateComment');
-	Route::post('/comment/delete', 'ReviewController@deleteComment');
+	// nothing so far
 
 
-	// --- AJAX API ---
+	// Restricted
+	Route::group(['before' => 'auth'], function() {
 
-	Route::group(array('before' => 'auth'), function() {
+		// --- Regular API ---
+
+		// comments
+		Route::post('/comment', 'ReviewController@createComment');
+		Route::post('/comment/edit', 'ReviewController@updateComment');
+		Route::post('/comment/delete', 'ReviewController@deleteComment');
+
+
+		// --- AJAX API ---
+
+		// Basic route to ping for auth status
+		Route::get('/is_auth', function() { return 'ok'; });
 		// votes
 		Route::post('/vote', 'ReviewController@vote');
 	});

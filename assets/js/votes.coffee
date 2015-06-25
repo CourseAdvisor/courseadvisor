@@ -1,3 +1,4 @@
+modals = require('./modals')
 
 $ -> # jQuery onLoad
   $('[data-vote-btn]').each ->
@@ -28,7 +29,7 @@ $ -> # jQuery onLoad
 
       .fail (xhr) ->
         if (xhr.statusCode().status == 401) # Unauthorized
-          $('#login-to-vote-modal').modal('show')
+          modals.show('login-to-vote')
 
       .always ->
         $score.animate(opacity: 1)
