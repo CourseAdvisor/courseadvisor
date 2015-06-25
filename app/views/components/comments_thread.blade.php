@@ -24,18 +24,25 @@
           ></a>
         </div>
       </div>
-      <div class="comment-header">
-        <a href="{{{ $comment->student->pageURL }}}" target="_blank">{{{ $comment->student->fullname }}}</a>
-        &ndash; <span data-vote-score="comment:{{{ $comment->id }}}">{{{ $comment->score }}}</span> points,
-        {{{ $comment->created_at }}}
+      <div class="comment-body">
+        <div class="comment-header">
+          <a href="{{{ $comment->student->pageURL }}}" target="_blank">{{{ $comment->student->fullname }}}</a>
+          &ndash; <span data-vote-score="comment:{{{ $comment->id }}}">{{{ $comment->score }}}</span> points,
+          {{{ $comment->created_at }}}
+          @if($comment->student->id == StudentInfo::getId())
+            &ndash; <a href="#" data-comment-action="edit:comment:{{{ $comment->id }}}">modifier</a>
+          @endif
+          &ndash; <a href="#" data-comment-action="reply:comment:{{{ $comment->id }}}">reply</a>
+        </div>
+        <div data-comment-body="{{{ $comment->id }}}">{{{ $comment->body }}}</div>
         @if($comment->student->id == StudentInfo::getId())
-          &ndash; <a href="#">modifier</a>
+          <div data-comment-form="edit:comment:{{{ $comment->id }}}" class="hidden">
+            @include('forms.comment', ['edit' => true, 'target_comment' => $comment, 'root_review' => $root])
+          </div>
         @endif
-        &ndash; <a href="#" data-comment-action="comment:{{{ $comment->id }}}">reply</a>
-      </div>
-      <div class="comment-body">{{{ $comment->body }}}</div>
-      <div data-comment-form="comment:{{{ $comment->id }}}" class="hidden">
-        @include('forms.comment', ['target_comment' => $comment, 'root_review' => $root ])
+        <div data-comment-form="reply:comment:{{{ $comment->id }}}" class="hidden">
+          @include('forms.comment', ['target_comment' => $comment, 'root_review' => $root ])
+        </div>
       </div>
       @if (count($comment->comments) > 0)
         @include('components.comments_thread', ['commentable' => $comment, 'root' => $root])

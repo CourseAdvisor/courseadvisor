@@ -64,7 +64,32 @@ Route::group([
 
 });
 
-/* Admin stuff */
+
+// === actions API ===
+// Routes for posting / editing / deleting stuff.
+// Looks like they don't need to be localized.
+
+Route::group([
+	'prefix' => 'api'
+], function() {
+
+	// --- Regular API ---
+
+	// comments
+	Route::post('/comment', 'ReviewController@createComment');
+	Route::post('/comment/edit', 'ReviewController@updateComment');
+
+
+	// --- AJAX API ---
+
+	Route::group(array('before' => 'auth'), function() {
+		// votes
+		Route::post('/vote', 'ReviewController@vote');
+	});
+});
+
+
+// === Admin ===
 Route::group(['before' => 'admin_check'], function() {
 	Route::get('/admin', 'AdminController@index');
 	Route::get('/admin/moderate', 'AdminController@moderate');
@@ -73,17 +98,6 @@ Route::group(['before' => 'admin_check'], function() {
 	Route::get('/admin/reviews', 'AdminController@listReviews');
 });
 
-// AJAX api
-Route::group([
-	'prefix' => 'api'
-], function() {
-
-	Route::group(array('before' => 'auth'), function() {
-		Route::post('/vote', 'ReviewController@vote');
-
-		Route::post('/comment', 'ReviewController@createComment');
-	});
-});
 
 Route::when('*', 'csrf', array('post', 'put', 'delete'));
 Route::when('*', 'mixpanel_identity', array('post', 'put', 'delete', 'get'));

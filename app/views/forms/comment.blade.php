@@ -4,11 +4,15 @@
 
   params:
 
+
   Use either:
     - target_comment: The comment to comment (reply to)
     - root: The root review for this comment thread
   or:
     - target_review: The review to comment
+  or:
+    - edit: true
+    - target_comment: The comment to edit
 --}}
 
 <?php
@@ -29,7 +33,11 @@
   <input type="hidden" name="review_id" value="{{{ isset($target_review) ? $target_review->id : '' }}}" />
   <input type="hidden" name="comment_id" value="{{{ isset($target_comment) ? $target_comment->id : '' }}}" />
   <div class="form-group">
-    <textarea class="form-control" name="body"></textarea>
+    <textarea class="form-control" name="body">{{--
+  --}}@if($is_editing){{{
+        $target_comment->body
+      }}}{{--
+  --}}@endif</textarea>
   </div>
 
   <button class="btn btn-primary" type="submit">Send</button>

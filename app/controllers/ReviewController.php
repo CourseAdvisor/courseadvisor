@@ -18,6 +18,29 @@ class ReviewController extends BaseController {
     return Redirect::to(URL::previous())->with('message', ['success', 'Your comment has been posted.']);
   }
 
+  public function updateComment() {
+    $id = Input::get('comment_id');
+
+    $comment = Comment::findOrFail($id);
+
+    if ($comment->student_id != StudentInfo::getId()) {
+      return Redirect::to(URL::previous())->with('message', ['danger', 'Cannot update this comment.']);
+    }
+
+    $comment->body = Input::get('body');
+
+    $validator = Comment::getValidator($comment->toArray());
+    if ($validator->fails()) {
+      return Redirect::to(URL::previous())
+          ->withInput()
+          ->withErrors($validator);
+    }
+
+    $comment->save();
+
+    return Redirect::to(URL::previous())->with('message', ['success', 'Your comment has been edited.']);
+  }
+
   public function vote() {
 
     $review_id = Input::get('review');
