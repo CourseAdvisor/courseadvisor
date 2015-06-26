@@ -34,13 +34,27 @@
           @endif
           &ndash; <a href="#" data-comment-action="reply:comment:{{{ $comment->id }}}">{{{ trans('courses.comment-reply-action') }}}</a>
         </div>
-        <div data-comment-body="{{{ $comment->id }}}">{{{ $comment->body }}}</div>
+
+        <?php $error = Session::get('error-comment', null); ?>
+
+        <div data-comment-body="{{{ $comment->id }}}"
+          @if(($error && $error['parent'] == $comment->id && $error['root'] == $root->id && $error['action'] == 'edit'))
+            style="display: none"
+          @endif
+        >{{{ $comment->body }}}</div>
+
+        {{-- Edit form --}}
         @if($comment->student->id == StudentInfo::getId())
-          <div data-comment-form="edit:comment:{{{ $comment->id }}}" class="hidden">
+          <div data-comment-form="edit:comment:{{{ $comment->id }}}"
+            class="{{{ ($error && $error['parent'] == $comment->id && $error['root'] == $root->id && $error['action'] == 'edit') ? '' : 'hidden' }}}">
             @include('forms.comment', ['edit' => true, 'target_comment' => $comment, 'root_review' => $root])
           </div>
         @endif
-        <div data-comment-form="reply:comment:{{{ $comment->id }}}" class="hidden">
+
+        {{-- Reply form --}}
+        <div
+            data-comment-form="reply:comment:{{{ $comment->id }}}"
+            class="{{{ ($error && $error['parent'] == $comment->id && $error['root'] == $root->id && $error['action'] == 'create') ? '' : 'hidden' }}}">
           @include('forms.comment', ['target_comment' => $comment, 'root_review' => $root ])
         </div>
       </div>

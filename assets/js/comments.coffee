@@ -15,11 +15,10 @@ $ ->
       hiddenBody = null
 
 
-  allForms
-    # use direct css property instead of the css class (which features an !important hack)
-    .hide().removeClass("hidden")
-    # apply cancel button logic
-    .each ->
+  # use direct css property instead of the css class (which features an !important hack)
+  allForms.filter(".hidden").hide().removeClass("hidden")
+  # apply cancel button logic
+  allForms.each ->
       $(@).find('[data-form-action=cancel]').click (evt) ->
         evt.preventDefault()
         closeAll()

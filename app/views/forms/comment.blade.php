@@ -17,7 +17,16 @@
 
 <?php
   $is_editing = isset($edit) && $edit;
+  $error = Session::get('error-comment', null);
+  $commentId = isset($target_comment) ? $target_comment->id : '';
+  $reviewId = isset($target_review) ? $target_review->id : '';
   if (!empty($target_review) && empty($root)) $root = $target_review;
+
+  // This test demultiplexes the error in $errors to make sure it belongs to this form instance
+  $is_my_error = $error && $error['parent'] == $commentId && $error['root'] == $root->id
+      && (($error['action'] == 'edit' && $is_editing) || ($error['action'] == 'create' && !$is_editing));
+
+
 ?>
 
 {{ Form::open([
@@ -28,14 +37,19 @@
   <span class="alert-danger">{{{ trans('courses.comment-anonymous-break-alert') }}}</span>
   @endif
 
-  <input type="hidden" name="review_id" value="{{{ isset($target_review) ? $target_review->id : '' }}}" />
-  <input type="hidden" name="{{{ ($is_editing) ? 'comment_id' : 'parent_id' }}}" value="{{{ isset($target_comment) ? $target_comment->id : '' }}}" />
-  <div class="form-group">
-    <textarea class="form-control" name="body">{{--
-  --}}@if($is_editing){{{
+  <input type="hidden" name="review_id" value="{{{ $reviewId }}}" />
+  <input type="hidden" name="{{{ ($is_editing) ? 'comment_id' : 'parent_id' }}}" value="{{{ $commentId }}}" />
+  <div class="form-group {{ ($is_my_error && isset($errors) && $errors->has('body')) ? 'has-error' : '' }}">
+    <textarea class="form-control" rows="4" name="body">{{--
+  --}}@if($is_my_error){{{
+        Input::old('body')
+   }}}@elseif($is_editing){{{
         $target_comment->body
       }}}{{--
   --}}@endif</textarea>
+  @if ($is_my_error && isset($errors))
+    {{ $errors->first('body', '<span class="help-block">:message</span>') }}
+  @endif
   </div>
 
   <button class="btn btn-primary" type="submit">{{{ trans('courses.comment-publish-action') }}}</button>

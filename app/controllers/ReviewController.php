@@ -20,7 +20,13 @@ class ReviewController extends BaseController {
 
     $validator = Comment::getValidator($comment->toArray());
     if ($validator->fails()) {
-      return Redirect::to(URL::previous())
+      Session::flash('error-comment', [
+          'action' => 'create',
+          'root' => $comment->review_id,
+          'parent' => $comment->parent_id]);
+
+      $hash = ($comment->parent_id) ? '#comment-'.$comment->parent_id : '#review-'.$comment->review_id;
+      return Redirect::to(URL::previous().$hash)
           ->withInput()
           ->withErrors($validator);
     }
@@ -50,7 +56,12 @@ class ReviewController extends BaseController {
 
     $validator = Comment::getValidator($comment->toArray());
     if ($validator->fails()) {
-      return Redirect::to(URL::previous())
+      Session::flash('error-comment', [
+          'action' => 'edit',
+          'root' => $comment->review_id,
+          'parent' => $id]);
+
+      return Redirect::to(URL::previous().'#comment-'.$id)
           ->withInput()
           ->withErrors($validator);
     }
