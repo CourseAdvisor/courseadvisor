@@ -53,7 +53,7 @@
           {{{ trans('student.browse-courses-action') }}}
         </a>
         <br/><br/>
-        @include('global.course_list', [
+        @include('components.course_list', [
           'courses' => $studentCourses,
           'paginate' => FALSE
         ])
@@ -77,14 +77,14 @@
               <div class="pull-right">
                 <!-- desktop only -->
                 <div class="pull-right hidden-xs hidden-sm">
-                  @include('global.starbar', [
+                  @include('components.starbar', [
                   'grade' => $review->avg_grade
                   ])
                 </div>
 
                 <!-- mobile only -->
                 <div class="pull-right visible-xs visible-sm">
-                  @include('global.starbar', [
+                  @include('components.starbar', [
                   'grade' => $review->avg_grade,
                   'compact' => TRUE,
                   ])

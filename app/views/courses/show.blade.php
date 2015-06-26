@@ -17,7 +17,7 @@
       <h1>{{{ $course->name }}}</h1>
 
       @if($nbVotes > 0)
-        @include('global.starbar', [
+        @include('components.starbar', [
           'grade' => $course->avg_overall_grade,
           'comment_unsafe' => '<a href="#reviews">'.
             Lang::choice('courses.reviews-counter', $nbReviews, ['count' => $nbReviews]).
@@ -25,7 +25,7 @@
             '</a>'
         ])
       @else
-        @include('global.starbar', [
+        @include('components.starbar', [
           'disabled' => TRUE,
           'comment_unsafe' => e(trans('courses.no-review-message')),
         ])
@@ -33,7 +33,7 @@
       <div class="clearfix"></div>
       <dl class="dl-horizontal course-attrs">
         <dt>{{{ trans('courses.difficulty-label') }}}</dt><dd>
-          @include('global.difficulty_bar', ['difficulty' => $course->avg_difficulty])
+          @include('components.difficulty_bar', ['difficulty' => $course->avg_difficulty])
         </dd>
         <dt>{{{ trans('courses.teacher-label') }}}</dt><dd><a href="{{{ action('CourseController@showTeacher', [
                 'id' => $course->teacher['id'],
@@ -118,21 +118,21 @@
             <dl class="dl-horizontal">
               <dt>{{{ trans('courses.grading-lectures-label') }}}</dt>
               <dd>
-                @include('global.starbar', [
+                @include('components.starbar', [
                 'grade' => $course->avg_lectures_grade,
                 'disabled' => $course->avg_lectures_grade == 0
                 ])
               </dd>
               <dt>{{{ trans('courses.grading-exercises-label') }}}</dt>
               <dd>
-                @include('global.starbar', [
+                @include('components.starbar', [
                 'grade' => $course->avg_exercises_grade,
                 'disabled' => $course->avg_exercises_grade == 0
                 ])
               </dd>
               <dt>{{{ trans('courses.grading-content-label') }}}</dt>
               <dd>
-                @include('global.starbar', [
+                @include('components.starbar', [
                 'grade' => $course->avg_content_grade,
                 'disabled' => $course->avg_content_grade == 0
                 ])
@@ -152,7 +152,7 @@
       <div class="page">
         <h2 id="reviews">
           {{{ trans('courses.reviews-heading') }}}
-        @if($nbReviews > 0)
+        @if($nbReviews > 0 && !$hasAlreadyReviewed)
           <a href="#my-review" class="pull-right btn btn-primary btn-large"><i class="fa fa-plus"></i> {{{ trans('courses.review-this-action') }}}</a>
         @endif
         </h2>
@@ -166,40 +166,41 @@
               ?>
               @if($i != 0) <hr> @endif
 
-              <div class="review">
+              <div class="review" id="review-{{{ $review->id }}}">
                 <div class="review-vote">
                   <div>
-                    <a href="#" data-vote-btn="up:{{{ $review->id }}}"
+                    <a href="#" data-vote-btn="up:review:{{{ $review->id }}}"
                       class="vote-btn upvote {{{ ($review->hasUpVote(Session::get('student_id'))) ? 'voted' : '' }}}"
                       ><i class="fa fa-arrow-up"></i
                     ></a>
                   </div>
-                  <div data-vote-score="{{{ $review->id }}}" class="review-score">{{{ $review->score }}}</div>
+                  <div data-vote-score="review:{{{ $review->id }}}" class="review-score">{{{ $review->score }}}</div>
                   <div>
-                    <a href="#" data-vote-btn="down:{{{ $review->id }}}"
+                    <a href="#" data-vote-btn="down:review:{{{ $review->id }}}"
                       class="vote-btn downvote {{{ ($review->hasDownVote(Session::get('student_id'))) ? 'voted' : '' }}}"
                       ><i class="fa fa-arrow-down"></i
                     ></a>
                   </div>
                 </div>
                 <div class="review-body">
-                  @if (Tequila::isLoggedIn() && StudentInfo::getSciper() == $review->student->sciper)
-                  <span class="pull-right actions">
-                    <a href="#"
-                      data-review-id="{{{ $review->id }}}"
-                      data-review-lectures-grade="{{{ $review->lectures_grade }}}"
-                      data-review-exercises-grade="{{{ $review->exercises_grade }}}"
-                      data-review-content-grade="{{{ $review->content_grade }}}"
-                      data-review-title="{{{ $review->title }}}"
-                      data-review-difficulty="{{{ $review->difficulty }}}"
-                      data-review-anonymous="{{{ $review->is_anonymous ? 1 : 0 }}}"
-                      class="edit-review" title="{{{ trans('courses.edit-reviews-action') }}}">
-                      <i class="fa fa-pencil"></i>
-                    </a>
-                  @endif
-                  </span>
 
-                  @include('global.starbar', [
+                  @if (Tequila::isLoggedIn() && StudentInfo::getSciper() == $review->student->sciper)
+                    <span class="pull-right actions">
+                      <a href="#"
+                        data-review-id="{{{ $review->id }}}"
+                        data-review-lectures-grade="{{{ $review->lectures_grade }}}"
+                        data-review-exercises-grade="{{{ $review->exercises_grade }}}"
+                        data-review-content-grade="{{{ $review->content_grade }}}"
+                        data-review-title="{{{ $review->title }}}"
+                        data-review-difficulty="{{{ $review->difficulty }}}"
+                        data-review-anonymous="{{{ $review->is_anonymous ? 1 : 0 }}}"
+                        class="edit-review" title="{{{ trans('courses.edit-review-action') }}}">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                    </span>
+                    @endif
+
+                  @include('components.starbar', [
                   'grade' => $review->avg_grade,
                   'comment_unsafe' => htmlspecialchars($review->title)
                   ])
@@ -211,7 +212,7 @@
                     @else
                     {{
                       trans('courses.review-author', [
-                        'author' => '<a target="_blank" href="http://people.epfl.ch/'.e($review->student->sciper).'">'.e($review->student->fullname).'</a>',
+                        'author' => '<a target="_blank" href="'.e($review->student->pageURL).'">'.e($review->student->fullname).'</a>',
                         'section' => $review->student->section->name
                         ])
                     }}
@@ -219,9 +220,22 @@
                   </div>
                   <p class="review-content">{{ nl2br(e($review->comment)) }}</p>
                 </div>
+
+                <div class="review-comments">
+                  <h4>{{{ Lang::choice('courses.comments-tree-heading', count($review->comments), ['count' => count($review->comments)]) }}}
+                    &ndash; <a data-comment-action="reply:review:{{{ $review->id }}}" href="#">{{{ trans('courses.comment-review-action') }}}</a>
+                  </h4>
+
+                  <?php $error = Session::get('error-comment', null); ?>
+                  <div data-comment-form="reply:review:{{{ $review->id }}}"
+                      class="{{{ ($error && $error['parent'] == null && $error['root'] == $review->id && $error['action'] == 'create') ? '' : 'hidden' }}}">
+                    @include('forms.comment', ['target_review' => $review ])
+                  </div>
+                  @include('components.comments_tree', ['commentable' => $review, 'root' => $review])
+                </div>
               </div>
             @endfor
-          </div>
+          </div> {{-- reviews --}}
         @endif
         {{ $reviews->fragment('reviews')->links()}}
       </div> {{-- page --}}
@@ -291,33 +305,6 @@
         'id' => 'edit-review-form'
       ])
 
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="login-to-vote-modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" ><span>&times;</span></button>
-        <h3 class="modal-title">{{{ trans('courses.login-required-heading') }}}</h3>
-      </div>
-      <div class="modal-body">
-        <p>
-          {{{ trans('courses.login-to-vote-body') }}}
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">
-          {{{ trans('global.cancel-action') }}}
-        </button>
-        <a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}" class="btn btn-primary"
-          >@if(Session::get('ab_group') == 'A')
-          {{{ trans('global.login-action') }}}
-          @else
-          {{{ trans('global.login-action-alt') }}}
-          @endif</a>
-      </div>
     </div>
   </div>
 </div>

@@ -6,6 +6,7 @@ return array(
   'logout-action' => 'Log out',
   'cancel-action' => 'Cancel',
 
+  'date-format' => '%m/%d/%Y',
   'locale_code' => 'en_US',
 
   'browse-courses-action' => 'Browse courses',

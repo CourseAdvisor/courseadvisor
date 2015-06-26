@@ -157,6 +157,37 @@
 
     @yield('dialogs')
 
+    <div class="modal fade" id="base-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" ><span>&times;</span></button>
+            <h3 class="modal-title">
+              <span data-modal-text="login-to-vote">{{{ trans('courses.login-required-heading') }}}</span>
+              <span data-modal-text="login-to-comment">{{{ trans('courses.login-required-heading') }}}</span>
+            </h3>
+          </div>
+          <div class="modal-body">
+            <p>
+              <span data-modal-text="login-to-vote">{{{ trans('courses.login-to-vote-body') }}}</span>
+              <span data-modal-text="login-to-comment">{{{ trans('courses.login-to-comment-body') }}}</span>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              {{{ trans('global.cancel-action') }}}
+            </button>
+            <a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}" class="btn btn-primary"
+              >@if(Session::get('ab_group') == 'A')
+              {{{ trans('global.login-action') }}}
+              @else
+              {{{ trans('global.login-action-alt') }}}
+              @endif</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script type="text/javascript">
     var TOKEN = "{{{ Session::token() }}}";
     </script>

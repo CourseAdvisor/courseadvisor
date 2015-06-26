@@ -7,6 +7,9 @@ class Student extends Eloquent {
 		'firstname', 'lastname', 'email', 'semester', 'section_id', 'sciper'
 	);
 
+
+  // Relations
+
 	public function section() {
 		return $this->belongsTo('Section');
 	}
@@ -23,9 +26,16 @@ class Student extends Eloquent {
 		return $this->belongsToMany('StudyPlan');
 	}
 
+
+  // Attributes
+
 	public function getFullnameAttribute() {
 		return $this->firstname . " " . $this->lastname;
 	}
+
+  public function getPageURLAttribute() {
+    return "http://people.epfl.ch/".$this->sciper;
+  }
 
   public function isRegistered($course_id) {
     return $this->inscriptions()->where('course_id', $course_id)->first() != null;

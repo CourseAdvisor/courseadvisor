@@ -173,7 +173,7 @@ h3 {
     color: @gray;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4 {
     font-family: @font-family-sans-serif;
 }
 
@@ -399,45 +399,45 @@ hr {
     padding-top: 20px;
 }
 
-.review {
+.review-vote, .comment-vote {
+    float: left;
 
-    .review-vote {
-        float: left;
+    @vote-up-color: #3D9B38;
+    @vote-down-color: #BF1B1B;
 
-        @vote-up-color: #3D9B38;
-        @vote-down-color: #BF1B1B;
+    .vote-btn {
+        color: initial;
+        transition-property: color;
+        transition-duration: 300ms;
 
-        .vote-btn {
-            color: initial;
-            transition-property: color;
-            transition-duration: 300ms;
-
-            &.downvote {
-                &:hover {
-                    color: darken(@vote-down-color, 20%);
-                }
-
-                &.voted, &.voted:hover {
-                    color: @vote-down-color;
-                }
+        &.downvote {
+            &:hover {
+                color: darken(@vote-down-color, 20%);
             }
 
-            &.upvote {
-                &:hover {
-                    color: darken(@vote-up-color, 20%);
-                }
-
-                &.voted, &.voted:hover {
-                    color: @vote-up-color;
-                }
+            &.voted, &.voted:hover {
+                color: @vote-down-color;
             }
         }
 
-        .review-score {
-            text-align: center;
-            font-weight: bold;
+        &.upvote {
+            &:hover {
+                color: darken(@vote-up-color, 20%);
+            }
+
+            &.voted, &.voted:hover {
+                color: @vote-up-color;
+            }
         }
     }
+
+    .review-score {
+        text-align: center;
+        font-weight: bold;
+    }
+}
+.review {
+
     .review-body {
         margin-left: 10px;
         display: inline-block;
@@ -446,13 +446,28 @@ hr {
     .review-author {
         padding-left: 15px;
         margin-bottom: 5px;
+        font-family: @font-family-sans-serif;
     }
 
-    .actions a {
-        color: black;
-        margin-right: 10px;
-    }
     margin-bottom: 10px;
+}
+
+.review-comments {
+    margin-left: 20px;
+}
+
+.comments {
+    padding-left: 20px;
+    border-left: 1px #eee solid;
+}
+.comment-header {
+    font-family: @font-family-sans-serif;
+}
+.comment-body {
+    margin-left: 20px;
+}
+.comment {
+    margin: 10px 0;
 }
 
 .formula {

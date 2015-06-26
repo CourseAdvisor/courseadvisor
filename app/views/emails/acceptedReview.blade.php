@@ -7,7 +7,7 @@ et que celui-ci est visible dès maintenant sur la page du cours
 <i><a href="{{{ action('CourseController@show',  [
 	'slug' => Str::slug($review->course->name),
 	'id' => $review->course->id
-])}}}">
+])}}}#review-{{{ $review->id }}}">
 	{{{ $review->course->name_fr }}}</a></i>.
 </p>
 
@@ -22,7 +22,7 @@ L'équipe CourseAdvisor.</p>
 <i><a href="{{{ action('CourseController@show',  [
 	'slug' => Str::slug($review->course->name),
 	'id' => $review->course->id
-])}}}">
+])}}}#review-{{{ $review->id }}}">
 	{{{ $review->course->name_en }}}</a></i> course page.</p>
 
 <p>Thank you for your contribution,<br />

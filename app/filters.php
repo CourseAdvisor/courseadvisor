@@ -96,6 +96,11 @@ Route::filter('csrf', function()
 });
 
 
+Route::filter('locale', function() {
+	setlocale(LC_ALL, trans('global.locale_code'));
+});
+
+
 /*
   Sets up analytics session
 */
@@ -123,5 +128,3 @@ Route::filter('ab_testing', function() {
     Session::put('ab_group', rand(0, 1) == 0 ? 'A' : 'B');
   }
 });
-
-

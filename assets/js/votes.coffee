@@ -1,12 +1,13 @@
+modals = require('./modals')
 
 $ -> # jQuery onLoad
   $('[data-vote-btn]').each ->
     $el = $(@)
-    [type, id] = $el.attr('data-vote-btn').split(':')
+    [type, target, id] = $el.attr('data-vote-btn').split(':')
 
-    $score = $("[data-vote-score=#{id}]")
+    $score = $("[data-vote-score=\"#{target}:#{id}\"]")
 
-    $btns = $("[data-vote-btn$=#{id}]")
+    $btns = $("[data-vote-btn$=\"#{target}:#{id}\"]")
 
     $el.click (evt) ->
       evt.preventDefault()
@@ -15,7 +16,7 @@ $ -> # jQuery onLoad
 
       $.post '/api/vote',
         type: type # up / down
-        review: id
+        "#{target}": id
         _token: TOKEN
       .done (resp) ->
         data = JSON.parse(resp)
@@ -28,7 +29,7 @@ $ -> # jQuery onLoad
 
       .fail (xhr) ->
         if (xhr.statusCode().status == 401) # Unauthorized
-          $('#login-to-vote-modal').modal('show')
+          modals.show('login-to-vote')
 
       .always ->
         $score.animate(opacity: 1)

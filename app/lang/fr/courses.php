@@ -80,9 +80,23 @@ return array(
   'delete-reviews-confirm' => 'Es-tu sûr de vouloir supprimer ton avis ?',
   'review-no-grade' => 'aucune note donnée',
 
+  'comments-tree-heading' => ':count commentaire|:count commentaires',
+  'comment-review-action' => 'Commenter cet avis',
+  'comment-edit-action' => 'modifier',
+  'comment-reply-action' => 'répondre',
+  'comment-anonymous-break-alert' => 'Tu es sur le point de commenter un avis que tu as posté anonymement mais les commentaires ne sont pas anonymes. Attention à ne pas compromettre ton anonymat !',
+  'comment-publish-action' => 'Envoyer',
+  'comment-delete-confirm' => 'Es-tu sûr de vouloir supprimer définitivement ce commentaire ?',
+  'comment-posted-confirm' => 'Ton commentaire a bien été ajouté.',
+  'comment-update-unauthorized' => 'Tu n\'as pas le droit de modifier ce commentaire. Chenapan !',
+  'comment-updated-confirm' => 'Ton commentaire a bien été mis à jour.',
+  'comment-delete-unauthorized' => 'Tu n\'as pas le droit de supprimer ce commentaire. Petit fourbe !',
+  'comment-deleted-confirm' => 'Ton commentaire a bien été supprimé.',
+
   'teacher-more-info' => 'En savoir plus sur :teacher',
   'teacher-courses-heading' => ':teacher enseigne les cours suivants',
 
   'login-required-heading' => 'Connexion requise',
-  'login-to-vote-body' => 'Tu dois être connecté pour pouvoir voter.'
+  'login-to-vote-body' => 'Tu dois être connecté pour pouvoir voter.',
+  'login-to-comment-body' => 'Tu dois être connecté pour pouvoir commenter.'
 );

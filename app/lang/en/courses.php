@@ -79,9 +79,23 @@ return array(
   'delete-reviews-confirm' => 'Are you sure you want to delete your review?',
   'review-no-grade' => 'no grade given',
 
+  'comments-tree-heading' => ':count comment|:count comments',
+  'comment-review-action' => 'Comment this review',
+  'comment-edit-action' => 'edit',
+  'comment-reply-action' => 'reply',
+  'comment-anonymous-break-alert' => 'You are about to comment a review that you posted anonymously but comments are not anonymous. Beware not to jeopardize your review.',
+  'comment-publish-action' => 'Send',
+  'comment-delete-confirm' => 'Delete this comment? (cannot be undone)',
+  'comment-posted-confirm' => 'Your comment has been posted.',
+  'comment-update-unauthorized' => 'You are not allowed to edit this comment.',
+  'comment-updated-confirm' => 'Your comment has been successfuly updated.',
+  'comment-delete-unauthorized' => 'You are not allowed to delete this comment.',
+  'comment-deleted-confirm' => 'Your comment has been successfuly deleted.',
+
   'teacher-more-info' => 'More about :teacher',
   'teacher-courses-heading' => ':teacher teaches the following courses',
 
   'login-required-heading' => 'Login required',
-  'login-to-vote-body' => 'You must be logged-in in order to vote.'
+  'login-to-vote-body' => 'You must be logged-in in order to vote.',
+  'login-to-comment-body' => 'You must be logged-in in order to comment.'
 );

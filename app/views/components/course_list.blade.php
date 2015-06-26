@@ -20,7 +20,7 @@
       <!-- desktop only -->
       <div class="pull-right hidden-xs hidden-sm">
         <div class="pull-right">
-          @include('global.starbar', [
+          @include('components.starbar', [
             'grade' => $course['avg_overall_grade'],
             'disabled' => $reviewsCount == 0,
             'comment_unsafe' => $reviewsCount.' <i class="fa fa-comments"></i>'
@@ -36,7 +36,7 @@
 
       <!-- mobile only -->
       <div class="pull-right visible-xs visible-sm">
-        @include('global.starbar', [
+        @include('components.starbar', [
           'grade' => $course['avg_overall_grade'],
           'disabled' => $reviewsCount == 0,
           'compact' => TRUE,

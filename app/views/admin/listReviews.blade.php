@@ -19,7 +19,7 @@
 		@foreach ($reviews as $review)
 			<div class="review">
 		    </span>
-			  @include('global.starbar', [
+			  @include('components.starbar', [
 		    'grade' => $review->avg_grade,
 		    'comment_unsafe' => htmlspecialchars($review->title)
 		    ])

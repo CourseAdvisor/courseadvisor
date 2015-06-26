@@ -3,7 +3,7 @@ class Vote extends Eloquent {
   protected $table = 'votes';
 
   protected $fillable = [
-    'student_id', 'review_id', 'type'
+    'student_id', 'review_id', 'comment_id', 'type'
   ];
 
   public function student() {
