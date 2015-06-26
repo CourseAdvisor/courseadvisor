@@ -1,6 +1,6 @@
 <p>Bonjour {{{ $review->student->firstname }}}, </p>
 
-<p>{{{ ucfirst($who->fullname) }}} a posté un commentaire sur ton avis pour le cours {{{ $review->course->name_fr }}}.<br />
+<p>{{{ ucfirst($who->fullname) }}} a commenté ton avis pour le cours {{{ $review->course->name_fr }}}.<br />
 Clique <a href="{{{ LaravelLocalization::getLocalizedURL('fr', action('CourseController@show', [
     'id' => $review->course->id,
     'slug' => Str::slug($review->course->name_fr)
@@ -12,7 +12,7 @@ Clique <a href="{{{ LaravelLocalization::getLocalizedURL('fr', action('CourseCon
 <br>
 <p>Hi {{{ $review->student->firstname }}}, </p>
 
-<p>{{{ ucfirst($who->fullname) }}} has commented your review in the course {{{ $review->course->name_en }}}.<br />
+<p>{{{ ucfirst($who->fullname) }}} has commented on your review in the course {{{ $review->course->name_en }}}.<br />
 Click <a href="{{{ LaravelLocalization::getLocalizedURL('en', action('CourseController@show', [
     'id' => $review->course->id,
     'slug' => Str::slug($review->course->name_en)

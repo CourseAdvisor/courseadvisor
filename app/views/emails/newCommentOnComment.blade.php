@@ -1,6 +1,6 @@
 <p>Bonjour {{{ $parent->student->firstname }}}, </p>
 
-<p>{{{ ucfirst($who->fullname) }}} a répondu à ton commentaire "{{{ Str::words($parent->body, 13) }}}".<br />
+<p>{{{ ucfirst($who->fullname) }}} a répondu à ton commentaire « {{{ Str::words($parent->body, 13) }}} ».<br />
 Clique <a href="{{{ LaravelLocalization::getLocalizedURL('fr', action('CourseController@show', [
     'id' => $review->course->id,
     'slug' => Str::slug($review->course->name_fr)

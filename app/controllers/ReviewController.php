@@ -35,7 +35,7 @@ class ReviewController extends BaseController {
 
     Event::fire('comment.newComment', [$comment]);
 
-    return Redirect::to(URL::previous())->with('message', ['success', 'Your comment has been posted.']);
+    return Redirect::to(URL::previous())->with('message', ['success', trans('courses.comment-posted-confirm')]);
   }
 
   public function updateComment() {
@@ -43,7 +43,7 @@ class ReviewController extends BaseController {
     $comment = Comment::findOrFail($id);
 
     if ($comment->student_id != StudentInfo::getId()) {
-      return Redirect::to(URL::previous())->with('message', ['danger', 'Cannot update this comment.']);
+      return Redirect::to(URL::previous())->with('message', ['danger', trans('courses.comment-update-unauthorized')]);
     }
 
     $comment->body = Input::get('body');
@@ -57,7 +57,7 @@ class ReviewController extends BaseController {
 
     $comment->save();
 
-    return Redirect::to(URL::previous())->with('message', ['success', 'Your comment has been edited.']);
+    return Redirect::to(URL::previous())->with('message', ['success', trans('courses.comment-updated-confirm')]);
   }
 
   public function deleteComment() {
@@ -65,7 +65,7 @@ class ReviewController extends BaseController {
     $comment = Comment::findOrFail($id);
 
     if ($comment->student_id != StudentInfo::getId()) {
-      return Redirect::to(URL::previous())->with('message', ['danger', 'Cannot delete this comment.']);
+      return Redirect::to(URL::previous())->with('message', ['danger', trans('courses.comment-delete-unauthorized')]);
     }
 
     $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
@@ -78,7 +78,7 @@ class ReviewController extends BaseController {
 
     $comment->delete();
 
-    return Redirect::to(URL::previous())->with('message', ['success', 'Your comment has been deleted.']);
+    return Redirect::to(URL::previous())->with('message', ['success', trans('courses.comment-deleted-confirm')]);
   }
 
   public function vote() {

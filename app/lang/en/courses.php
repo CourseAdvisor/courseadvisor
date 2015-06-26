@@ -86,6 +86,11 @@ return array(
   'comment-anonymous-break-alert' => 'You are about to comment a review that you posted anonymously but comments are not anonymous. Beware not to jeopardize your review.',
   'comment-publish-action' => 'Send',
   'comment-delete-confirm' => 'Delete this comment? (cannot be undone)',
+  'comment-posted-confirm' => 'Your comment has been posted.',
+  'comment-update-unauthorized' => 'You are not allowed to edit this comment.',
+  'comment-updated-confirm' => 'Your comment has been successfuly updated.',
+  'comment-delete-unauthorized' => 'You are not allowed to delete this comment.',
+  'comment-deleted-confirm' => 'Your comment has been successfuly deleted.',
 
   'teacher-more-info' => 'More about :teacher',
   'teacher-courses-heading' => ':teacher teaches the following courses',
