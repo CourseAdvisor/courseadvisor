@@ -13,13 +13,13 @@
 
 App::before(function($request)
 {
-	//
+  //
 });
 
 
 App::after(function($request, $response)
 {
-	//
+  //
 });
 
 /*
@@ -35,28 +35,28 @@ App::after(function($request, $response)
 
 Route::filter('auth', function()
 {
-	if (!Tequila::isLoggedIn())
-	{
-		if (Request::ajax())
-		{
-			$mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+  if (!Tequila::isLoggedIn())
+  {
+    if (Request::ajax())
+    {
+      $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
       $mp->track('Unauthorized action ', [
         'route' => Route::getCurrentRoute()->getPath(),
         'ab_group' => Session::get('ab_group')
       ]);
-			return Response::make('Unauthorized', 401);
-		}
-		else
-		{
-			return Redirect::guest('login');
-		}
-	}
+      return Response::make('Unauthorized', 401);
+    }
+    else
+    {
+      return Redirect::action('AuthController@login', ['next' => Request::url()]);
+    }
+  }
 });
 
-
-Route::filter('auth.basic', function()
-{
-	return Auth::basic();
+Route::filter('admin', function() {
+  if (!StudentInfo::isAdmin()) {
+    return Redirect::to(Config::get('content.rickroll_url'));
+  }
 });
 
 /*
@@ -72,7 +72,8 @@ Route::filter('auth.basic', function()
 
 Route::filter('guest', function()
 {
-	if (Auth::check()) return Redirect::to('/');
+  if (Tequila::isLoggedIn())
+    return Redirect::to('/');
 });
 
 /*
@@ -88,30 +89,39 @@ Route::filter('guest', function()
 
 Route::filter('csrf', function()
 {
-	if (Session::token() !== Input::get('_token'))
-	{
-		throw new Illuminate\Session\TokenMismatchException;
-	}
+  if (Session::token() !== Input::get('_token'))
+  {
+    throw new Illuminate\Session\TokenMismatchException;
+  }
 });
 
+
+/*
+  Sets up analytics session
+*/
 Route::filter('mixpanel_identity', function() {
-	$mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
-	if (!Session::has('mp_id')) {
-		Session::put('mp_id', uniqid('mp', true));
-	}
-	$mp->identify(Session::get('mp_id'));
+  $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
+  if (!Session::has('mp_id')) {
+    Session::put('mp_id', uniqid('mp', true));
+  }
+  $mp->identify(Session::get('mp_id'));
 
-	if (Tequila::isLoggedIn()) {
-		$mp->people->set(StudentInfo::getSciper(), [
-			'name' => StudentInfo::getFullName(),
-			'section' => StudentInfo::getFullSection(),
-			'sciper' => StudentInfo::getSciper()
-		]);
-	}
+  if (Tequila::isLoggedIn()) {
+    $mp->people->set(StudentInfo::getSciper(), [
+      'name' => StudentInfo::getFullName(),
+      'section' => StudentInfo::getFullSection(),
+      'sciper' => StudentInfo::getSciper()
+    ]);
+  }
 });
 
+/*
+  Ensures user belongs to an AB testing group.
+*/
 Route::filter('ab_testing', function() {
-	if (!Session::has('ab_group')) {
-		Session::put('ab_group', rand(0, 1) == 0 ? 'A' : 'B');
-	}
+  if (!Session::has('ab_group')) {
+    Session::put('ab_group', rand(0, 1) == 0 ? 'A' : 'B');
+  }
 });
+
+

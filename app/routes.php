@@ -45,16 +45,13 @@ Route::group([
 	Route::get('/course/{slug}-{id}', 'CourseController@show');
 	Route::get('/teacher/{slug}-{id}', 'CourseController@showTeacher');
 
-	Route::get('/login', array('before' => 'logged_out', 'uses' => 'AuthController@login'));
-	Route::get('/login_redirect', 'AuthController@loginRedirect');
+  Route::get('/login', array('before' => 'guest', 'uses' => 'AuthController@login'));
+  Route::get('/login_redirect', 'AuthController@loginRedirect');
 
-	/* Routes requiring login (display error message if not logged in) */
-	Route::group(array('before' => 'logged_in'), function() {
-		Route::get('/logout', 'AuthController@logout');
-	});
+	Route::get('/logout', 'AuthController@logout');
 
 	/* Routes forcing login */
-	Route::group(array('before' => 'force_login'), function() {
+	Route::group(array('before' => 'auth'), function() {
 		Route::get('/dashboard', 'StudentController@dashboard');
 		Route::post('/course/{slug}-{id}/createReview', 'CourseController@createReview');
 		Route::post('/course/{slug}-{id}/updateReview', 'CourseController@updateReview');
@@ -64,7 +61,7 @@ Route::group([
 });
 
 /* Admin stuff */
-Route::group(['before' => 'admin_check'], function() {
+Route::group(['before' => 'admin'], function() {
 	Route::get('/admin', 'AdminController@index');
 	Route::get('/admin/moderate', 'AdminController@moderate');
 	Route::post('/admin/moderate', 'AdminController@doModerate');
@@ -86,29 +83,3 @@ Route::group([
 Route::when('*', 'csrf', array('post', 'put', 'delete'));
 Route::when('*', 'mixpanel_identity', array('post', 'put', 'delete', 'get'));
 Route::when('*', 'ab_testing', array('post', 'put', 'delete', 'get'));
-
-Route::filter('admin_check', function() {
-	if (!StudentInfo::isAdmin()) {
-		return Redirect::to(Config::get('content.rickroll_url'));
-	}
-});
-
-Route::filter('logged_in', function() {
-	if(!Tequila::isLoggedIn())  {
-		Session::flash('message', array('type' => 'danger', 'message' => 'You must be logged in to do this.'));
-		return Redirect::to('/');
-	}
-});
-
-Route::filter('force_login', function() {
-	if(!Tequila::isLoggedIn())  {
-		return Redirect::action('AuthController@login', ['next' => Request::url()]);
-	}
-});
-
-Route::filter('logged_out', function() {
-	if(Tequila::isLoggedIn())  {
-		Session::flash('message', array('type' => 'danger', 'message' => 'You must be logged out to do this.'));
-		return Redirect::to('/');
-	}
-});
