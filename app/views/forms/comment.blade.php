@@ -29,7 +29,7 @@
   @endif
 
   <input type="hidden" name="review_id" value="{{{ isset($target_review) ? $target_review->id : '' }}}" />
-  <input type="hidden" name="comment_id" value="{{{ isset($target_comment) ? $target_comment->id : '' }}}" />
+  <input type="hidden" name="{{{ ($is_editing) ? 'comment_id' : 'parent_id' }}}" value="{{{ isset($target_comment) ? $target_comment->id : '' }}}" />
   <div class="form-group">
     <textarea class="form-control" name="body">{{--
   --}}@if($is_editing){{{

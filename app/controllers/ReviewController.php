@@ -7,13 +7,13 @@ class ReviewController extends BaseController {
     $comment = new Comment([
       'body' => Input::get('body'),
       'review_id' => Input::get('review_id'),
-      'comment_id' => Input::get('comment_id') ? Input::get('comment_id') : null
+      'parent_id' => Input::get('parent_id') ? Input::get('parent_id') : null
     ]);
     $comment->student_id = Session::get('student_id');
 
-    if ($comment->comment_id) { // Has parent
+    if ($comment->parent_id) { // Has parent
       // Inherit review id
-      $comment->review_id = Comment::findOrFail($comment->comment_id)->review_id;
+      $comment->review_id = Comment::findOrFail($comment->parent_id)->review_id;
     } else {
       $comment->review_id = Input::get('review_id');
     }
@@ -29,8 +29,8 @@ class ReviewController extends BaseController {
     $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
     $mp->track('Posted a comment', [
         'Owner' => $comment->student_id,
-        'Parent review' => $comment->review_id,
-        'Parent comment' => $comment->comment_id
+        'Review' => $comment->review_id,
+        'Parent' => $comment->parent_id
     ]);
 
     Event::fire('comment.newComment', [$comment]);
@@ -72,8 +72,8 @@ class ReviewController extends BaseController {
     $mp->track('Deleted a comment', [
         'Children' => count($comment->comments),
         'Owner' => $comment->student_id,
-        'Parent review' => $comment->review_id,
-        'Parent comment' => $comment->comment_id
+        'Review' => $comment->review_id,
+        'Parent' => $comment->parent_id
     ]);
 
     $comment->delete();
@@ -95,6 +95,10 @@ class ReviewController extends BaseController {
     } else if(!empty($comment_id)) {
       $target = 'comment';
     }
+
+    $commentable = ($target == 'review')
+        ? Review::find($review_id)
+        : Comment::find($comment_id);
 
     $vote = Vote::where([
           'student_id' => $student_id,
@@ -134,9 +138,6 @@ class ReviewController extends BaseController {
       ]);
     }
 
-    $commentable = ($target == 'review')
-        ? Review::find($review_id)
-        : Comment::find($comment_id);
 
     $commentable->updateScore();
     $commentable->save();

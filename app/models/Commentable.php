@@ -38,6 +38,6 @@ class Commentable extends Eloquent {
   // =======================
 
   public function comments() {
-    return $this->hasMany('Comment');
+    return $this->hasMany('Comment', $this->comment_key);
   }
 }

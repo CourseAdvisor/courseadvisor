@@ -1,11 +1,12 @@
 <?php
 class Review extends Commentable {
   protected $table = 'reviews';
+  protected $comment_key = 'review_id';
 
   protected $fillable = ['lectures_grade', 'exercises_grade', 'content_grade', 'difficulty', 'title', 'comment'];
 
   public function comments() {
-    return parent::comments()->whereNull('comment_id');
+    return parent::comments()->whereNull('parent_id');
   }
 
   public function student() {
