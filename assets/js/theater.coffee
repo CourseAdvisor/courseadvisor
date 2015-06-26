@@ -31,10 +31,12 @@ $ ->
       evt.preventDefault();
       $img.attr('src', $myImg.attr('src'))
       $backdrop.fadeIn()
-      #$('body').css('overflow', 'hidden');
+      $('body').addClass('modal-open')
+      #$('body').css('overflow', 'hidden')
 
   hide = ->
     $backdrop.fadeOut().queue (next) ->
       $img.hide()
       next()
-    $('body').css('overflow', 'visible');
+    $('body').css('overflow', 'visible')
+    $('body').removeClass('modal-open')
