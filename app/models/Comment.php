@@ -1,5 +1,8 @@
 <?php
 
+/*
+  A comment is always linked to a review. Top-level comment have NULL parent.
+*/
 class Comment extends Commentable {
   protected $table = 'comments';
   protected $comment_key = 'parent_id';

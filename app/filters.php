@@ -94,6 +94,10 @@ Route::filter('csrf', function()
 	}
 });
 
+Route::filter('locale', function() {
+	setlocale(LC_ALL, trans('global.locale_code'));
+});
+
 Route::filter('mixpanel_identity', function() {
 	$mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
 	if (!Session::has('mp_id')) {

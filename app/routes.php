@@ -110,6 +110,7 @@ Route::group(['before' => 'admin_check'], function() {
 
 
 Route::when('*', 'csrf', array('post', 'put', 'delete'));
+Route::when('*', 'locale', array('post', 'put', 'delete', 'get'));
 Route::when('*', 'mixpanel_identity', array('post', 'put', 'delete', 'get'));
 Route::when('*', 'ab_testing', array('post', 'put', 'delete', 'get'));
 

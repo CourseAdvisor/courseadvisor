@@ -28,7 +28,7 @@
         <div class="comment-header">
           <a href="{{{ $comment->student->pageURL }}}" target="_blank">{{{ $comment->student->fullname }}}</a>
           &ndash; <span data-vote-score="comment:{{{ $comment->id }}}">{{{ $comment->score }}}</span> points,
-          {{{ $comment->created_at }}}
+          {{{ strftime(trans('global.date-format'), $comment->created_at->getTimestamp()) }}}
           @if($comment->student->id == StudentInfo::getId())
             &ndash; <a href="#" data-comment-action="edit:comment:{{{ $comment->id }}}">{{{ trans('courses.comment-edit-action') }}}</a>
           @endif

@@ -6,6 +6,7 @@ return array(
   'logout-action' => 'Déconnexion',
   'cancel-action' => 'Annuler',
 
+  'date-format' => '%d %B %Y',
   'locale_code' => 'fr_FR',
 
   'browse-courses-action' => 'Parcourir les cours',
