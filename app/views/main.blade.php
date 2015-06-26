@@ -17,6 +17,7 @@
     {{ HTML::style("css/font-awesome.min.css") }}
   </head>
   <body>
+    <div id="main">
     <div class="navbar navbar-default navbar-static-top">
       <div class="container">
         <div class="navbar-header">
@@ -152,6 +153,9 @@
 
     @include('footer')
 
+    </div> <!-- main -->
+
+    @yield('dialogs')
 
     <div class="modal fade" id="base-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog">

@@ -66,7 +66,11 @@
       </div>
     </div>
   </section>
-<!-- Modal -->
+</div>
+@stop
+
+@section('dialogs')
+
 <div class="modal fade" id="reasonModal" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -94,7 +98,6 @@
     </div>
   </div>
 </div>
-<!-- End modal -->
-</div>
+
 
 @stop
