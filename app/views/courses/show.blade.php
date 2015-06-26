@@ -166,7 +166,7 @@
               ?>
               @if($i != 0) <hr> @endif
 
-              <div class="review">
+              <div class="review" id="review-{{{ $review->id }}}">
                 <div class="review-vote">
                   <div>
                     <a href="#" data-vote-btn="up:review:{{{ $review->id }}}"
