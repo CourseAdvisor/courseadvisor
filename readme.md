@@ -6,7 +6,8 @@ CourseAdvisor
 This section describes how to setup a development environment.
 
 ### Requirements
-- WAMP/LAMP
+- A web server running php
+- A php cli ( php5-cli on debian )
 - nodejs + npm
 - gulp (`npm install -g gulp`)
 
@@ -23,6 +24,28 @@ This section describes how to setup a development environment.
 `cp app/config/database.php app/config/production/database.php`
 Enter your database specific configuration in app/config/production/database.php
 
+### Troubleshooting
+
+#### During `npm install`
+If you get:
+```
+Mcrypt PHP extension required.
+Script php artisan clear-compiled handling the post-install-cmd event returned with an error
+```
+run:
+```
+sudo apt-get install php5-mcrypt
+sudo php5enmod mcrypt
+```
+
+If you get:
+```
+php: command not found
+```
+run:
+```
+sudo apt-get install php5-cli
+```
 
 ## Documentation
 
