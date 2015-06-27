@@ -60,7 +60,7 @@
       onclick="return confirm('{{{ trans('courses.comment-delete-confirm') }}}');"
       class="btn btn-link"
       type="submit">
-    <i class="fa fa-trash"></i>
+    <i class="fa fa-trash-o"></i>
   </button>
   @endif
 
