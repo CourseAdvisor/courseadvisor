@@ -67,8 +67,8 @@ Event::listen('comment.newComment', function($comment) {
   else
     $target = $review->student;
 
-  // Don't do anything if user posting the review is the same as the target
-  if ($target->id == $review->student_id) return;
+  // Don't do anything if user posting the comment is the same as the target
+  if ($target->id == $comment->student_id) return;
 
   $data = [
     'who' => $comment->student,
