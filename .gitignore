@@ -19,13 +19,12 @@ _ide_helper.php
 /vendor
 public/css/*
 public/js/vendor/*
-public/js/app.*
+public/js/app*
 public/img/*
 public/fonts/*
-deployment.sh
+rev-manifest.json
 
 
 github_pull.sh
 public/__github_update.php
 npm-debug.log
-

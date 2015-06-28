@@ -13,7 +13,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="icon" type="image/png" href="/favicon.png" />
 
-    {{ HTML::style("css/courseadvisor.css") }}
+    {{ HTML::style("css/".asset_path("courseadvisor.css")) }}
     {{ HTML::style("css/font-awesome.min.css") }}
   </head>
   <body>
@@ -195,7 +195,7 @@
     {{ HTML::script("https://code.jquery.com/jquery-1.10.2.min.js") }}
     {{ HTML::script("js/vendor/bootstrap.min.js") }}
     {{ HTML::script("js/starbar.js") }}
-    {{ HTML::script("js/app.js") }}
+    {{ HTML::script(asset_path("js/app.js")) }}
 
     <script>
       // Initialize starbars

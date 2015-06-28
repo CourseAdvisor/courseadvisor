@@ -13,6 +13,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var gutil = require('gulp-util');
 var browserify = require('browserify');
 var coffeeify = require('coffeeify');
+var rev = require('gulp-rev');
 
 
 /* meta tasks */
@@ -47,10 +48,16 @@ gulp.task('build:style', ['clean:style'], function() {
         new LessPluginAutoPrefix({ browsers: ["last 2 versions"] })
       ]
     }))
-    .pipe(gulp.dest('./public/css'));
+    .pipe(rev())
+    .pipe(gulp.dest('./public/css'))
+    .pipe(rev.manifest({
+      base: 'public',
+      merge: true
+    }))
+    .pipe(gulp.dest('assets'));
 });
 
-gulp.task('build:script', function () {
+gulp.task('build:script', ['clean:script'], function () {
   // set up the browserify instance on a task basis
   var b = browserify({
     entries: 'assets/js/app.js',
@@ -65,8 +72,14 @@ gulp.task('build:script', function () {
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(uglify())
     .on('error', gutil.log)
+    .pipe(rev())
     .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest('public/'));
+    .pipe(gulp.dest('public/'))
+    .pipe(rev.manifest({
+      base: 'public',
+      merge: true
+    }))
+    .pipe(gulp.dest('assets'));
 });
 
 /* 3rd party assets */
@@ -98,7 +111,7 @@ gulp.task('clean:images', function() {
 });
 
 gulp.task('clean:style', function() {
-  return gulp.src('public/css/courseadvisor.*', {read: false})
+  return gulp.src('public/css/courseadvisor*.css', {read: false})
       .pipe(clean());
 });
 
@@ -118,6 +131,11 @@ gulp.task('clean:thirdparty', function() {
       .on('finish', collector());
 
   return collector.promise;
+});
+
+gulp.task('clean:script', function() {
+  return gulp.src('public/js/app*.js*', {read: false})
+      .pipe(clean());
 });
 
 

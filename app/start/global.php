@@ -83,3 +83,6 @@ require app_path().'/filters.php';
 
 /* Events */
 require app_path().'/events.php';
+
+/* Utility functions */
+require app_path().'/helpers.php';
