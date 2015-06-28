@@ -97,7 +97,7 @@ Route::filter('csrf', function()
 
 
 Route::filter('locale', function() {
-	setlocale(LC_ALL, trans('global.locale_code'));
+  setlocale(LC_ALL, trans('global.locale_code'));
 });
 
 

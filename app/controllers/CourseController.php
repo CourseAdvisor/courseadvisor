@@ -256,7 +256,7 @@ class CourseController extends BaseController {
         $review->status = 'waiting';
         $msg = trans('courses.review-updated-anonymous-message');
     } else {
-    	$review->is_anonymous = 0;
+      $review->is_anonymous = 0;
     }
 
     $review->updateAverage();

@@ -11,15 +11,15 @@
 
 
 @if(count($student->courses) == 0)
-	(No courses)
+  (No courses)
 @else
 <ul>
 @foreach($student->courses as $course)
-	<li>
-		<a href="{{{ action('CourseController@show', ['id' => $course->id, 'slug' => Str::slug($course->name)]) }}}">
-		{{{ $course->name }}}
-		</a>
-	</li>
+  <li>
+    <a href="{{{ action('CourseController@show', ['id' => $course->id, 'slug' => Str::slug($course->name)]) }}}">
+    {{{ $course->name }}}
+    </a>
+  </li>
 @endforeach
 </ul>
 @endif

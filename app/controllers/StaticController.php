@@ -1,9 +1,9 @@
 <?php
 class StaticController extends BaseController {
-	public function about() {
+  public function about() {
     $this->addCrumb('StaticController@about', trans('about.breadcrumb'));
-		return View::make('about');
-	}
+    return View::make('about');
+  }
 
   public function homepage()
   {

@@ -9,13 +9,13 @@
   <section class="row">
     <div class="col-xs-12">
       <div class="page">
-		<h1>{{{ trans('about.heading') }}}</h1>
+    <h1>{{{ trans('about.heading') }}}</h1>
 
-		{{ trans('about.authors') }}
+    {{ trans('about.authors') }}
 
-		<h2>{{{ trans('about.policy-heading') }}}</h2>
+    <h2>{{{ trans('about.policy-heading') }}}</h2>
 
-		{{ trans('about.policy') }}
+    {{ trans('about.policy') }}
       </div>
     </div>
   </section>

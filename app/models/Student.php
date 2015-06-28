@@ -1,37 +1,37 @@
 <?php
 class Student extends Eloquent {
 
-	protected $table = 'students';
+  protected $table = 'students';
 
-	protected $fillable = array(
-		'firstname', 'lastname', 'email', 'semester', 'section_id', 'sciper'
-	);
+  protected $fillable = array(
+    'firstname', 'lastname', 'email', 'semester', 'section_id', 'sciper'
+  );
 
 
   // Relations
 
-	public function section() {
-		return $this->belongsTo('Section');
-	}
+  public function section() {
+    return $this->belongsTo('Section');
+  }
 
-	public function reviews() {
-		return $this->hasMany('Review');
-	}
+  public function reviews() {
+    return $this->hasMany('Review');
+  }
 
   public function inscriptions() {
     return $this->hasMany('Inscription', 'sciper', 'sciper');
   }
 
-	public function studyPlans() {
-		return $this->belongsToMany('StudyPlan');
-	}
+  public function studyPlans() {
+    return $this->belongsToMany('StudyPlan');
+  }
 
 
   // Attributes
 
-	public function getFullnameAttribute() {
-		return $this->firstname . " " . $this->lastname;
-	}
+  public function getFullnameAttribute() {
+    return $this->firstname . " " . $this->lastname;
+  }
 
   public function getPageURLAttribute() {
     return "http://people.epfl.ch/".$this->sciper;
