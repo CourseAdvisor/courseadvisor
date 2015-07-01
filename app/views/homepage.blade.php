@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="icon" type="image/png" href="/favicon.png" />
 
-    {{ HTML::style("css/courseadvisor.css") }}
+    {{ HTML::style("css/".asset_path("courseadvisor.css")) }}
     {{ HTML::style("css/font-awesome.min.css") }}
   </head>
   <body>
