@@ -92,7 +92,7 @@ return array(
   'comment-delete-unauthorized' => 'You are not allowed to delete this comment.',
   'comment-deleted-confirm' => 'Your comment has been successfuly deleted.',
 
-  'teacher-more-info' => 'More about :teacher',
+  'teacher-more-info' => 'More about Prof. :teacher',
   'teacher-courses-heading' => ':teacher teaches the following courses',
 
   'login-required-heading' => 'Login required',

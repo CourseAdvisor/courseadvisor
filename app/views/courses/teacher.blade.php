@@ -10,7 +10,7 @@
         <p>
             <a href="{{{ $teacher->peoplePageLink }}}" target="_blank"><i class="fa fa-external-link"></i>
                 {{{ trans('courses.teacher-more-info', [
-                  'teacher' => $teacher->firstname ]) }}}
+                  'teacher' => $teacher->lastname ]) }}}
             </a>
         </p>
 

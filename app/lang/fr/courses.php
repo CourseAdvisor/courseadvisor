@@ -93,7 +93,7 @@ return array(
   'comment-delete-unauthorized' => 'Tu n\'as pas le droit de supprimer ce commentaire. Petit fourbe !',
   'comment-deleted-confirm' => 'Ton commentaire a bien été supprimé.',
 
-  'teacher-more-info' => 'En savoir plus sur :teacher',
+  'teacher-more-info' => 'En savoir plus sur Prof. :teacher',
   'teacher-courses-heading' => ':teacher enseigne les cours suivants',
 
   'login-required-heading' => 'Connexion requise',
