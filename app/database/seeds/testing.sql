@@ -1,3 +1,5 @@
+USE `courseadvisor`;
+
 CREATE TABLE IF NOT EXISTS `comments` (
 `id` int(11) NOT NULL,
   `review_id` int(11) NOT NULL,
