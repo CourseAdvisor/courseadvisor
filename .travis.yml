@@ -5,6 +5,9 @@ php:
 addons:
   hosts:
     - local.courseadvisor.ch
+before_install:
+  - mysql -e "create database IF NOT EXISTS courseadvisor;" -uroot
+  - cat ./app/database/testing.sql | mysql -uroot
 install:
   - npm install
   - npm install -g casperjs

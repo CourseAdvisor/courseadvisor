@@ -56,6 +56,9 @@ Documentation for the entire framework can be found on the [Laravel website](htt
 **All issues and pull requests should be filed on the [laravel/framework](http://github.com/laravel/framework) repository.**
 The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
+### Testing
+Testing is done with casperjs. Install phantomjs v1.8.x (not 2.x !!!), install casperjs and make sure both are available in the path.
+To run the tests, run `npm test` while the webserver is running.
 
 ### Gulp tasks
 All front-end related files go into assets/. This file **is not served over http**. Instead, gulp tasks take care to compile/minify/bake/whatever your files and put them in the public/ folder.

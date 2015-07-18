@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "preinstall": "composer install || php composer.phar install || (echo You must install composer to download php dependencies && exit 1)",
-    "postinstall": "cd assets && node ../node_modules/bower/bin/bower install && echo 'well done, everything is set up! Consider `npm install -g gulp` if you want to develop for the front-end'"
+    "postinstall": "cd assets && node ../node_modules/bower/bin/bower install && echo 'well done, everything is set up! Consider `npm install -g gulp` if you want to develop for the front-end'",
+    "test": "sh -c 'casperjs test tests/test-*' "
   },
   "repository": {
     "type": "git",
