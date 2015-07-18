@@ -1,6 +1,8 @@
 CourseAdvisor
 =============
 
+[![Build Status](https://travis-ci.org/CourseAdvisor/courseadvisor.svg)](https://travis-ci.org/CourseAdvisor/courseadvisor)
+
 ## Setup
 
 This section describes how to setup a development environment.

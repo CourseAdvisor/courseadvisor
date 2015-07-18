@@ -1,0 +1,15 @@
+language: php
+sudo: required
+php:
+  - 5.5
+addons:
+  hosts:
+    - local.courseadvisor.ch
+install:
+  - npm install
+  - npm install -g casperjs
+before_script:
+  - gulp publish
+  - php artisan serve --port=8080 --host=local.courseadvisor.ch &
+script:
+  - casperjs test tests/travis-config.coffee tests/test-*
