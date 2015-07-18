@@ -5,7 +5,6 @@ var clean = require('gulp-clean');
 var less = require('gulp-less');
 var LessPluginCleanCSS = require('less-plugin-clean-css');
 var LessPluginAutoPrefix = require('less-plugin-autoprefix');
-var imagemin = require('gulp-imagemin');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
@@ -19,26 +18,17 @@ var rev = require('gulp-rev');
 /* meta tasks */
 
 gulp.task('default', ['watch']);
-gulp.task('publish', ['build:style', 'build:script', 'publish:thirdparty', 'publish:images']);
-gulp.task('clean', ['clean:style', 'clean:thirdparty', 'clean:images']);
+gulp.task('publish', ['build:style', 'build:script', 'publish:thirdparty']);
+gulp.task('clean', ['clean:style', 'clean:thirdparty']);
 
 
 gulp.task('watch', function() {
-  gulp.watch('./assets/img/**/*', ['publish:images']);
   gulp.watch('./assets/js/**/*', ['build:script']);
   return gulp.watch('./assets/style/*.less', ['build:style']);  // Watch all the .less files, then run the less task
 });
 
 
 /* source related tasks */
-
-gulp.task('publish:images', ['clean:images'], function() {
-  return gulp.src('assets/img/**/*')
-    .pipe(imagemin({
-      progressive: true
-    }))
-    .pipe(gulp.dest('./public/img'));
-});
 
 gulp.task('build:style', ['clean:style'], function() {
   return gulp.src('assets/style/courseadvisor.less')
@@ -104,11 +94,6 @@ gulp.task('publish:thirdparty', ['clean:thirdparty'], function() {
 
 
 /* cleaning */
-
-gulp.task('clean:images', function() {
-  return gulp.src('public/img/**/*')
-    .pipe(clean());
-});
 
 gulp.task('clean:style', function() {
   return gulp.src('public/css/courseadvisor*.css', {read: false})
