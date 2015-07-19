@@ -58,7 +58,8 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ### Testing
 Testing is done with casperjs. Install phantomjs v1.8.x (not 2.x !!!), install casperjs and make sure both are available in the path.
-To run the tests, run `npm test` while the webserver is running.
+To run the tests, run `./test.sh` while the webserver is running.
+For a list of available test options, run `./test.sh --help`.
 
 ### Gulp tasks
 All front-end related files go into assets/. This file **is not served over http**. Instead, gulp tasks take care to compile/minify/bake/whatever your files and put them in the public/ folder.

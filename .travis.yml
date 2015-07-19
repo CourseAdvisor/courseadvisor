@@ -15,4 +15,4 @@ before_script:
   - gulp publish
   - php artisan serve --port=8080 --host=local.courseadvisor.ch >/dev/null 2>&1 &
 script:
-  - casperjs test tests/travis-config.coffee tests/test-*
+  - ./test.sh -c travis
