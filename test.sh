@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Everything happens in the test folder
+# Everything happens in the tests folder
 cd tests
 
 usage() {
@@ -15,8 +15,8 @@ EOF
 }
 
 do_test() {
-  rm screenshots/*.png
-  casperjs test config-default.* "$1" test-*
+  rm screenshots/*.png 2>/dev/null
+  casperjs test config-default.* $1 test-*
 }
 
 # cross platform open
