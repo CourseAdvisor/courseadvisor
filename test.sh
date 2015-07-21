@@ -1,22 +1,42 @@
 #!/bin/sh
 
-# Everything happens in the tests folder
-cd tests
+server_port="80"
+open_screenshots=0
 
 usage() {
   cat 1>&2 << EOF
 Usage: test.sh [options]
 
 options:
-  -c, --config name : Runs test with the provided config (as in tests/config-name.*)
+  -p, --port number : Connects to this server port (default 80)
   -h, --help        : Shows this help message
   -s, --screenshots : Opens the screenshot page after tests ran
 EOF
 }
 
-do_test() {
+do_integration_test() {
+  cd tests
   rm screenshots/*.png 2>/dev/null
-  casperjs test config-default.* $1 test-*
+  cd integration
+  casperjs test config-default.* ../../tmp/casper-config.coffee test-*
+}
+
+do_test() {
+  curdir=`pwd`
+
+  cat > tmp/casper-config.coffee << __EOF
+    casper.options.port = $server_port
+    casper.test.done()
+__EOF
+
+  do_integration_test
+
+  cd "$curdir"
+
+  if [ "$?" -ne 0 ]; then
+    echo "Integration test failed" 1>&2
+    exit 1
+  fi
 }
 
 # cross platform open
@@ -30,20 +50,34 @@ x_open() {
   fi
 }
 
-if [ ! -z "$1" ]; then
+# ensures tmp dir
+if [ ! -d tmp ]; then
+  mkdir tmp
+fi
+
+while [ $# -ne 0 ]; do
   case "$1" in
     --help|-h)
       usage
+      exit 0
     ;;
-    --config|-c)
-      do_test config-$2.*
+    --port|-p)
+      shift
+      server_port="$1"
     ;;
     --screenshots|-s)
-      do_test
-      x_open screenshots/index.html
+      open_screenshots=1
     ;;
-    *) echo "Unknown parameter: $1" ;;
+    *)
+      echo "Unknown parameter: $1"
+      exit 1
+    ;;
   esac
-else
-  do_test
+  shift
+done
+
+do_test
+if [ "$open_screenshots" -eq 1 ]; then
+  x_open tests/screenshots/index.html
 fi
+
