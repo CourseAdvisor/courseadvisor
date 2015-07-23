@@ -28,17 +28,17 @@ do_api_test() {
 }
 
 _do_test() {
+  curdir=`pwd`
   echo "Running $1 tests"
   "do_$1_test"
   if [ "$?" -ne 0 ]; then
     echo "$1 test failed" 1>&2
     exit 1
   fi
+  cd "$curdir" # restore working directory
 }
 
 do_test() {
-  curdir=`pwd`
-
   cat > tmp/tests-config.coffee << __EOF
     module.exports =
       port: $server_port
