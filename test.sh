@@ -45,8 +45,8 @@ do_test() {
 __EOF
 
   if [ "$run_test" = "all" ]; then
-    _do_test api
     _do_test integration
+    _do_test api
   else
     _do_test "$run_test"
   fi
