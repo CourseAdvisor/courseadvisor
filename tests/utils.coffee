@@ -1,4 +1,4 @@
-port = casper.options.port || 80
+{port} = require "../tmp/tests-config.coffee"
 
 config = module.exports =
   BASE_URL: 'http://local.courseadvisor.ch:'+(port || 80),

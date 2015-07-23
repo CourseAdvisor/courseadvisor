@@ -2,6 +2,7 @@
 
 server_port="80"
 open_screenshots=0
+run_test=all
 
 usage() {
   cat 1>&2 << EOF
@@ -11,6 +12,7 @@ options:
   -p, --port number : Connects to this server port (default 80)
   -h, --help        : Shows this help message
   -s, --screenshots : Opens the screenshot page after tests ran
+  -t, --test name   : Specify which test to run (api or integration), default: all
 EOF
 }
 
@@ -18,24 +20,35 @@ do_integration_test() {
   cd tests
   rm screenshots/*.png 2>/dev/null
   cd integration
-  casperjs test config-default.* ../../tmp/casper-config.coffee test-*
+  casperjs test config-default.coffee test-*
+}
+
+do_api_test() {
+  jasmine-node --coffee tests/api
+}
+
+_do_test() {
+  echo "Running $1 tests"
+  "do_$1_test"
+  if [ "$?" -ne 0 ]; then
+    echo "$1 test failed" 1>&2
+    exit 1
+  fi
 }
 
 do_test() {
   curdir=`pwd`
 
-  cat > tmp/casper-config.coffee << __EOF
-    casper.options.port = $server_port
-    casper.test.done()
+  cat > tmp/tests-config.coffee << __EOF
+    module.exports =
+      port: $server_port
 __EOF
 
-  do_integration_test
-
-  cd "$curdir"
-
-  if [ "$?" -ne 0 ]; then
-    echo "Integration test failed" 1>&2
-    exit 1
+  if [ "$run_test" = "all" ]; then
+    _do_test integration
+    _do_test api
+  else
+    _do_test "$run_test"
   fi
 }
 
@@ -68,6 +81,10 @@ while [ $# -ne 0 ]; do
     --screenshots|-s)
       open_screenshots=1
     ;;
+    --test|-t)
+      shift
+      run_test="$1"
+    ;;
     *)
       echo "Unknown parameter: $1"
       exit 1
@@ -80,4 +97,3 @@ do_test
 if [ "$open_screenshots" -eq 1 ]; then
   x_open tests/screenshots/index.html
 fi
-
