@@ -1,9 +1,8 @@
 ###
-  api-example_spec.coffee
+  global_api_spec.coffee
 
-  This file demonstrate how to test the APIs using frisby and jasmine. It should
-  be refactored in the near future when we find a proper way to organize tests
-  in this folder.
+  This spec defines global API behaviors. Detailed specs are available in their
+  respective spec files.
 ###
 
 # Basic requirements
@@ -20,5 +19,5 @@ frisby.create("Test auth probe unauthorized AJAX")
 # A call to the auth probe route should result in a redirect to tequila
 frisby.create("Test auth probe unauthorized")
   .get( url("/api/is_auth"), followRedirect: false )
-  .expectStatus(301)
+  .expectStatus(302)
 .toss();
