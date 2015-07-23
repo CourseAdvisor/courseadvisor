@@ -13,6 +13,7 @@ frisby = require "frisby"
 frisby.create("Test auth probe unauthorized AJAX")
   .addHeaders "X-Requested-With": "XMLHttpRequest"
   .get( url("/api/is_auth") )
+  .inspectBody()
   .expectStatus(401)
 .toss();
 
