@@ -44,10 +44,3 @@ casper.test.begin "Browse courses (fr)", 4, (test) ->
     test.assertExists("#course_list>a", "Shows at least one course")
   .run ->
     test.done()
-
-casper.test.begin "Test api endpoint", 1, (test) ->
-  casper.start url("/api/is_auth"), ->
-    console.log(this.getPageContent())
-    test.assertHttpStatus(200)
-  .run ->
-    test.done()
