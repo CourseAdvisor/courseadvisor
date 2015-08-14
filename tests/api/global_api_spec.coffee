@@ -9,6 +9,11 @@
 frisby = require "frisby"
 {url} = require("../utils")
 
+frisby.globalSetup (
+  request:
+    timeout: 30*1000
+)
+
 # An ajax call to the auth probe route should result in an unauthorized response
 frisby.create("Test auth probe unauthorized AJAX")
   .addHeaders "X-Requested-With": "XMLHttpRequest"
