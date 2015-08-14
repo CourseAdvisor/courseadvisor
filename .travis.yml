@@ -15,4 +15,4 @@ before_script:
   - gulp publish
   - php artisan serve --port=8080 --host=local.courseadvisor.ch >/dev/null 2>&1 &
 script:
-  - ./test.sh -p 8080
+  - ./test.sh -p 8080 -t api
