@@ -16,7 +16,11 @@ frisby.globalSetup (
     timeout: 30000
 )
 
-
+# Debug test
+frisby.create("Test root")
+  .get( url("/") )
+  .expectStatus(200)
+.toss();
 
 # An ajax call to the auth probe route should result in an unauthorized response
 frisby.create("Test auth probe unauthorized AJAX")
