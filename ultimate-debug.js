@@ -2,7 +2,7 @@ var http = require('http');
 
 var options = {
   hostname: 'local.courseadvisor.ch',
-  port: 9000,
+  port: 8080,
   path: '/',
   method: 'GET',
 };
