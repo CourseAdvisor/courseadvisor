@@ -16,3 +16,4 @@ before_script:
   - php artisan serve --port=8080 --host=local.courseadvisor.ch >/dev/null 2>&1 &
 script:
   - ./test.sh -p 8080
+  - node ultimate-debug.js
