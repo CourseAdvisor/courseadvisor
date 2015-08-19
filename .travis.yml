@@ -16,8 +16,4 @@ before_script:
   - php artisan serve --port=8080 --host 0.0.0.0 &
   - sleep 3
 script:
-  - node ultimate-debug.js
-  - curl http://localhost:8080/
-  - curl -g http://[::1]:8080/
-  - curl http://127.0.0.1:8080/
   - ./test.sh -p 8080
