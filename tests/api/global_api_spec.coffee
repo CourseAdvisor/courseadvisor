@@ -17,8 +17,8 @@ frisby.globalSetup (
 )
 
 # Debug test
-frisby.create("Test root")
-  .get( url("/") )
+frisby.create("Test anything")
+  .get( "http://www.google.fr/" )
   .expectStatus(200)
 .toss();
 

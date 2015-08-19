@@ -1,8 +1,8 @@
 var http = require('http');
 
 var options = {
-  hostname: 'local.courseadvisor.ch',
-  port: 8080,
+  hostname: 'www.google.fr',
+  port: 80,
   path: '/',
   method: 'GET',
 };
