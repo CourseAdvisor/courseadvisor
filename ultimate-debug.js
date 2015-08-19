@@ -1,8 +1,8 @@
 var http = require('http');
 
 var options = {
-  hostname: 'www.google.fr',
-  port: 80,
+  hostname: '127.0.0.1',
+  port: 8080,
   path: '/',
   method: 'GET',
 };
