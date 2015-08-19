@@ -13,7 +13,7 @@ install:
   - npm install -g casperjs jasmine-node
 before_script:
   - gulp publish
-  - php artisan serve --port=8080 >/dev/null 2>&1 &
+  - php artisan serve --port=8080 --host 0.0.0.0 >/dev/null 2>&1 &
 script:
   - node ultimate-debug.js
   - wget http://local.courseadvisor.ch:8080/
