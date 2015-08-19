@@ -69,7 +69,7 @@ class Tequila {
 
 		// check if response is false or does not contain key
 		if(!$response || strpos($response, 'key=') != 0) {
-			return App::abort(400, "Unable to contact tequila server");
+			return App::abort(500, "Unable to contact tequila server");
 		}
 
 		$this->setKey(explode('=', $response)[1]);
