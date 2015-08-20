@@ -11,10 +11,9 @@ before_install:
 install:
   - npm install
   - npm install -g casperjs jasmine-node
-  - ./tests.sh --setup-margarita
 before_script:
   - gulp publish
   - php artisan serve --port=8080 --host 0.0.0.0 &
-  - sleep 3
+  - ./tests.sh --setup-margarita
 script:
   - ./test.sh -m -p 8080
