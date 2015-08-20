@@ -68,7 +68,7 @@
                 </i>
                 <i class="fa fa-caret-down"></i>
               </a>
-              <ul class="dropdown-menu fa-ul" role="menu">
+              <ul id="logged-in-menu" class="dropdown-menu fa-ul" role="menu">
                 @if (StudentInfo::isAdmin())
                 <li><a href="{{{ action('AdminController@index') }}}">
                   <i class="fa fa-lock"></i> Admin</a>
@@ -84,7 +84,7 @@
             </li>
             @else
             <li>
-              <a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}">
+              <a id="header-login" href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}">
                 {{{ trans('global.login-action') }}}
               </a>
             </li>
