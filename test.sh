@@ -32,7 +32,7 @@ do_api_test() {
 }
 
 setup_margarita() {
-  git clone git@github.com:CourseAdvisor/margarita.git
+  git clone https://github.com/CourseAdvisor/margarita.git
   cp tests/profiles.json margarita/
   cd margarita
   npm install
