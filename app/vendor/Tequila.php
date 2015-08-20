@@ -68,8 +68,11 @@ class Tequila {
 		$response = $this->askTequila('createrequest', $params);
 
 		// check if response is false or does not contain key
-		if(!$response || strpos($response, 'key=') != 0) {
+		if(!$response) {
 			return App::abort(500, "Unable to contact tequila server");
+		}
+		if (strpos($response, 'key=') != 0) {
+			return App::abort(500, "Invalid response from tequila");
 		}
 
 		$this->setKey(explode('=', $response)[1]);
@@ -187,6 +190,9 @@ class Tequila {
  	      	$query = implode("\n", $pFields) . "\n";
  	      	curl_setopt ($ch, CURLOPT_POSTFIELDS, $query);
  	    }
+	    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+	    	'Content-Type: text/plain'
+	    ));
 
  	    $response = curl_exec ($ch);
 
