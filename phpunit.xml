@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!-- CourseAdvisor does not do php unit testing. This file stays here for reference-->
+
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
          bootstrap="bootstrap/autoload.php"

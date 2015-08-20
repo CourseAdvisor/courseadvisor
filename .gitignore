@@ -3,6 +3,7 @@ composer.phar
 .env.php
 .DS_Store
 Thumbs.db
+tmp
 
 app/config/production/*
 *.bak

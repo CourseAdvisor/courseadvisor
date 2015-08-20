@@ -4,7 +4,7 @@
   "description": "A TripAdvisor for courses",
   "main": "index.js",
   "scripts": {
-    "preinstall": "php composer.phar install || (echo You must install composer to download php dependencies && exit 1)",
+    "preinstall": "composer install || php composer.phar install || (echo You must install composer to download php dependencies && exit 1)",
     "postinstall": "cd assets && node ../node_modules/bower/bin/bower install && echo 'well done, everything is set up! Consider `npm install -g gulp` if you want to develop for the front-end'"
   },
   "repository": {
@@ -21,9 +21,9 @@
     "bower": "^1.3.2",
     "browserify": "~10.2.3",
     "coffeeify": "~1.1.0",
+    "frisby": "^0.8.5",
     "gulp": "^3.8.11",
     "gulp-clean": "^0.3.1",
-    "gulp-imagemin": "~2.2.1",
     "gulp-less": "^3.0.1",
     "gulp-rev": "^5.0.1",
     "gulp-sourcemaps": "~1.5.2",
