@@ -3,6 +3,7 @@
 server_port="80"
 open_screenshots=0
 run_test=all
+margarita_pid=0
 
 usage() {
   cat 1>&2 << EOF
@@ -13,6 +14,9 @@ options:
   -h, --help        : Shows this help message
   -s, --screenshots : Opens the screenshot page after tests ran
   -t, --test name   : Specify which test to run (api or integration), default: all
+  -m, --start-margarita: Starts the margarita server. See --setup-margarita
+
+  --setup-margarita : Downloads the margarita server, installs the profile and dependencies and exits
 EOF
 }
 
@@ -27,12 +31,35 @@ do_api_test() {
   jasmine-node --coffee tests/api
 }
 
+setup_margarita() {
+  git clone https://github.com/CourseAdvisor/margarita.git
+  cp tests/profiles.json margarita/
+  cd margarita
+  npm install
+}
+
+start_margarita() {
+  cd margarita
+  node bin/www &
+  margarita_pid=$!
+  echo "margarita process started with pid $margarita_pid"
+  sleep 2
+  cd ..
+}
+
+cleanup() {
+  if [ ! $margarita_pid -eq "0" ]; then
+    kill $margarita_pid
+  fi
+}
+
 _do_test() {
   curdir=`pwd`
   echo "Running $1 tests"
   "do_$1_test"
   if [ "$?" -ne 0 ]; then
     echo "$1 test failed" 1>&2
+    cleanup
     exit 1
   fi
   cd "$curdir" # restore working directory
@@ -85,8 +112,16 @@ while [ $# -ne 0 ]; do
       shift
       run_test="$1"
     ;;
+    --setup-margarita)
+      setup_margarita
+      exit $?
+    ;;
+    --start_margarita|-m)
+      start_margarita
+    ;;
     *)
       echo "Unknown parameter: $1"
+      cleanup
       exit 1
     ;;
   esac
@@ -97,3 +132,5 @@ do_test
 if [ "$open_screenshots" -eq 1 ]; then
   x_open tests/screenshots/index.html
 fi
+
+cleanup

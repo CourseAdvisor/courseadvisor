@@ -14,6 +14,6 @@ install:
 before_script:
   - gulp publish
   - php artisan serve --port=8080 --host 0.0.0.0 &
-  - sleep 3
+  - ./test.sh --setup-margarita
 script:
-  - ./test.sh -p 8080
+  - ./test.sh -m -p 8080

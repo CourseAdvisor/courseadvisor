@@ -3,6 +3,9 @@ casper.options.viewportSize =
   height: 1024
 
 casper.on "resource.received", (request) ->
-  casper.test.fail "Resource Not Found: #{request.url}" if request.status == 404
+  casper.test.fail "Resource Not Found: #{request.url}" if (request.status == 404)
+
+casper.on "run.complete", (request) ->
+  phantom.clearCookies()
 
 casper.test.done()

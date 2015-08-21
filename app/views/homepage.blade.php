@@ -65,7 +65,9 @@
             {{{ trans('homepage.login-invitation') }}}
           </p>
           <div class="hero-browse">
-            <a href="{{{ action('AuthController@login') }}}" class="btn btn-lg btn-primary"><i class="fa fa-eye"></i> {{{ trans("global.login-action") }}}</a>
+            <a id="header-login" href="{{{ action('AuthController@login') }}}" class="btn btn-lg btn-primary">
+              <i class="fa fa-eye"></i> {{{ trans("global.login-action") }}}
+            </a>
           </div>
         </div>
       </div>
@@ -79,4 +81,3 @@
   </body>
 
 </html>
-
