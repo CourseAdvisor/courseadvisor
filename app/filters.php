@@ -112,11 +112,16 @@ Route::filter('mixpanel_identity', function() {
   $mp->identify(Session::get('mp_id'));
 
   if (Tequila::isLoggedIn()) {
-    $mp->people->set(StudentInfo::getSciper(), [
-      'name' => StudentInfo::getFullName(),
-      'section' => StudentInfo::getFullSection(),
-      'sciper' => StudentInfo::getSciper()
-    ]);
+    try {
+      $mp->people->set(StudentInfo::getSciper(), [
+        'name' => StudentInfo::getFullName(),
+        'section' => StudentInfo::getFullSection(),
+        'sciper' => StudentInfo::getSciper()
+      ]);
+    } catch (Exception $e) {
+      // Fixes a bug which leads to an invalid state when there is an error on login
+      Tequila::logout();
+    }
   }
 });
 
