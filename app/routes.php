@@ -53,28 +53,12 @@ Route::group([
   /* Routes forcing login */
   Route::group(array('before' => 'auth'), function() {
     Route::get('/dashboard', 'StudentController@dashboard');
-    Route::post('/course/{slug}-{id}/createReview', 'CourseController@createReview');
-    Route::post('/course/{slug}-{id}/updateReview', 'CourseController@updateReview');
-    Route::get('/course/{slug}-{courseId}/deleteReview/{reviewId}', 'CourseController@deleteReview');
-
   });
-
 });
 
-
-/* Admin stuff */
-Route::group(['before' => 'admin'], function() {
-  Route::get('/admin', 'AdminController@index');
-  Route::get('/admin/moderate', 'AdminController@moderate');
-  Route::post('/admin/moderate', 'AdminController@doModerate');
-  Route::get('/admin/students', 'AdminController@listStudents');
-  Route::get('/admin/reviews', 'AdminController@listReviews');
-});
 
 // === actions API ===
 // Routes for posting / editing / deleting stuff.
-// Looks like they don't need to be localized.
-
 Route::group([
   'prefix' => 'api'
 ], function() {
@@ -88,6 +72,11 @@ Route::group([
   Route::group(['before' => 'auth'], function() {
 
     // --- Regular API ---
+
+    // reviews
+    Rotue::post('/review', 'ReviewController@createReview');
+    Route::post('/review/edit', 'ReviewController@updateReview');
+    Route::post('/review/delete', 'ReviewController@deleteReview');
 
     // comments
     Route::post('/comment', 'ReviewController@createComment');
@@ -105,15 +94,14 @@ Route::group([
 });
 
 
-// === Admin ===
-Route::group(['before' => 'admin_check'], function() {
+// === Admin stuff ===
+Route::group(['before' => 'admin'], function() {
   Route::get('/admin', 'AdminController@index');
   Route::get('/admin/moderate', 'AdminController@moderate');
   Route::post('/admin/moderate', 'AdminController@doModerate');
   Route::get('/admin/students', 'AdminController@listStudents');
   Route::get('/admin/reviews', 'AdminController@listReviews');
 });
-
 
 Route::when('*', 'csrf', array('post', 'put', 'delete'));
 Route::when('*', 'locale', array('post', 'put', 'delete', 'get'));

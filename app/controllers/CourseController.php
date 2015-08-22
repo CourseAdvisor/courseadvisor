@@ -16,36 +16,36 @@ class CourseController extends BaseController {
     return Redirect::action('CourseController@studyPlanCourses', ['plan_slug' => $plan->slug, 'cycle' => $plan->studyCycle->name]);
   }
 
-    public function studyPlanCourses($cycle, $plan_slug) {
-        $coursesPerPage = Config::get('app.nbCoursesPerPage');
+  public function studyPlanCourses($cycle, $plan_slug) {
+    $coursesPerPage = Config::get('app.nbCoursesPerPage');
 
-        $plan = StudyPlan::with('studyCycle')
-            ->whereHas('studyCycle', function($q) use($cycle)
-            {
-                $q->where('name_en', $cycle)->orWhere('name_fr', $cycle);
-            })
-            ->where('slug', $plan_slug)
-            ->firstOrFail();
+    $plan = StudyPlan::with('studyCycle')
+      ->whereHas('studyCycle', function($q) use($cycle) {
+        $q->where('name_en', $cycle)->orWhere('name_fr', $cycle);
+      })
+      ->where('slug', $plan_slug)
+      ->firstOrFail();
 
-        $this->addCrumb('CourseController@studyPlans', ucfirst($plan->studyCycle->name), ['cycle' => $plan->studyCycle->name]);
-        $this->addCrumb('CourseController@studyPlanCourses', ucfirst($plan->name), [
-            'cycle' => $cycle,
-            'plan_slug' => $plan_slug]);
+    $this->addCrumb('CourseController@studyPlans', ucfirst($plan->studyCycle->name), ['cycle' => $plan->studyCycle->name]);
+    $this->addCrumb('CourseController@studyPlanCourses', ucfirst($plan->name), [
+      'cycle' => $cycle,
+      'plan_slug' => $plan_slug
+    ]);
 
-        return View::make('courses.planCourses', [
-            'page_title' => $cycle.' &ndash; '.$plan->name,
-            'plan' => $plan,
-            'cycle' => $cycle,
-            'courses' => $plan->courses()
-                ->with('teacher', 'plans')
-                ->withPivot('semester')
-                ->orderBy('pivot_semester')
-                ->get()
-                ->groupBy(function($course) {
-                    return $course->nice_semester;
-            })
-        ]);
-    }
+    return View::make('courses.planCourses', [
+      'page_title' => $cycle.' &ndash; '.$plan->name,
+      'plan' => $plan,
+      'cycle' => $cycle,
+      'courses' => $plan->courses()
+        ->with('teacher', 'plans')
+        ->withPivot('semester')
+        ->orderBy('pivot_semester')
+        ->get()
+        ->groupBy(function($course) {
+          return $course->nice_semester;
+        })
+    ]);
+  }
 
   public function studyPlans($cycle_name) {
     $cycle = StudyCycle::where('name_fr', $cycle_name)->orWhere('name_en', $cycle_name)->firstOrFail();
