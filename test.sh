@@ -4,6 +4,7 @@ server_port="80"
 open_screenshots=0
 run_test=all
 margarita_pid=0
+file=0
 
 usage() {
   cat 1>&2 << EOF
@@ -15,7 +16,8 @@ options:
   -s, --screenshots : Opens the screenshot page after tests ran
   -t, --test name   : Specify which test to run (api or integration), default: all
   -m, --start-margarita: Starts the margarita server. See --setup-margarita
-
+  -f, --file name   : Runs this test file only (use with -t, works only with integration tests).
+                      Loaded file is "integration/test-{name}.coffee"
   --setup-margarita : Downloads the margarita server, installs the profile and dependencies and exits
 EOF
 }
@@ -24,7 +26,11 @@ do_integration_test() {
   cd tests
   rm screenshots/*.png 2>/dev/null
   cd integration
-  casperjs test config-default.coffee test-*
+  others="test-*"
+  if [ $file != 0 ]; then
+    others="test-$file.coffee"
+  fi
+  casperjs test config-default.coffee $others
 }
 
 do_api_test() {
@@ -118,6 +124,10 @@ while [ $# -ne 0 ]; do
     ;;
     --start_margarita|-m)
       start_margarita
+    ;;
+    --file|-f)
+      shift
+      file="$1"
     ;;
     *)
       echo "Unknown parameter: $1"

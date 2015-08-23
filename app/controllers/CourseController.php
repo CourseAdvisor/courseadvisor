@@ -237,7 +237,7 @@ class CourseController extends BaseController {
     // Check input data
     $validator = Review::getValidator(Input::all());
     if ($validator->fails()) {
-      return Redirect::to(URL::previous() . "#!edit-" . $review->id)
+      return Redirect::to(action('CourseController@show', [$slug, $courseId]) . "#!xedit-" . $review->id)
           ->withInput()
           ->withErrors($validator);
     }

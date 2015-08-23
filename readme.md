@@ -58,8 +58,12 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ### Testing
 Testing is done with casperjs. Install phantomjs v1.8.x (not 2.x !!!), install casperjs and make sure both are available in the path.
-To run the tests, run `./test.sh` while the webserver is running.
-For a list of available test options, run `./test.sh --help`.
+
+To tests authenticated features, we are using [margarita](https://github.com/CourseAdvisor/margarita). Run ./test.sh --setup-margarita
+to install a local copy of margarita, then in app/config/production/tequila.php, add `'server_url' => 'http://localhost:3000/'`
+
+You can then run the tests with `./test.sh -m -s`.
+For a full list of available test options, run `./test.sh --help`.
 
 ### Gulp tasks
 All front-end related files go into assets/. This file **is not served over http**. Instead, gulp tasks take care to compile/minify/bake/whatever your files and put them in the public/ folder.
@@ -78,4 +82,3 @@ Cleans the public/ directory. This selectively removes generated files from publ
 
 #### `php artisan ide-helper:generate`
 Generates a file for IDE autocompletion and stuff. Works well with phpstorm for instance.
-

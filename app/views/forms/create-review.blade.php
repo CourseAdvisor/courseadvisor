@@ -104,7 +104,7 @@
     {{ $errors->first('title', '<span class="help-block">:message</span>') }}
   </div>
 </div>
-<div class="col-md-4">
+<div class="col-md-4" name="review-grades">
   <dl class="dl-horizontal">
     <dt>{{{ trans('courses.grading-lectures-label') }}}</dt>
     <dd>
