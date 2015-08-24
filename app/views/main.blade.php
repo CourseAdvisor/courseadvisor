@@ -197,58 +197,6 @@
     {{ HTML::script("js/starbar.js") }}
     {{ HTML::script(asset_path("js/app.js")) }}
 
-    <script>
-      // Initialize starbars
-      $('[data-starbar]').each(function(el){
-        var el = $(this);
-
-        // Parse starbar attributes
-        var data = el.attr('data-starbar').split(',');
-        var attrs = {
-          inputName: data.splice(0, 1)[0]
-        };
-        for (var i in data) {
-          var splitted = data[i].split('=');
-          attrs[splitted[0]] = splitted[1] || true;
-        }
-
-        var starbar = new StarBar(el, attrs);
-        var initialValue = el.attr('data-value');
-        if(typeof initialValue !== 'undefined') {
-          starbar.setValue(initialValue);
-        }
-        el.data('starbar', starbar);
-      });
-
-      // Initialize popovers
-      var popovers = $("[data-toggle=popover]");
-      popovers.popover();
-
-      $('#search-icon').click(function() {
-        $(this).fadeOut(function() {
-          $('#search-form').fadeIn();
-        });
-        return false;
-      });
-    </script>
-
-    {{-- mobile search navbar script --}}
-    <script>
-    $(function() {
-      $('.mobile-search').each(function() {
-        var $el = $(this);
-        var initial_width = $el.css('width');
-        var padding = $el.css('padding-left');
-
-        $el.find('input').focusin(function() {
-          $el.css({'opacity': '1', 'width': '100%'});
-        }).focusout(function() {
-          $el.css({'opacity': '0', 'width': initial_width});
-        });
-      });
-    });
-    </script>
-
     @yield('scripts')
 
   </body>
