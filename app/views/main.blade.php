@@ -92,7 +92,7 @@
           </ul>
 
           {{-- desktop search --}}
-          <form class="navbar-form navbar-right hidden-xs desktop-search" role="search" action="{{{ action('SearchController@search') }}}" method="GET">
+          <form id="navbar-search" class="navbar-form navbar-right hidden-xs desktop-search" role="search" action="{{{ action('SearchController@search') }}}" method="GET">
             <div class="input-group">
               <input type="text" class="form-control" placeholder="Search" name="q" value="{{{ Input::get('q') }}}">
               <span class="input-group-btn">
