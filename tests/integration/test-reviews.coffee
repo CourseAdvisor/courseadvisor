@@ -18,12 +18,12 @@ casper.test.begin "Full review workflow", 16, (test) ->
 
   casper.start url("/")
   login profile: "snow", next: "/fr/course/psychologie-sociale-d-524"
-  casper.then ->
+  casper.waitForSelector "#reviews", ->
     @fill("form#create-review-form",
       comment: content
       difficulty: "2"
     , true) # submit form
-  casper.then ->
+  casper.waitForSelector "[data-starbar*=content_grade]>.fa-stack:nth-child(5)", ->
     # Title is mandatory if content is set
     test.assertExists(".form-group.has-error>input[name=title]+.help-block", "Title field has error")
     # Grade at least one criteria
@@ -71,7 +71,7 @@ casper.test.begin "Full review workflow", 16, (test) ->
   casper.waitForSelector ".modal-open", ->
     # Edit review modal is open
     @click('a[data-action="delete-review"]')
-  casper.then ->
+  casper.waitForSelector "#reviews", ->
     # Review has been deleted
     test.assertTextDoesntExist(title, "Title is gone")
     test.assertTextDoesntExist(content, "Content is gone")
