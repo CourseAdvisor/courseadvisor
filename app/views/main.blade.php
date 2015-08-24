@@ -192,7 +192,7 @@
     var TOKEN = "{{{ Session::token() }}}";
     </script>
 
-    {{ HTML::script("https://code.jquery.com/jquery-1.10.2.min.js") }}
+    {{ HTML::script("//code.jquery.com/jquery-1.10.2.min.js") }}
     {{ HTML::script("js/vendor/bootstrap.min.js") }}
     {{ HTML::script("js/starbar.js") }}
     {{ HTML::script(asset_path("js/app.js")) }}

@@ -1,7 +1,7 @@
 <?php
 
 Event::listen('review.newReview', function($review) {
-  if (Config::get('app.debug')) return;
+  if (Config::get('app.skip_mails')) return;
 
   $data = [
     'courseUrl' => action('CourseController@show', [
@@ -24,7 +24,7 @@ Event::listen('review.newReview', function($review) {
 });
 
 Event::listen('review.newAnonymous', function($review) {
-  if (Config::get('app.debug')) return;
+  if (Config::get('app.skip_mails')) return;
 
   $data = [
     'moderationUrl' => action('AdminController@moderate'),
@@ -39,6 +39,7 @@ Event::listen('review.newAnonymous', function($review) {
 });
 
 Event::listen('review.rejected', function($review, $reasons) {
+  if (Config::get('app.skip_mails')) return;
   $data = [
     'review' => $review,
     'reasons' => $reasons
@@ -51,6 +52,7 @@ Event::listen('review.rejected', function($review, $reasons) {
 });
 
 Event::listen('review.accepted', function($review) {
+  if (Config::get('app.skip_mails')) return;
   Mail::send('emails.acceptedReview', ['review' => $review], function($message) use($review) {
     $message->to($review->student->email)
         ->from('noreply@courseadvisor.ch', "CourseAdvisor")
@@ -59,6 +61,8 @@ Event::listen('review.accepted', function($review) {
 });
 
 Event::listen('comment.newComment', function($comment) {
+
+  if (Config::get('app.skip_mails')) return;
 
   $review = $comment->review;
   $parent = $comment->parent;
