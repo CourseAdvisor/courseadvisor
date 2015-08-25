@@ -92,7 +92,7 @@
           </ul>
 
           {{-- desktop search --}}
-          <form class="navbar-form navbar-right hidden-xs desktop-search" role="search" action="{{{ action('SearchController@search') }}}" method="GET">
+          <form id="navbar-search" class="navbar-form navbar-right hidden-xs desktop-search" role="search" action="{{{ action('SearchController@search') }}}" method="GET">
             <div class="input-group">
               <input type="text" class="form-control" placeholder="Search" name="q" value="{{{ Input::get('q') }}}">
               <span class="input-group-btn">
@@ -192,62 +192,10 @@
     var TOKEN = "{{{ Session::token() }}}";
     </script>
 
-    {{ HTML::script("https://code.jquery.com/jquery-1.10.2.min.js") }}
+    {{ HTML::script("//code.jquery.com/jquery-1.10.2.min.js") }}
     {{ HTML::script("js/vendor/bootstrap.min.js") }}
     {{ HTML::script("js/starbar.js") }}
     {{ HTML::script(asset_path("js/app.js")) }}
-
-    <script>
-      // Initialize starbars
-      $('[data-starbar]').each(function(el){
-        var el = $(this);
-
-        // Parse starbar attributes
-        var data = el.attr('data-starbar').split(',');
-        var attrs = {
-          inputName: data.splice(0, 1)[0]
-        };
-        for (var i in data) {
-          var splitted = data[i].split('=');
-          attrs[splitted[0]] = splitted[1] || true;
-        }
-
-        var starbar = new StarBar(el, attrs);
-        var initialValue = el.attr('data-value');
-        if(typeof initialValue !== 'undefined') {
-          starbar.setValue(initialValue);
-        }
-        el.data('starbar', starbar);
-      });
-
-      // Initialize popovers
-      var popovers = $("[data-toggle=popover]");
-      popovers.popover();
-
-      $('#search-icon').click(function() {
-        $(this).fadeOut(function() {
-          $('#search-form').fadeIn();
-        });
-        return false;
-      });
-    </script>
-
-    {{-- mobile search navbar script --}}
-    <script>
-    $(function() {
-      $('.mobile-search').each(function() {
-        var $el = $(this);
-        var initial_width = $el.css('width');
-        var padding = $el.css('padding-left');
-
-        $el.find('input').focusin(function() {
-          $el.css({'opacity': '1', 'width': '100%'});
-        }).focusout(function() {
-          $el.css({'opacity': '0', 'width': initial_width});
-        });
-      });
-    });
-    </script>
 
     @yield('scripts')
 

@@ -12,17 +12,25 @@ if (window.location.hash.indexOf('!edit') == 1) {
   showEditModal($('a.edit-review[data-review-id='+id+']').first());
 }
 
+// Dirty hack: xedit means the controller lead us here after a failed update.
+// PHP did the work of hydrating so we should not overwrite with review data.
+if (window.location.hash.indexOf('!xedit') == 1) {
+  modal.modal('show');
+  var reviewId = window.location.hash.split("-")[1];
+  modal.find('input[name=reviewId]').val(reviewId);
+  window.location.hash = "!edit-"+reviewId;
+}
+
 $('a.edit-review').click(function() {
   showEditModal($(this));
   return false;
-})
+});
 
 modal.on('hidden.bs.modal', function() {
   window.location.hash = "#!";
-})
+});
 
 function showEditModal(openingLink) {
-  modal.modal('show');
   var reviewElement = openingLink.closest('div.review');
   var reviewId = openingLink.data('review-id');
   var reviewGrades = {
@@ -51,4 +59,5 @@ function showEditModal(openingLink) {
   for(var gradeType in reviewGrades) {
     modal.find('[data-starbar^=' + gradeType + '_grade]').data('starbar').setValue(reviewGrades[gradeType]);
   }
+  modal.modal('show');
 }
