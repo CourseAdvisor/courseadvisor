@@ -76,7 +76,7 @@ class CourseController extends BaseController {
       }
     ])->findOrFail($id);
 
-    if (($realSlug = Str::slug($course->name)) != $slug) {
+    if (($realSlug = $course->slug) != $slug) {
       return Redirect::action('CourseController@show', ['slug' => $realSlug, 'id' => $id]);
     }
 
@@ -155,7 +155,6 @@ class CourseController extends BaseController {
 
   public function createReview($slug, $courseId) {
     $validator = Review::getValidator(Input::all());
-    $goToCourse = Redirect::action('CourseController@show', [$slug, $courseId]);
     if ($validator->fails()) {
       return Redirect::to(URL::previous() . "#my-review")
           ->withInput()
@@ -165,6 +164,7 @@ class CourseController extends BaseController {
     // Get course and student info
     $course = Course::findOrFail($courseId); // Fails if the course doesn't exist
     $studentId = Session::get('student_id');
+    $goToCourse = Redirect::action('CourseController@show', [$slug, $courseId]);
 
     // Check if the course was not already reviewed by the student
     if($course->alreadyReviewedBy($studentId)) {

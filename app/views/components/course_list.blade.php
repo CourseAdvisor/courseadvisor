@@ -13,7 +13,7 @@
 
   <a href="{{{ action('CourseController@show', [
     'id' => $course['id'],
-    'slug' => Str::slug($course['name'])
+    'slug' => $course['slug']
     ]) }}}" class="list-group-item">
 
 

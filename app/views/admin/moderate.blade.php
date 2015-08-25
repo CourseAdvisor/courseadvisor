@@ -35,7 +35,7 @@
             <div class="col-lg-10">
               <h3>{{{ $review->title }}}</h3>
               <p>By <i>{{{ $review->student->fullname }}} ({{{ $review->student->section->string_id }}}-{{{ $review->student->semester }}})</i>,
-                for course {{ link_to_action('CourseController@show', $review->course->name, [Str::slug($review->course->name), $review->course->id])}}
+                for course {{ link_to_action('CourseController@show', $review->course->name, [$review->course->slug, $review->course->id])}}
                 <br>
                 @if ($review->student->isRegistered($review->course_id))
                   <i class="fa fa-check"></i> Is registered to this course

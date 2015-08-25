@@ -5,7 +5,7 @@ Event::listen('review.newReview', function($review) {
 
   $data = [
     'courseUrl' => action('CourseController@show', [
-      'slug' => Str::slug($review->course->name),
+      'slug' => $review->course->slug,
       'id' => $review->course->id
     ]),
     'courseName' => $review->course->name,

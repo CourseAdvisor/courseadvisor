@@ -74,7 +74,7 @@ Route::group([
     // --- Regular API ---
 
     // reviews
-    Rotue::post('/review', 'ReviewController@createReview');
+    Route::post('/review', 'ReviewController@createReview');
     Route::post('/review/edit', 'ReviewController@updateReview');
     Route::post('/review/delete', 'ReviewController@deleteReview');
 

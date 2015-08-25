@@ -50,6 +50,26 @@ class Course extends Eloquent {
     return $review;
   }
 
+  public function getSlugAttribute() {
+    return Str::slug($this->name);
+  }
+
+  public function getReviewsCountAttribute() {
+    if ($this->_reviewsCount == null)
+      $this->_reviewsCount = $this->reviews()->published()->count();
+
+    return $this->_reviewsCount;
+  }
+
+  public function getNiceSemesterAttribute() {
+    $sem_nb = intval(substr($this->pivot->semester, 2));
+
+    if (substr($this->pivot->semester, 0, 2) == "BA" && $sem_nb > 2) {
+      $sem_nb -= 2;
+    }
+    return "Semester ".$sem_nb;
+  }
+
   public function updateAverages() {
     $sql  = "AVG(avg_grade) as total";
     $sql .= ", AVG(lectures_grade) as lectures";
@@ -69,21 +89,5 @@ class Course extends Eloquent {
     $this->avg_difficulty = $averages->difficulty;
 
     $this->save();
-  }
-
-  public function getReviewsCountAttribute() {
-    if ($this->_reviewsCount == null)
-      $this->_reviewsCount = $this->reviews()->published()->count();
-
-    return $this->_reviewsCount;
-  }
-
-  public function getNiceSemesterAttribute() {
-    $sem_nb = intval(substr($this->pivot->semester, 2));
-
-    if (substr($this->pivot->semester, 0, 2) == "BA" && $sem_nb > 2) {
-      $sem_nb -= 2;
-    }
-    return "Semester ".$sem_nb;
   }
 }
