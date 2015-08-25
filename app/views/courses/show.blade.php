@@ -1,7 +1,6 @@
 @extends('main')
 
 @section('scripts')
-{{ HTML::script('js/show-course.js') }}
 @if (Config::get('app.debug'))
   {{ HTML::script('js/fill-random-review.js') }}
 @endif
