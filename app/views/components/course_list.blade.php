@@ -18,7 +18,7 @@
 
 
       <!-- desktop only -->
-      <div class="pull-right hidden-xs hidden-sm">
+      <div class="pull-right hidden-xs hidden-sm course-list-item-infos">
         <div class="pull-right">
           @include('components.starbar', [
             'grade' => $course['avg_overall_grade'],

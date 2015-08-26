@@ -43,12 +43,7 @@ class SearchController extends BaseController {
     // TODO : name en / fr
     $cleaned = DB::getPDO()->quote(preg_replace("/[^A-Za-z0-9èàé ]/", '', $term));
     $query = DB::table('courses')
-          ->select(DB::raw('courses.name_fr as name, courses.id as id'))
-          ->addSelect(DB::raw('CONCAT(teachers.firstname, " ", teachers.lastname) as teacher_fullname'))
-          ->addSelect(DB::raw('courses.avg_overall_grade as avg_overall_grade'))
-          ->addSelect(DB::raw('GROUP_CONCAT(study_plans.string_id) as plans'))
-          ->addSelect(DB::raw('GROUP_CONCAT(course_study_plan.semester) as semesters'))
-          ->addSelect(DB::raw('(select count(*) from reviews where course_id=courses.id) as reviewsCount'))
+          ->select(DB::raw('courses.id as course_id'))
           ->addSelect(DB::raw("
             MATCH(courses.name_en, courses.name_fr)
             AGAINST ($cleaned IN NATURAL LANGUAGE MODE) as course_relevance
@@ -91,31 +86,12 @@ class SearchController extends BaseController {
       $query->orderBy(DB::raw('course_relevance + teacher_relevance'), 'desc' /*$order*/);
     }
 
-    $query->groupBy('courses.id');
+    $query->groupBy('course_id');
 
 
     $paginated = $query->paginate($nbPerPage);
-    $courses = $paginated->getItems();
-    $courses = array_map(function($c) { return (array) $c;}, $courses);
-
-    /* From the SQL query, 'sections' and 'semesters' look like IN,SV,MT and BA1,BA1,BA3.
-    We need to adapt them to a standard array */
-
-    foreach($courses as &$course) {
-      $plans = explode(",", $course['plans']);
-      $semesters = explode(",", $course['semesters']);
-      $plansData = [];
-      foreach($plans as $i => $plan) {
-        $plansData[] = [
-          'string_id' => $plan,
-          'semester' => $semesters[$i]
-        ];
-      }
-      $course['plans'] = $plansData;
-      $course['teacher'] = ['fullname' => $course['teacher_fullname']];
-      unset($course['semesters']);
-      unset($course['teacher_fullname']);
-    }
+    $course_ids = array_map(function($c) { return $c->course_id;}, $paginated->getItems());
+    $courses = Course::findMany($course_ids);
 
     $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
 

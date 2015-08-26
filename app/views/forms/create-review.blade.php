@@ -6,13 +6,11 @@
 
 {{ Form::open([
   'class' => 'row form-horizontal',
-  'action' => [
-    'CourseController@' . ($is_editing ? 'update' : 'create') . 'Review',
-    $slug,
-    $course->id],
+  'action' => ['CourseController@' . ($is_editing ? 'update' : 'create') . 'Review'],
   'id' => isset($id) ? $id : ''
   ]) }}
 
+<input type="hidden" name="course_id" value="{{{ $course->id }}}" />
 
 @if ($is_modal)
 <div class="modal-header">
@@ -23,7 +21,7 @@
 @endif
 
 @if ($is_editing)
-<input type="hidden" name="reviewId" />
+<input type="hidden" name="review_id" value="{{{ isset($data['review_id']) ? $data['review_id'] : '' }}}" />
 @endif
 
 <div class="col-md-8">
@@ -157,17 +155,16 @@
 @if (!$is_modal) {{-- otherwise place actions in modal footer --}}
   <div class="col-sm-12">
     @if ($is_editing)
-      <a  href="{{{ action("CourseController@deleteReview", [
-            'reviewId'=> 'REVIEW_ID', /* See js/show-course.js */
-            'courseId'=> $course->id,
-            'slug' => $slug]) }}}"
+      <button
+          formaction="{{{ action("CourseController@deleteReview") }}}"
           data-action="delete-review"
           onclick="return confirm('{{{ trans('courses.delete-reviews-confirm') }}}');"
-          class="pull-left"
+          class="btn btn-link pull-left"
+          type="submit"
       >
         <i class="fa fa-trash-o"></i>
         {{{ trans('courses.delete-review-action') }}}
-      </a>
+      </button>
       <input type="submit" class="btn btn-primary center-block" value="{{{ trans('courses.create-review-action') }}}">
     @else
       <input type="submit" class="btn btn-primary center-block" value="{{{ trans('courses.create-review-action') }}}">
@@ -185,13 +182,12 @@
 </div> {{-- .modal-body --}}
 <div class="modal-footer">
   @if ($is_editing)
-    <a  href="{{{ action("CourseController@deleteReview", [
-          'reviewId'=> 'REVIEW_ID', /* See js/show-course.js */
-          'courseId'=> $course->id,
-          'slug' => $slug]) }}}"
+    <button
+        formaction="{{{ action("CourseController@deleteReview") }}}"
         data-action="delete-review"
         onclick="return confirm('{{{ trans('courses.delete-reviews-confirm') }}}');"
-        class="pull-left"
+        class="btn btn-link pull-left"
+        type="submit"
     >
       <i class="fa fa-trash-o"></i>
       {{{ trans('courses.delete-review-action') }}}

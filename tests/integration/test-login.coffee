@@ -25,6 +25,6 @@ casper.test.begin "Login with next parameter and then logout", 3, (test) ->
     test.assertExists("#logged-in-menu", "Is logged in")
     @click 'footer a[href*="logout"]'
   .then ->
-    test.assertDoesntExist("#logged-in-menu", "Is logged in")
+    test.assertDoesntExist("#logged-in-menu", "Is logged out")
   .run ->
     test.done()

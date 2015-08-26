@@ -153,7 +153,7 @@ class CourseController extends BaseController {
     ]);
   }
 
-  public function createReview($slug, $courseId) {
+  public function createReview() {
     $validator = Review::getValidator(Input::all());
     if ($validator->fails()) {
       return Redirect::to(URL::previous() . "#my-review")
@@ -162,9 +162,9 @@ class CourseController extends BaseController {
     }
 
     // Get course and student info
-    $course = Course::findOrFail($courseId); // Fails if the course doesn't exist
+    $course = Course::findOrFail(Input::get('course_id')); // Fails if the course doesn't exist
     $studentId = Session::get('student_id');
-    $goToCourse = Redirect::action('CourseController@show', [$slug, $courseId]);
+    $goToCourse = Redirect::action('CourseController@show', [$course->slug, $course->id]);
 
     // Check if the course was not already reviewed by the student
     if($course->alreadyReviewedBy($studentId)) {
@@ -172,10 +172,10 @@ class CourseController extends BaseController {
     }
 
     // Create the review
-    $data = ['course_id' => intval($courseId), 'student_id' => $studentId];
+    $data = ['course_id' => intval($course->id), 'student_id' => $studentId];
 
     $newReview = new Review(Input::all());
-    $newReview->course_id = $courseId;
+    $newReview->course_id = $course->id;
     $newReview->student_id = $studentId;
     $newReview->updateAverage();
 
@@ -218,15 +218,14 @@ class CourseController extends BaseController {
     return $goToCourse->with('message', ['success', $msg]);
   }
 
-  public function updateReview($slug, $courseId) {
-    if (!Input::has('reviewId')) {
-      return Redirect::to('/');
+  public function updateReview() {
+    if (!Input::has('review_id')) {
+      return App::abort(400, "No review to edit");
     }
 
-    $courseRedirect = Redirect::action('CourseController@show', [$slug, $courseId]);
-
     // Retrieve review
-    $review = Review::findOrFail(Input::get('reviewId'));
+    $review = Review::findOrFail(Input::get('review_id'));
+    $courseRedirect = Redirect::action('CourseController@show', [$review->course->slug, $review->course_id]);
 
     // Check authorized
     if ($review->student_id != StudentInfo::getId()) {
@@ -237,9 +236,11 @@ class CourseController extends BaseController {
     // Check input data
     $validator = Review::getValidator(Input::all());
     if ($validator->fails()) {
-      return Redirect::to(action('CourseController@show', [$slug, $courseId]) . "#!xedit-" . $review->id)
-          ->withInput()
-          ->withErrors($validator);
+      return Redirect::to(LaravelLocalization::getLocalizedURL(
+            LaravelLocalization::getCurrentLocale(),
+            action('CourseController@show', [$review->course->slug, $review->course_id])) . '#!xedit-' . $review->id)
+        ->withInput()
+        ->withErrors($validator);
     }
 
     $review->comment = Input::get('comment');
@@ -285,9 +286,10 @@ class CourseController extends BaseController {
         ->with('message', ['success', $msg]);
   }
 
-  public function deleteReview($slug, $courseId, $reviewId) {
-    $review = Review::findOrFail($reviewId);
-    $courseRedirect = Redirect::action('CourseController@show', [$slug, $courseId]);
+  public function deleteReview() {
+    $review = Review::findOrFail(Input::get('review_id'));
+
+    $courseRedirect = Redirect::action('CourseController@show', [$review->course->slug, $review->course_id]);
 
     // Check authorized
     if ($review->student_id != StudentInfo::getId()) {
