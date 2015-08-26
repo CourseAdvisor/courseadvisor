@@ -38,7 +38,7 @@
 
           in the course
           <a href="{{{ action('CourseController@show',  [
-        'slug' => Str::slug($review->course->name),
+        'slug' => $review->course->slug,
         'id' => $review->course->id
           ])}}}">
             {{{ $review->course->name }}}

@@ -70,7 +70,7 @@
             @foreach($student->reviews as $review)
             <a href="{{{ action('CourseController@show', [
                 'id' => $review->course->id,
-                'slug' => Str::slug($review->course->name)
+                'slug' => $review->course->slug
                 ]) }}}"
               class="list-group-item">
 

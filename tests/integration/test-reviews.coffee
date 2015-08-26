@@ -70,9 +70,10 @@ casper.test.begin "Full review workflow", 16, (test) ->
     @click("a.edit-review")
   casper.waitForSelector ".modal-open", ->
     # Edit review modal is open
-    @click('a[data-action="delete-review"]')
+    @click('[data-action="delete-review"]')
   casper.waitForSelector "#reviews", ->
     # Review has been deleted
+    screenshot("debug")
     test.assertTextDoesntExist(title, "Title is gone")
     test.assertTextDoesntExist(content, "Content is gone")
     test.assertDoesntExist("a.edit-review", "Edit review action is not shown")

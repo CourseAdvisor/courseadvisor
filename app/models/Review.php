@@ -74,7 +74,8 @@ class Review extends Commentable {
       'exercises_grade' => 'integer|between:0,5',
       'content_grade' =>'integer|between:0,5',
       'difficulty' => 'integer|between:0,5',
-      'title' => 'max:100'
+      'title' => 'max:100',
+      'course_id' => 'required'
     ];
   }
 
