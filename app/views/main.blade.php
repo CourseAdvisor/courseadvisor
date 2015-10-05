@@ -150,10 +150,9 @@
 
     @yield('content')
 
-
-    @include('footer')
-
     </div> <!-- main -->
+    
+    @include('footer')
 
     @yield('dialogs')
 
