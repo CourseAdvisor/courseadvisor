@@ -12,9 +12,12 @@
 #   - mandatory title if content set
 # - edit a review (with error on title)
 # - delete a Review
-casper.test.begin "Full review workflow", 16, (test) ->
+casper.test.begin "Full review workflow", 19, (test) ->
   content = randomStr(128)
   title = randomStr(32)
+
+  getFirstReviewVotes = -> parseInt($('.review:first-child [data-vote-score]').first().text())
+  votes = 0
 
   casper.start url("/")
   login profile: "snow", next: "/fr/course/psychologie-sociale-d-524"
@@ -63,10 +66,24 @@ casper.test.begin "Full review workflow", 16, (test) ->
     @fill("form#edit-review-form",
       title: "#{title}_edited"
     , true ) # submit form
-  casper.waitForSelector ".review", ->
+  casper.waitForSelector "[data-starbar*=content_grade]>.fa-stack:nth-child(5)", ->
     # Review is now edited
     test.assertTextExists("#{title}_edited", "Edited title is shown on course page")
     test.assertTextExists("#{content}_edited", "Edited content is shown on course page")
+
+    # test votes
+    votes = @evaluate getFirstReviewVotes
+    @click('.review:first-child [data-vote-btn^="up"]')
+  casper.wait 2000, ->
+    test.assertEvalEquals(getFirstReviewVotes, votes + 1, "Vote up increases the review mark")
+    @click('.review:first-child [data-vote-btn^="down"]')
+  casper.wait 2000, ->
+    test.assertEvalEquals(getFirstReviewVotes, votes - 1, "Vote down decreases the review mark")
+    @click('.review:first-child [data-vote-btn^="down"]')
+  casper.wait 2000, ->
+    test.assertEvalEquals(getFirstReviewVotes, votes, "Re-clicking the same vote button discards the vote")
+
+    # remove the review
     @click("a.edit-review")
   casper.waitForSelector ".modal-open", ->
     # Edit review modal is open

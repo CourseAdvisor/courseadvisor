@@ -12,10 +12,13 @@
 #   - mandatory title if content set
 # - edit a review (with error on title)
 # - delete a Review
-casper.test.begin "Full comment workflow", 0, (test) ->
+casper.test.begin "Full comment workflow", 6, (test) ->
   content = randomStr(128)
   title = randomStr(32)
   comment = randomStr(128)
+
+  getFirstReviewVotes = -> parseInt($('.review:first-child .comment:first-child [data-vote-score]').first().text())
+  votes = 0
 
   casper.start url("/")
   login profile: "snow", next: "/fr/course/psychologie-sociale-d-524"
@@ -31,7 +34,6 @@ casper.test.begin "Full comment workflow", 0, (test) ->
   casper.waitForSelector ".review", ->
     @click "[data-comment-action^=reply]"
   casper.then ->
-    screenshot 'debug'
     @fill("form[action$=comment]",
       body: comment
     , true )
@@ -44,9 +46,19 @@ casper.test.begin "Full comment workflow", 0, (test) ->
     , true )
   casper.waitForSelector "[data-comment-action^=edit]", ->
     test.assertTextExists("#{comment}_edited", "Modified comment is shown")
-    ###
-      TODO: test vote stuff
-    ###
+
+    # test votes
+    votes = @evaluate getFirstReviewVotes
+    @click('.review:first-child .comment:first-child [data-vote-btn^="up"]')
+  casper.wait 2000, ->
+    test.assertEvalEquals(getFirstReviewVotes, votes + 1, "Vote up increases the comment mark")
+    @click('.review:first-child .comment:first-child [data-vote-btn^="down"]')
+  casper.wait 2000, ->
+    test.assertEvalEquals(getFirstReviewVotes, votes - 1, "Vote down decreases the comment mark")
+    @click('.review:first-child .comment:first-child [data-vote-btn^="down"]')
+  casper.wait 2000, ->
+    test.assertEvalEquals(getFirstReviewVotes, votes, "Re-clicking the same vote button discards the vote")
+
     @click '[data-comment-action^="edit"]'
   casper.then ->
     @click '[formaction$="comment/delete"]'

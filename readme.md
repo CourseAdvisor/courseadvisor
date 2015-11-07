@@ -59,7 +59,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 ### Testing
 Testing is done with casperjs. Install phantomjs v1.8.x (not 2.x !!!), install casperjs and make sure both are available in the path.
 
-To tests authenticated features, we are using [margarita](https://github.com/CourseAdvisor/margarita). Run ./test.sh --setup-margarita
+To tests authenticated features, we are using [margarita](https://github.com/CourseAdvisor/margarita). Run `./test.sh --setup-margarita`
 to install a local copy of margarita, then in app/config/production/tequila.php, add `'server_url' => 'http://localhost:3000/'`
 
 You can then run the tests with `./test.sh -m -s`.
