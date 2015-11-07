@@ -17,12 +17,12 @@ casper.test.begin "Full review workflow", 16, (test) ->
   title = randomStr(32)
 
   login profile: "snow", next: "/fr/course/psychologie-sociale-d-524"
-  .waitForSelector "#reviews", ->
+  casper.waitForSelector "#reviews", ->
     @fill("form#create-review-form",
       comment: content
       difficulty: "2"
     , true) # submit form
-  .waitForSelector "[data-starbar*=content_grade]>.fa-stack:nth-child(5)", ->
+  casper.waitForSelector "[data-starbar*=content_grade]>.fa-stack:nth-child(5)", ->
     # Title is mandatory if content is set
     test.assertExists(".form-group.has-error>input[name=title]+.help-block", "Title field has error")
     # Grade at least one criteria
@@ -38,13 +38,13 @@ casper.test.begin "Full review workflow", 16, (test) ->
     @fill("form#create-review-form",
       title: title
     , true) # submit form
-  .waitForSelector ".review", ->
+  casper.waitForSelector ".review", ->
     # Review is now posted
     test.assertTextExists(title, "Title is shown on course page")
     test.assertTextExists(content, "Content is shown on course page")
     test.assertExists('.review-author>a[href="http://people.epfl.ch/115687"]', "Author is shown on page")
     @click("a.edit-review")
-  .waitForSelector ".modal-open", ->
+  casper.waitForSelector ".modal-open", ->
     # Edit dialog is opened, we check that the grades were correctly assigned
     test.assertFieldCSS("#edit-review-form [name=lectures_grade]", "2", "Lectures grade is set correctly")
     test.assertFieldCSS("#edit-review-form [name=exercises_grade]", "3", "Exercises grade is set correctly")
@@ -55,25 +55,25 @@ casper.test.begin "Full review workflow", 16, (test) ->
       comment: "#{content}_edited"
     , true ) # submit form
   # Submitted an erroneous update, should open dialog and show error
-  .waitForSelector ".modal-open", ->
+  casper.waitForSelector ".modal-open", ->
     # Edit review modal is open
     screenshot("edit-review")
     test.assertExists(".form-group.has-error>input[name=title]+.help-block", "Title field has error")
     @fill("form#edit-review-form",
       title: "#{title}_edited"
     , true ) # submit form
-  .waitForSelector ".review", ->
+  casper.waitForSelector ".review", ->
     # Review is now edited
     test.assertTextExists("#{title}_edited", "Edited title is shown on course page")
     test.assertTextExists("#{content}_edited", "Edited content is shown on course page")
     @click("a.edit-review")
-  .waitForSelector ".modal-open", ->
+  casper.waitForSelector ".modal-open", ->
     # Edit review modal is open
     @click('[data-action="delete-review"]')
-  .waitForSelector "#reviews", ->
+  casper.waitForSelector "#reviews", ->
     # Review has been deleted
     test.assertTextDoesntExist(title, "Title is gone")
     test.assertTextDoesntExist(content, "Content is gone")
     test.assertDoesntExist("a.edit-review", "Edit review action is not shown")
-  .run ->
+  casper.run ->
     test.done()

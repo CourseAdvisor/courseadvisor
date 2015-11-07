@@ -74,6 +74,18 @@ _do_test() {
 }
 
 do_test() {
+  # ensures app is not in debug mode
+  echo 'Config::get("app.debug");' | php artisan tinker | grep -q false
+  if [ $? -ne 0 ]; then
+    echo "ERR: Tests must run with debug mode off. Please set app.debug to false in your app config file" 1>&2
+    exit 1
+  fi
+
+  # ensures tmp dir
+  if [ ! -d tmp ]; then
+    mkdir tmp
+  fi
+
   cat > tmp/tests-config.coffee << __EOF
     module.exports =
       port: $server_port
@@ -97,18 +109,6 @@ x_open() {
     start "$1"  # windows
   fi
 }
-
-# ensures tmp dir
-if [ ! -d tmp ]; then
-  mkdir tmp
-fi
-
-# ensures app is not in debug mode
-echo 'Config::get("app.debug");' | php artisan tinker | grep -q false
-if [ $? -ne 0 ]; then
-  echo "ERR: Tests must run with debug mode off. Please set app.debug to false in your app config file" 1>&2
-  exit 1
-fi
 
 while [ $# -ne 0 ]; do
   case "$1" in
