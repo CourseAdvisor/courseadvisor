@@ -8,9 +8,8 @@
 
 # Tests that a login without parameters directs to the homepage
 casper.test.begin "Login lands on dashboard", 1, (test) ->
-  casper.start url("/")
   login profile: "snow"
-  casper.then ->
+  .then ->
     test.assertMatch(@getCurrentUrl(), /\/[a-z]{2}\/dashboard$/, "landed on dashboard")
   .run ->
     test.done()
@@ -20,7 +19,7 @@ casper.test.begin "Login with next parameter and then logout", 3, (test) ->
   casper.start url("/fr/course/psychologie-sociale-a-450"), ->
     @click "#header-login"
   login profile: "snow", direct: true
-  casper.then ->
+  .then ->
     test.assertEquals(@getCurrentUrl(), url("/fr/course/psychologie-sociale-a-450"), "Stays on the same page")
     test.assertExists("#logged-in-menu", "Is logged in")
     @click 'footer a[href*="logout"]'
