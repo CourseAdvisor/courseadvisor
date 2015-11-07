@@ -74,13 +74,13 @@ casper.test.begin "Full review workflow", 19, (test) ->
     # test votes
     votes = @evaluate getFirstReviewVotes
     @click('.review:first-child [data-vote-btn^="up"]')
-  casper.wait 2000, ->
+  casper.wait 3000, ->
     test.assertEvalEquals(getFirstReviewVotes, votes + 1, "Vote up increases the review mark")
     @click('.review:first-child [data-vote-btn^="down"]')
-  casper.wait 2000, ->
+  casper.wait 3000, ->
     test.assertEvalEquals(getFirstReviewVotes, votes - 1, "Vote down decreases the review mark")
     @click('.review:first-child [data-vote-btn^="down"]')
-  casper.wait 2000, ->
+  casper.wait 3000, ->
     test.assertEvalEquals(getFirstReviewVotes, votes, "Re-clicking the same vote button discards the vote")
 
     # remove the review
