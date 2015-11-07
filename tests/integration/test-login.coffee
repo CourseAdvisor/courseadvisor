@@ -8,10 +8,11 @@
 
 # Tests that a login without parameters directs to the homepage
 casper.test.begin "Login lands on dashboard", 1, (test) ->
+  casper.start url("/")
   login profile: "snow"
-  .then ->
+  casper.then ->
     test.assertMatch(@getCurrentUrl(), /\/[a-z]{2}\/dashboard$/, "landed on dashboard")
-  .run ->
+  casper.run ->
     test.done()
 
 # Tests login and then logout

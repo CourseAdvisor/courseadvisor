@@ -16,6 +16,7 @@ casper.test.begin "Full review workflow", 16, (test) ->
   content = randomStr(128)
   title = randomStr(32)
 
+  casper.start url("/")
   login profile: "snow", next: "/fr/course/psychologie-sociale-d-524"
   casper.waitForSelector "#reviews", ->
     @fill("form#create-review-form",
