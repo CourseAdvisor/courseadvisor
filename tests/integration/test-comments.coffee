@@ -52,26 +52,32 @@ casper.test.begin "Full comment workflow", 6, (test) ->
     votes = @evaluate getFirstReviewVotes
     @click('.review:first-child .comment:first-child [data-vote-btn^="up"]')
     lastTime = new Date()
-  casper.waitForResource(
-    ((res) -> /vote$/.test(res.url) && res.time > lastTime)
-    , ->
+  casper.waitForResource (res) ->
+    if (/vote$/.test(res.url))
+      console.log("my "+res.time.getTime()+" yours "+lastTime.getTime())
+      res.time > lastTime
+    else false
+  casper.wait 500, ->
       test.assertEvalEquals(getFirstReviewVotes, votes + 1, "Vote up increases the comment mark")
       @click('.review:first-child .comment:first-child [data-vote-btn^="down"]')
       lastTime = new Date()
-  )
-  casper.waitForResource(
-    ((res) -> /vote$/.test(res.url) && res.time > lastTime)
-    , ->
+  casper.waitForResource (res) ->
+    if (/vote$/.test(res.url))
+      console.log("my "+res.time.getTime()+" yours "+lastTime.getTime())
+      res.time > lastTime
+    else false
+  casper.wait 500, ->
       test.assertEvalEquals(getFirstReviewVotes, votes - 1, "Vote down decreases the comment mark")
       @click('.review:first-child .comment:first-child [data-vote-btn^="down"]')
       lastTime = new Date()
-  )
-  casper.waitForResource(
-    ((res) -> /vote$/.test(res.url) && res.time > lastTime)
-    , ->
+  casper.waitForResource (res) ->
+    if (/vote$/.test(res.url))
+      console.log("my "+res.time.getTime()+" yours "+lastTime.getTime())
+      res.time > lastTime
+    else false
+  casper.wait 500, ->
       test.assertEvalEquals(getFirstReviewVotes, votes, "Re-clicking the same vote button discards the vote")
       @click '[data-comment-action^="edit"]'
-  )
   casper.then ->
     @click '[formaction$="comment/delete"]'
   casper.waitForSelector ".review", ->

@@ -76,28 +76,34 @@ casper.test.begin "Full review workflow", 19, (test) ->
     votes = @evaluate getFirstReviewVotes
     @click('.review:first-child [data-vote-btn^="up"]')
     lastTime = new Date()
-  casper.waitForResource(
-    ((res) -> /vote$/.test(res.url) && res.time > lastTime)
-    , ->
-      test.assertEvalEquals(getFirstReviewVotes, votes + 1, "Vote up increases the review mark")
-      @click('.review:first-child [data-vote-btn^="down"]')
-      lastTime = new Date()
-  )
-  casper.waitForResource(
-    ((res) -> /vote$/.test(res.url) && res.time > lastTime)
-    , ->
+  casper.waitForResource (res) ->
+    if (/vote$/.test(res.url))
+      console.log("my "+res.time.getTime()+" yours "+lastTime.getTime())
+      res.time > lastTime
+    else false
+  casper.wait 500, ->
+    test.assertEvalEquals(getFirstReviewVotes, votes + 1, "Vote up increases the review mark")
+    @click('.review:first-child [data-vote-btn^="down"]')
+    lastTime = new Date()
+  casper.waitForResource (res) ->
+    if (/vote$/.test(res.url))
+      console.log("my "+res.time.getTime()+" yours "+lastTime.getTime())
+      res.time > lastTime
+    else false
+  casper.wait 500, ->
       test.assertEvalEquals(getFirstReviewVotes, votes - 1, "Vote down decreases the review mark")
       @click('.review:first-child [data-vote-btn^="down"]')
       lastTime = new Date()
-  )
-  casper.waitForResource(
-    ((res) -> /vote$/.test(res.url) && res.time > lastTime)
-    , ->
+  casper.waitForResource (res) ->
+    if (/vote$/.test(res.url))
+      console.log("my "+res.time.getTime()+" yours "+lastTime.getTime())
+      res.time > lastTime
+    else false
+  casper.wait 500, ->
       test.assertEvalEquals(getFirstReviewVotes, votes, "Re-clicking the same vote button discards the vote")
 
       # remove the review
       @click("a.edit-review")
-  )
   casper.waitForSelector ".modal-open", ->
     # Edit review modal is open
     @click('[data-action="delete-review"]')
