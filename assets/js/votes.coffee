@@ -26,20 +26,23 @@ $ -> # jQuery onLoad
       .done (resp) ->
         data = JSON.parse(resp)
         if (!data.cancelled)
-          $el.addClass('voted');
+          $el.addClass('voted')
 
-        console.log("Voting succeded");
+        console.log("Voting succeded")
         $score.queue (next) ->
           $score.text(data.score)
-          console.log("Score updated");
+          console.log("Score updated")
           next()
 
       .fail (xhr) ->
-        console.log("Voting failed");
         if (xhr.statusCode().status == 401) # Unauthorized
+          console.error("Voting failed. Reason: Unauthorized")
           modals.show('login-to-vote')
+        else
+          console.error("Voting failed. Reason: Unknown")
+          console.error(xhr);
 
       .always ->
-        console.log("Voting finished");
+        console.log("Voting finished")
         $score.animate(opacity: 1)
         _votes.pending = false
