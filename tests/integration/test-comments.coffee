@@ -44,12 +44,15 @@ casper.test.begin "Full comment workflow", 6, (test) ->
     @fill('form[action$="comment/edit"]',
       body: "#{comment}_edited"
     , true )
-  casper.waitForSelector "[data-comment-action^=edit]", ->
-    test.assertTextExists("#{comment}_edited", "Modified comment is shown")
+  casper.waitFor(
+    (-> @evaluate -> window._loaded)
+    , ->
+      test.assertTextExists("#{comment}_edited", "Modified comment is shown")
 
-    # test votes
-    votes = @evaluate getFirstReviewVotes
-    @click('.review:first-child .comment:first-child [data-vote-btn^="up"]')
+      # test votes
+      votes = @evaluate getFirstReviewVotes
+      @click('.review:first-child .comment:first-child [data-vote-btn^="up"]')
+  )
   casper.waitFor(
     (-> @evaluate -> !window._votes.pending)
     , ->
