@@ -1,5 +1,9 @@
 modals = require('./modals')
 
+# used to help tests figure out when vote has been performed
+window._votes =
+  pending: false
+
 $ -> # jQuery onLoad
   $('[data-vote-btn]').each ->
     $el = $(@)
@@ -13,6 +17,7 @@ $ -> # jQuery onLoad
       evt.preventDefault()
       $score.animate(opacity: 0)
       $btns.removeClass('voted');
+      _votes.pending = true
 
       $.post '/api/vote',
         type: type # up / down
@@ -33,6 +38,4 @@ $ -> # jQuery onLoad
 
       .always ->
         $score.animate(opacity: 1)
-
-
-
+        _votes.pending = false
