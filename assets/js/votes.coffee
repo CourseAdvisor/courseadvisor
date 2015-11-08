@@ -40,7 +40,8 @@ $ -> # jQuery onLoad
           modals.show('login-to-vote')
         else
           console.error("Voting failed. Reason: Unknown")
-          console.error(xhr);
+          console.error(xhr.statusCode().status)
+          console.error(xhr.responseText)
 
       .always ->
         console.log("Voting finished")
