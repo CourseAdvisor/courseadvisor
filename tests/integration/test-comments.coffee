@@ -19,6 +19,7 @@ casper.test.begin "Full comment workflow", 6, (test) ->
 
   getFirstReviewVotes = -> parseInt($('.review:first-child .comment:first-child [data-vote-score]').first().text())
   votes = 0
+  lastTime = 0
 
   casper.start url("/")
   login profile: "snow", next: "/fr/course/psychologie-sociale-d-524"
@@ -50,16 +51,27 @@ casper.test.begin "Full comment workflow", 6, (test) ->
     # test votes
     votes = @evaluate getFirstReviewVotes
     @click('.review:first-child .comment:first-child [data-vote-btn^="up"]')
-  casper.wait 3000, ->
-    test.assertEvalEquals(getFirstReviewVotes, votes + 1, "Vote up increases the comment mark")
-    @click('.review:first-child .comment:first-child [data-vote-btn^="down"]')
-  casper.wait 3000, ->
-    test.assertEvalEquals(getFirstReviewVotes, votes - 1, "Vote down decreases the comment mark")
-    @click('.review:first-child .comment:first-child [data-vote-btn^="down"]')
-  casper.wait 3000, ->
-    test.assertEvalEquals(getFirstReviewVotes, votes, "Re-clicking the same vote button discards the vote")
-
-    @click '[data-comment-action^="edit"]'
+    lastTime = new Date()
+  casper.waitForResource(
+    ((res) -> /vote$/.test(res.url) && res.time > lastTime)
+    , ->
+      test.assertEvalEquals(getFirstReviewVotes, votes + 1, "Vote up increases the comment mark")
+      @click('.review:first-child .comment:first-child [data-vote-btn^="down"]')
+      lastTime = new Date()
+  )
+  casper.waitForResource(
+    ((res) -> /vote$/.test(res.url) && res.time > lastTime)
+    , ->
+      test.assertEvalEquals(getFirstReviewVotes, votes - 1, "Vote down decreases the comment mark")
+      @click('.review:first-child .comment:first-child [data-vote-btn^="down"]')
+      lastTime = new Date()
+  )
+  casper.waitForResource(
+    ((res) -> /vote$/.test(res.url) && res.time > lastTime)
+    , ->
+      test.assertEvalEquals(getFirstReviewVotes, votes, "Re-clicking the same vote button discards the vote")
+      @click '[data-comment-action^="edit"]'
+  )
   casper.then ->
     @click '[formaction$="comment/delete"]'
   casper.waitForSelector ".review", ->

@@ -18,6 +18,7 @@ casper.test.begin "Full review workflow", 19, (test) ->
 
   getFirstReviewVotes = -> parseInt($('.review:first-child [data-vote-score]').first().text())
   votes = 0
+  lastTime = 0
 
   casper.start url("/")
   login profile: "snow", next: "/fr/course/psychologie-sociale-d-524"
@@ -74,17 +75,29 @@ casper.test.begin "Full review workflow", 19, (test) ->
     # test votes
     votes = @evaluate getFirstReviewVotes
     @click('.review:first-child [data-vote-btn^="up"]')
-  casper.wait 3000, ->
-    test.assertEvalEquals(getFirstReviewVotes, votes + 1, "Vote up increases the review mark")
-    @click('.review:first-child [data-vote-btn^="down"]')
-  casper.wait 3000, ->
-    test.assertEvalEquals(getFirstReviewVotes, votes - 1, "Vote down decreases the review mark")
-    @click('.review:first-child [data-vote-btn^="down"]')
-  casper.wait 3000, ->
-    test.assertEvalEquals(getFirstReviewVotes, votes, "Re-clicking the same vote button discards the vote")
+    lastTime = new Date()
+  casper.waitForResource(
+    ((res) -> /vote$/.test(res.url) && res.time > lastTime)
+    , ->
+      test.assertEvalEquals(getFirstReviewVotes, votes + 1, "Vote up increases the review mark")
+      @click('.review:first-child [data-vote-btn^="down"]')
+      lastTime = new Date()
+  )
+  casper.waitForResource(
+    ((res) -> /vote$/.test(res.url) && res.time > lastTime)
+    , ->
+      test.assertEvalEquals(getFirstReviewVotes, votes - 1, "Vote down decreases the review mark")
+      @click('.review:first-child [data-vote-btn^="down"]')
+      lastTime = new Date()
+  )
+  casper.waitForResource(
+    ((res) -> /vote$/.test(res.url) && res.time > lastTime)
+    , ->
+      test.assertEvalEquals(getFirstReviewVotes, votes, "Re-clicking the same vote button discards the vote")
 
-    # remove the review
-    @click("a.edit-review")
+      # remove the review
+      @click("a.edit-review")
+  )
   casper.waitForSelector ".modal-open", ->
     # Edit review modal is open
     @click('[data-action="delete-review"]')
