@@ -28,14 +28,18 @@ $ -> # jQuery onLoad
         if (!data.cancelled)
           $el.addClass('voted');
 
+        console.log("Voting succeded");
         $score.queue (next) ->
           $score.text(data.score)
+          console.log("Score updated");
           next()
 
       .fail (xhr) ->
+        console.log("Voting failed");
         if (xhr.statusCode().status == 401) # Unauthorized
           modals.show('login-to-vote')
 
       .always ->
+        console.log("Voting finished");
         $score.animate(opacity: 1)
         _votes.pending = false
