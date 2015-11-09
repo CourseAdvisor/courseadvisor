@@ -19,10 +19,13 @@ $ -> # jQuery onLoad
       $btns.removeClass('voted');
       _votes.pending = true
 
-      $.post '/api/vote',
+      params =
         type: type # up / down
         "#{target}": id
         _token: TOKEN
+
+      console.log("Voting with params: #{JSON.stringify(params)}")
+      $.post '/api/vote', params
       .done (resp) ->
         data = JSON.parse(resp)
         if (!data.cancelled)
