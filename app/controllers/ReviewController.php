@@ -94,16 +94,16 @@ class ReviewController extends BaseController {
 
   public function vote() {
 
-    $review_id = Input::get('review');
-    $comment_id = Input::get('comment');
+    $review_id = Input::get('review', null);
+    $comment_id = Input::get('comment', null);
     $student_id = Session::get('student_id');
 
     // Determines target (review or comment)
     $target = 'review';
-    if ((empty($review_id) && empty($comment_id)) ||
-        (!empty($review_id) && !empty($comment_id))) {
+    if (($review_id != null && $comment_id != null) ||
+        ($review_id == null && $comment_id == null)) {
       return Response::make('bad request', 400);
-    } else if(!empty($comment_id)) {
+    } else if($comment_id != null) {
       $target = 'comment';
     }
 
