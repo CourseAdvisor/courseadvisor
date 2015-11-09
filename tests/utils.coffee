@@ -48,3 +48,5 @@ DICT = " abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789 "
           'username': profile
           'password': profile
         , true) # submit
+
+  waitForPage: (cb) -> casper.waitFor( ( -> @evaluate -> @_loaded ), cb)

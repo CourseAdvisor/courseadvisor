@@ -4606,10 +4606,10 @@ CREATE TABLE IF NOT EXISTS `votes` (
 
 
 ALTER TABLE `comments`
- ADD PRIMARY KEY (`id`), ADD KEY `fk_comments_reviews1_idx` (`review_id`), ADD KEY `fk_comments_students1_idx` (`student_id`), ADD KEY `fk_comments_comments1_idx` (`parent_id`);
+ ADD PRIMARY KEY (`id`), CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT, ADD KEY `fk_comments_reviews1_idx` (`review_id`), ADD KEY `fk_comments_students1_idx` (`student_id`), ADD KEY `fk_comments_comments1_idx` (`parent_id`);
 
 ALTER TABLE `courses`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `string_id_UNIQUE` (`string_id`), ADD KEY `fk_courses_teacher1_idx` (`teacher_id`), ADD KEY `fk_courses_sections1_idx` (`section_id`), ADD FULLTEXT KEY `name_fulltext` (`name_en`,`name_fr`);
+ ADD PRIMARY KEY (`id`), CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT, ADD UNIQUE KEY `string_id_UNIQUE` (`string_id`), ADD KEY `fk_courses_teacher1_idx` (`teacher_id`), ADD KEY `fk_courses_sections1_idx` (`section_id`), ADD FULLTEXT KEY `name_fulltext` (`name_en`,`name_fr`);
 
 ALTER TABLE `course_study_plan`
  ADD PRIMARY KEY (`study_plan_id`,`course_id`,`semester`), ADD KEY `fk_study_plans_has_courses_courses1_idx` (`course_id`), ADD KEY `fk_study_plans_has_courses_study_plans1_idx` (`study_plan_id`);
@@ -4618,25 +4618,25 @@ ALTER TABLE `inscriptions`
  ADD PRIMARY KEY (`course_id`,`sciper`,`year`,`term`), ADD KEY `fk_student_inscriptions_idx` (`course_id`);
 
 ALTER TABLE `reviews`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `course_student_unicity` (`course_id`,`student_id`), ADD KEY `fk_reviews_courses2_idx` (`course_id`), ADD KEY `fk_reviews_students1_idx` (`student_id`);
+ ADD PRIMARY KEY (`id`), CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT, ADD UNIQUE KEY `course_student_unicity` (`course_id`,`student_id`), ADD KEY `fk_reviews_courses2_idx` (`course_id`), ADD KEY `fk_reviews_students1_idx` (`student_id`);
 
 ALTER TABLE `sections`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `string_id_UNIQUE` (`string_id`);
+ ADD PRIMARY KEY (`id`), CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT, ADD UNIQUE KEY `string_id_UNIQUE` (`string_id`);
 
 ALTER TABLE `students`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `email_UNIQUE` (`email`), ADD UNIQUE KEY `sciper_UNIQUE` (`sciper`) USING BTREE, ADD KEY `fk_students_sections_idx` (`section_id`);
+ ADD PRIMARY KEY (`id`), CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT, ADD UNIQUE KEY `email_UNIQUE` (`email`), ADD UNIQUE KEY `sciper_UNIQUE` (`sciper`) USING BTREE, ADD KEY `fk_students_sections_idx` (`section_id`);
 
 ALTER TABLE `student_study_plan`
  ADD PRIMARY KEY (`study_plan_id`,`student_id`), ADD KEY `fk_study_plans_has_students_students1_idx` (`student_id`), ADD KEY `fk_study_plans_has_students_study_plans1_idx` (`study_plan_id`);
 
 ALTER TABLE `study_cycles`
- ADD PRIMARY KEY (`id`);
+ ADD PRIMARY KEY (`id`), CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `study_plans`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `url_fr_UNIQUE` (`url_fr`), ADD UNIQUE KEY `url_en_UNIQUE` (`url_en`), ADD UNIQUE KEY `slug_UNIQUE` (`slug`), ADD KEY `fk_study_plans_study_cycle1_idx` (`study_cycle_id`);
+ ADD PRIMARY KEY (`id`), CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT, ADD UNIQUE KEY `url_fr_UNIQUE` (`url_fr`), ADD UNIQUE KEY `url_en_UNIQUE` (`url_en`), ADD UNIQUE KEY `slug_UNIQUE` (`slug`), ADD KEY `fk_study_plans_study_cycle1_idx` (`study_cycle_id`);
 
 ALTER TABLE `teachers`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `sciper_UNIQUE` (`sciper`), ADD FULLTEXT KEY `name_fulltext` (`lastname`,`firstname`);
+ ADD PRIMARY KEY (`id`), CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT, ADD UNIQUE KEY `sciper_UNIQUE` (`sciper`), ADD FULLTEXT KEY `name_fulltext` (`lastname`,`firstname`);
 
 ALTER TABLE `votes`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `student_review_unicity` (`student_id`,`review_id`), ADD KEY `fk_votes_reviews1_idx` (`review_id`), ADD KEY `fk_votes_students1_idx` (`student_id`), ADD KEY `fk_votes_comments1_idx` (`comment_id`);
+ ADD PRIMARY KEY (`id`), CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT, ADD UNIQUE KEY `student_review_unicity` (`student_id`,`review_id`), ADD KEY `fk_votes_reviews1_idx` (`review_id`), ADD KEY `fk_votes_students1_idx` (`student_id`), ADD KEY `fk_votes_comments1_idx` (`comment_id`);

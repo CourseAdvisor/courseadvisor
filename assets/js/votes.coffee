@@ -1,8 +1,6 @@
 modals = require('./modals')
-
-# used to help tests figure out when vote has been performed
-window._votes =
-  pending: false
+events = require('./events')
+log = require('./log')
 
 $ -> # jQuery onLoad
   $('[data-vote-btn]').each ->
@@ -17,36 +15,32 @@ $ -> # jQuery onLoad
       evt.preventDefault()
       $score.animate(opacity: 0)
       $btns.removeClass('voted');
-      _votes.pending = true
 
       params =
         type: type # up / down
         "#{target}": id
         _token: TOKEN
 
-      console.log("Voting with params: #{JSON.stringify(params)}")
+      log.v("Voting with params: #{JSON.stringify(params)}")
       $.post '/api/vote', params
       .done (resp) ->
         data = JSON.parse(resp)
         if (!data.cancelled)
           $el.addClass('voted')
 
-        console.log("Voting succeded")
+        log.v("Voting succeded")
         $score.queue (next) ->
           $score.text(data.score)
-          console.log("Score updated")
           next()
 
       .fail (xhr) ->
         if (xhr.statusCode().status == 401) # Unauthorized
-          console.error("Voting failed. Reason: Unauthorized")
+          log.e("Voting failed. Reason: Unauthorized")
           modals.show('login-to-vote')
         else
-          console.error("Voting failed. Reason: Unknown")
-          console.error(xhr.statusCode().status)
-          console.error(xhr.responseText)
+          log.e("Voting failed. #{xhr.statusCode().status} ; #{xhr.responseText}")
 
       .always ->
-        console.log("Voting finished")
+        log.v("Voting finished")
         $score.animate(opacity: 1)
-        _votes.pending = false
+        events.trigger('vote.completed')

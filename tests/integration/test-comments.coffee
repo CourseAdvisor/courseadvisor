@@ -4,7 +4,7 @@
   Tests comment features
 ###
 
-{url, screenshot, login, randomStr} = require("../utils.coffee")
+{url, screenshot, login, randomStr, waitForPage} = require("../utils.coffee")
 
 # Tests basic comment workflow:
 # - post a comment
@@ -24,7 +24,7 @@ casper.test.begin "Full comment workflow", 6, (test) ->
   casper.start url("/")
   login profile: "snow", next: "/fr/course/psychologie-sociale-d-524"
   # Creates a review in order to comment
-  casper.waitForSelector "#reviews", ->
+  waitForPage ->
     @click("[data-starbar*=lectures_grade]>.fa-stack:nth-child(3)")
   casper.then ->
     @fill("form#create-review-form",
@@ -32,58 +32,42 @@ casper.test.begin "Full comment workflow", 6, (test) ->
       title: title
       difficulty: "2"
     , true) # submit form
-  casper.waitForSelector ".review", ->
+  waitForPage ->
     @click "[data-comment-action^=reply]"
   casper.then ->
     @fill("form[action$=comment]",
       body: comment
     , true )
-  casper.waitForSelector "[data-comment-action^=edit]", ->
+  waitForPage ->
     test.assertTextExists(comment, "Comment is shown")
     @click "[data-comment-action^=edit]"
   casper.then ->
     @fill('form[action$="comment/edit"]',
       body: "#{comment}_edited"
     , true )
-  casper.waitFor(
-    (-> @evaluate -> window._loaded)
-    , ->
+  waitForPage ->
       test.assertTextExists("#{comment}_edited", "Modified comment is shown")
-
       # test votes
       votes = @evaluate getFirstReviewVotes
+      @evaluate -> @events.clear('vote.completed')
       @click('.review:first-child .comment:first-child [data-vote-btn^="up"]')
-      lastTime = new Date()
+  casper.waitFor( ( -> @evaluate -> @events.poll('vote.completed') ), ->
+    test.assertEvalEquals(getFirstReviewVotes, votes + 1, "Vote up increases the comment mark")
+    @evaluate -> @events.clear('vote.completed')
+    @click('.review:first-child .comment:first-child [data-vote-btn^="down"]')
   )
-  casper.waitForResource (res) ->
-    if (/vote$/.test(res.url))
-      console.log("my "+res.time.getTime()+" yours "+lastTime.getTime())
-      res.time > lastTime
-    else false
-  casper.wait 500, ->
-      test.assertEvalEquals(getFirstReviewVotes, votes + 1, "Vote up increases the comment mark")
-      @click('.review:first-child .comment:first-child [data-vote-btn^="down"]')
-      lastTime = new Date()
-  casper.waitForResource (res) ->
-    if (/vote$/.test(res.url))
-      console.log("my "+res.time.getTime()+" yours "+lastTime.getTime())
-      res.time > lastTime
-    else false
-  casper.wait 500, ->
-      test.assertEvalEquals(getFirstReviewVotes, votes - 1, "Vote down decreases the comment mark")
-      @click('.review:first-child .comment:first-child [data-vote-btn^="down"]')
-      lastTime = new Date()
-  casper.waitForResource (res) ->
-    if (/vote$/.test(res.url))
-      console.log("my "+res.time.getTime()+" yours "+lastTime.getTime())
-      res.time > lastTime
-    else false
-  casper.wait 500, ->
-      test.assertEvalEquals(getFirstReviewVotes, votes, "Re-clicking the same vote button discards the vote")
-      @click '[data-comment-action^="edit"]'
+  casper.waitFor( ( -> @evaluate -> @events.poll('vote.completed') ), ->
+    test.assertEvalEquals(getFirstReviewVotes, votes - 1, "Vote down decreases the comment mark")
+    @evaluate -> @events.clear('vote.completed')
+    @click('.review:first-child .comment:first-child [data-vote-btn^="down"]')
+  )
+  casper.waitFor( ( -> @evaluate -> @events.poll('vote.completed') ), ->
+    test.assertEvalEquals(getFirstReviewVotes, votes, "Re-clicking the same vote button discards the vote")
+    @click '[data-comment-action^="edit"]'
+  )
   casper.then ->
     @click '[formaction$="comment/delete"]'
-  casper.waitForSelector ".review", ->
+  waitForPage ->
     test.assertTextDoesntExist(comment, "Comment is gone")
     @click("a.edit-review")
   casper.waitForSelector ".modal-open", ->

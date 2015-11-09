@@ -23,6 +23,8 @@ casper.setFilter "page.confirm", -> true
 casper.on "url.changed", (url) ->
   if (url.indexOf(BASE_URL) == 0)
     casper.evaluate ->
+      window.DEBUG = true
+      
       disableAnimations = ->
         jQuery = window.jQuery
         if ( jQuery )
