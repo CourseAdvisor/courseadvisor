@@ -4,7 +4,7 @@
   Tests comment features
 ###
 
-{url, screenshot, login, randomStr, waitForPage} = require("../utils.coffee")
+{url, screenshot, login, randomStr, waitForPage} = require './utils.coffee'
 
 # Tests basic comment workflow:
 # - post a comment

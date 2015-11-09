@@ -1,4 +1,4 @@
-{BASE_URL} = require('../utils')
+{BASE_URL} = require './utils.coffee'
 
 casper.options.viewportSize =
   width:  1280
@@ -24,7 +24,7 @@ casper.on "url.changed", (url) ->
   if (url.indexOf(BASE_URL) == 0)
     casper.evaluate ->
       window.DEBUG = true
-      
+
       disableAnimations = ->
         jQuery = window.jQuery
         if ( jQuery )

@@ -6,25 +6,29 @@
 ###
 
 # Basic requirements
-frisby = require "frisby"
-{url} = require("../utils")
-
-frisby.globalSetup (
-  request:
-    headers:
-      "content-type": "application/json"
-    timeout: 30000
-)
+{test, logged_in_as} = require("./utils")
 
 # An ajax call to the auth probe route should result in an unauthorized response
-frisby.create("Test auth probe unauthorized AJAX")
-  .addHeaders("X-Requested-With": "XMLHttpRequest")
-  .get( url("/api/is_auth") )
-  .expectStatus(401)
+test "Auth probe unauthorized AJAX"
+.on "/api/is_auth"
+.is (rq) ->
+  rq.addHeaders "X-Requested-With": "XMLHttpRequest"
+    .expectStatus 401
 .toss()
 
 # A call to the auth probe route should result in a redirect to tequila
-frisby.create("Test auth probe unauthorized")
-  .get( url("/api/is_auth"), followRedirect: false )
-  .expectStatus(302)
+test "Auth probe unauthorized"
+.on "/api/is_auth", followRedirect: false
+.is (rq) ->
+  rq.expectStatus 302
 .toss()
+
+
+logged_in_as 'snow', (test) ->
+
+  # A call to the auth probe route when authorized shoud return 200
+  test "Auth probe authorized"
+  .on "/api/is_auth", followRedirect: false
+  .is (rq) ->
+    rq.expectStatus 200
+  .toss()

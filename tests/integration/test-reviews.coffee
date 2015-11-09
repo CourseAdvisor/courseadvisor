@@ -4,7 +4,7 @@
   Tests review features
 ###
 
-{url, screenshot, login, randomStr, waitForPage} = require("../utils.coffee")
+{url, screenshot, login, randomStr, waitForPage} = require './utils.coffee'
 
 # Tests basic review workflow:
 # - post a Review

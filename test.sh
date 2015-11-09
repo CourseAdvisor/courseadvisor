@@ -111,6 +111,9 @@ x_open() {
   fi
 }
 
+# clean compiled files before running tests
+rm -f tests/integration/*.js
+
 while [ $# -ne 0 ]; do
   case "$1" in
     --help|-h)

@@ -4,7 +4,7 @@
   Tests basic login features
 ###
 
-{url, screenshot, login} = require("../utils.coffee")
+{url, screenshot, login} = require './utils.coffee'
 
 # Tests that a login without parameters directs to the homepage
 casper.test.begin "Login lands on dashboard", 1, (test) ->

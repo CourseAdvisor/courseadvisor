@@ -4,7 +4,7 @@
   Tests global stuff like homepage, header, footer...
 ###
 
-{url, screenshot} = require("../utils.coffee")
+{url, screenshot} = require './utils.coffee'
 
 # Tests that the homepage loads
 casper.test.begin "Loads homepage", 1, (test) ->
