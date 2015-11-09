@@ -19,6 +19,7 @@ options:
   -m, --start-margarita: Starts the margarita server. See --setup-margarita
   -f, --file name   : Runs this test file only (use with -t, works only with integration tests).
                       Loaded file is "integration/test-{name}.coffee"
+  --seed            : Prepares the database with fresh test data
   --precompile      : Precompiles coffee integration test files (try this if first test hangs)
   --setup-margarita : Downloads the margarita server, installs the profile and dependencies and exits
 EOF
@@ -141,6 +142,11 @@ while [ $# -ne 0 ]; do
     --file|-f)
       shift
       file="$1"
+    ;;
+    --seed)
+      echo "Seeding database. Requires to enter sql root password twice"
+      mysql -e "drop database IF EXISTS courseadvisor; create database IF NOT EXISTS courseadvisor;" -uroot -p
+      cat ./app/database/seeds/testing.sql | mysql -uroot -p
     ;;
     *)
       echo "Unknown parameter: $1"
