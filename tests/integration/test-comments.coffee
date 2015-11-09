@@ -12,7 +12,7 @@
 #   - mandatory title if content set
 # - edit a review (with error on title)
 # - delete a Review
-casper.test.begin "Full comment workflow", 6, (test) ->
+casper.test.begin "Full comment workflow", 7, (test) ->
   content = randomStr(128)
   title = randomStr(32)
   comment = randomStr(128)
@@ -73,5 +73,8 @@ casper.test.begin "Full comment workflow", 6, (test) ->
   casper.waitForSelector ".modal-open", ->
     # Edit review modal is open
     @click('[data-action="delete-review"]')
+  waitForPage ->
+    # Review has been deleted
+    test.assertTextDoesntExist(title, "Title is gone")
   casper.run ->
     test.done()
