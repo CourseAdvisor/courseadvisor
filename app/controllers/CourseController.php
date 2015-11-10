@@ -32,18 +32,27 @@ class CourseController extends BaseController {
       'plan_slug' => $plan_slug
     ]);
 
+    $courses = $plan->courses()
+      ->with('teacher', 'plans')
+      ->withPivot('semester')
+      ->orderBy('pivot_semester')
+      ->get()
+      ->groupBy(function($course) {
+        return $course->nice_semester;
+      });
+
+    foreach($courses as $semester => $_courses) {
+      usort($_courses, function ($c1, $c2) {
+        return strcmp($c1->name, $c2->name);
+      });
+      $courses[$semester] = $_courses;
+    }
+
     return View::make('courses.planCourses', [
       'page_title' => $cycle.' &ndash; '.$plan->name,
       'plan' => $plan,
       'cycle' => $cycle,
-      'courses' => $plan->courses()
-        ->with('teacher', 'plans')
-        ->withPivot('semester')
-        ->orderBy('pivot_semester')
-        ->get()
-        ->groupBy(function($course) {
-          return $course->nice_semester;
-        })
+      'courses' => $courses
     ]);
   }
 
