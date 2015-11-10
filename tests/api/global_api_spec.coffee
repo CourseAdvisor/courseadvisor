@@ -5,31 +5,22 @@
   respective spec files.
 ###
 
-# Basic requirements
-{test, logged_in_as} = require("./utils")
+{test} = require './utils'
 
 # An ajax call to the auth probe route should result in an unauthorized response
 test "Auth probe unauthorized AJAX"
 .on "/api/is_auth"
-.is
-.addHeaders "X-Requested-With": "XMLHttpRequest"
-.expectStatus 401
-.toss()
-
+.is (rq) ->
+  rq.addHeaders "X-Requested-With": "XMLHttpRequest"
+    .expectStatus 401
 
 # A call to the auth probe route should result in a redirect to tequila
 test "Auth probe unauthorized"
 .on "/api/is_auth", followRedirect: false
-.is
-.expectStatus 302
-.toss()
+.is (rq) -> rq.expectStatus 302
 
-
-logged_in_as 'snow', (test) ->
-
-  # A call to the auth probe route when authorized shoud return 200
-  test "Auth probe authorized"
-  .on "/api/is_auth", followRedirect: false
-  .is
-  .expectStatus 200
-  .toss()
+# A call to the auth probe route when authorized shoud return 200
+test "Auth probe authorized"
+.withUser 'snow'
+.on "/api/is_auth", followRedirect: false
+.is (rq) -> rq.expectStatus 200
