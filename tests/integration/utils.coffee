@@ -20,6 +20,18 @@ utils = module.exports =
 
   waitForPage: (cb) -> casper.waitFor( ( -> @evaluate -> @_loaded ), cb)
 
+  doXHR: (url) ->
+    casper.evaluate ((url) ->
+      window.TEST_XHR_DONE = false
+      window.TEST_XHR_RESULT = null
+      xhr = new XMLHttpRequest();
+      xhr.open('GET', url)
+      xhr.onerror = -> window.TEST_XHR_RESULT = 'failure'
+      xhr.onload = -> window.TEST_XHR_RESULT = 'success'
+      xhr.onreadystatechange = -> window.TEST_XHR_DONE = (xhr.readyState == 4)
+      xhr.send()
+    ), url
+
 # extend shared utilities
 for i in Object.keys(shared)
   utils[i] = shared[i]

@@ -22,5 +22,6 @@ test "Auth probe unauthorized"
 # A call to the auth probe route when authorized shoud return 200
 test "Auth probe authorized"
 .withUser 'snow'
+.withCSRF()
 .on "/api/is_auth", followRedirect: false
 .is (rq) -> rq.expectStatus 200
