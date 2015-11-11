@@ -30,3 +30,8 @@ utils = module.exports =
   # generates a random (hopefully unique) string of length {len}
   randomStr: (len = 32) ->
     return (DICT.charAt(Math.random()*DICT.length) for i in [0..len]).join('')
+
+  extend: (object, properties) ->
+    for key, val of properties
+      object[key] = val if !object[key]?
+    object

@@ -6,9 +6,9 @@
 
 {test, logged_in_as, withCSRF} = require './utils'
 
-###
-test "Valid vote on review"
-  .withUser 'snow'
+
+test "Unauthenticated vote"
+  .on "/api/vote", method: 'post'
   .withCSRF
-  .is
-###
+  .withAJAX
+  .is (rq) -> rq.expectStatus 401

@@ -10,9 +10,8 @@
 # An ajax call to the auth probe route should result in an unauthorized response
 test "Auth probe unauthorized AJAX"
 .on "/api/is_auth"
-.is (rq) ->
-  rq.addHeaders "X-Requested-With": "XMLHttpRequest"
-    .expectStatus 401
+.withAJAX
+.is (rq) -> rq.expectStatus 401
 
 # A call to the auth probe route should result in a redirect to tequila
 test "Auth probe unauthorized"
@@ -21,7 +20,6 @@ test "Auth probe unauthorized"
 
 # A call to the auth probe route when authorized shoud return 200
 test "Auth probe authorized"
-.withUser 'snow'
-.withCSRF()
+.withUser "snow"
 .on "/api/is_auth", followRedirect: false
 .is (rq) -> rq.expectStatus 200

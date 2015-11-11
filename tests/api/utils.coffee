@@ -3,99 +3,132 @@ request = require 'request'
 Promise = require 'promise'
 shared = require '../utils-shared.coffee'
 
-# === frisby-only utilities ===
+
 {fail} = utils = module.exports =
-  test: (desc) -> new TestCase(desc)
   fail: (reason) -> expect("Test aborted. Reason: #{reason}").toBeUndefined()
+  test: (desc) -> new TestCaseBuilder({_desc: desc}, ROOT_BUILDER)
 
-#TODO: refactor & cache sessions
-class TestCase
-  constructor: (desc, {@_request = undefined} = {}) ->
-    @_user = null
-    @_desc = desc
-    @_useCSRF = false
-    # Subsequent request keep the session state
-    if (!@_request?) then @_request = request.defaults jar: request.jar()
-    @rq = null
+shared.extend(utils, shared)
 
-  withUser: (@_user) -> @
 
-  # TODO: turn this into a attr, not a method
-  withCSRF: ->
-    @_useCSRF = true
-    @
+class Session
+  constructor: ->
+    @request = request.defaults jar: request.jar()
+    @get = Promise.denodeify @request
+    @post = Promise.denodeify @request.post
+    @csrf = null
 
-  on: (@_url, @_params = {}) -> @
 
-  is: (cb) ->
-    describe "Tequila auth", =>
-      it "should authenticate with tequila", =>
-        done = false
-        runs =>
-          Promise.all([
-            if (@_user) then @_authenticate() else Promise.resolve(null),
-            if (@_useCSRF) then @_getCSRF() else Promise.resolve(null)
-          ])
-          .then => @_prepareRq()
-          .then => cb(@rq)
-          .then => @rq.toss()
-          .catch (err) -> fail(err)
-          .done -> done = true
-        waitsFor (-> done), "tequila authentication"
+SessionStore =
+  # Returns a promise holding a Session object for the test's parameters
+  # TODO: cache sessions
+  getSessionForTestCase: (test) ->
+    params = test.getParams()
+    session = new Session()
+    Promise.all([
+        if params.csrf then @_getCSRF(session) else null,
+        if params.user? then @_authenticate(session, params.user) else null
+      ])
+      .then -> session
 
-  _prepareRq: () ->
-    if @rq? then throw Error("Test case was launched twice !")
-    @rq = frisby.create @_desc
-    {method = 'GET', data = null} = @_params
-    if @_params.mock? then return fail("Use constructor request param instead of mock")
-    @_params.mock = @_request
-    if data && @_useCSRF then data._token = @_csrfToken
-    method = method.toUpperCase()
-    url = utils.url @_url
-    @rq._request.apply @rq, [method].concat([url, data, @_params])
-    @
-
-  _getCSRF: ->
-    # promise-ify request library
-    getRequest = Promise.denodeify @_request
-
-    getRequest url: utils.url('/api/csrf_token')
-      .then (res) =>
+  _getCSRF: (session) ->
+    session.get url: utils.url('/api/csrf_token')
+      .then (res) ->
         if res.statusCode != 200 then throw Error("Bad response from /api/csrf_token. Status: #{res.statusCode}")
-        if !(matches = res.body.match(/TOKEN = (\S+)/))? then throw Error("Bad response from /api/csrf_token. Body: #{res.body}")
-        @_csrfToken = matches[1]
+        if !(matches = res.body.match(/TOKEN = (\w+)/i))? then throw Error("Bad response from /api/csrf_token. Body: #{res.body}")
+        session.csrf = matches[1]
 
-
-  _authenticate: ->
-    # promise-ify request library
-    getRequest = Promise.denodeify @_request
-    postRequest = Promise.denodeify @_request.post
-
-    getRequest url: utils.url('/en/login'), followRedirect: false
-      .then (res) =>
+  _authenticate: (session, user) ->
+    session.get url: utils.url('/en/login'), followRedirect: false
+      .then (res) ->
         if (res.statusCode == 307 || res.statusCode == 302)
           location = res.headers['location']
           requestKey = location.split('=')[1];
           base = location.substr(0, location.lastIndexOf('/'))
-          postRequest url: "#{base}/login", followRedirect: false, form:
+          session.post url: "#{base}/login", followRedirect: false, form:
             requestkey: requestKey
-            username: @_user
-            password: @_user
+            username: user
+            password: user
         else
           throw Error("Error while requesting login page. Status is #{res.statusCode}")
       .then (res) ->
         if (res.statusCode == 307 || res.statusCode == 302)
-          getRequest url: res.headers['location']
+          session.get url: res.headers['location']
         else
           throw Error("Invalid status code: #{res.statusCode} on /login response")
 
-# extend shared utilities
-for i in Object.keys(shared)
-  utils[i] = shared[i]
+
+class TestCase
+  constructor: ({@_user, @_url, @_desc, @_reqParams, @_useCSRF, @_useAJAX}) ->
+  is: (cb) ->
+    describe "test case", =>
+      it "should prepare #{@}", =>
+        done = false
+        runs =>
+          SessionStore.getSessionForTestCase @
+            .then @_prepareRq
+            .then (rq) =>
+              cb(rq)
+              return rq
+            .then (rq) => rq.toss()
+            .catch (err) -> fail("#{err} #{err.stack}")
+            .done -> done = true
+        waitsFor (-> done), "test case completion"
+    @
+  getParams: ->
+    url: @_url
+    desc: @_desc
+    user: @_user
+    csrf: @_useCSRF
+    ajax: @_useAJAX
+    reqParams: @_reqParams
+  toString: -> "TestCase: " + JSON.stringify @getParams()
+  _prepareRq: (session) =>
+    rq = frisby.create @_desc
+    {method = 'GET', data = {}} = @_reqParams
+    if @_reqParams.mock? then return fail("Use constructor request param instead of mock")
+    @_reqParams.mock = session.request
+    if @_useCSRF then data._token = session.csrf
+    method = method.toUpperCase()
+    url = utils.url @_url
+    rq._request.apply rq, [method].concat([url, data, @_reqParams])
+    if (@_useAJAX) then rq.addHeaders "X-Requested-With": "XMLHttpRequest"
+    return rq
+
+
+class TestCaseBuilder
+  constructor: ({@_useAJAX, @_user, @_url, @_desc, @_reqParams, @_useCSRF}, @_parent) ->
+    utils.extend(@, @_parent)
+    @_reqParams = {}
+    @withCSRF = if @_useCSRF then @ else new TestCaseBuilder({_useCSRF: true}, @)
+    @withAJAX = if @_useAJAX then @ else new TestCaseBuilder({_useAJAX: true}, @)
+  withUser: (@_user) -> @
+  on: (@_url, @_reqParams = {}) -> @
+  build: ->
+    @_inheritProperties()
+    new TestCase(@)
+  is: (cb) ->
+    tc = @build()
+    tc.is(cb)
+  _inheritProperties: ->
+    if !@_parent? then return
+    @_parent._inheritProperties()
+    utils.extend(@_reqParams, @_parent._reqParams)
+    utils.extend(@, @_parent)
+
+
+ROOT_BUILDER = new TestCaseBuilder(
+  _useAJAX: false
+  _user: null
+  _url: null
+  _desc: null
+  _reqParams: {}
+  _useCSRF: false
+)
+
 
 # Do some setup by the way
 frisby.globalSetup
   request:
-    headers:
-      "content-type": "application/json"
+    headers: {}
     timeout: 30000

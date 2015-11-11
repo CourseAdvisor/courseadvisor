@@ -3,9 +3,9 @@
 server_port="80"
 open_screenshots=0
 run_test=all
-margarita_pid=0
 file=0
 integ_ext="coffee"
+force=0
 
 usage() {
   cat 1>&2 << EOF
@@ -19,6 +19,7 @@ options:
   -m, --start-margarita: Starts the margarita server. See --setup-margarita
   -f, --file name   : Runs this test file only (use with -t, works only with integration tests).
                       Loaded file is "integration/test-{name}.coffee"
+  --force           : Run test even if sanity checks failed
   --seed            : Prepares the database with fresh test data
   --precompile      : Precompiles coffee integration test files (try this if first test hangs)
   --setup-margarita : Downloads the margarita server, installs the profile and dependencies and exits
@@ -51,13 +52,15 @@ start_margarita() {
   cd margarita
   node bin/www &
   margarita_pid=$!
+  echo "$margarita_pid" > ../.margarita.pid
   echo "margarita process started with pid $margarita_pid"
   sleep 2
   cd ..
 }
 
 cleanup() {
-  if [ ! $margarita_pid -eq "0" ]; then
+  margarita_pid=`cat .margarita.pid`
+  if [ $? -eq 0 ] && [ ! $margarita_pid -eq "0" ]; then
     kill $margarita_pid
   fi
 }
@@ -78,8 +81,10 @@ do_test() {
   # ensures app is not in debug mode
   echo 'Config::get("app.debug");' | php artisan tinker | grep -q false
   if [ $? -ne 0 ]; then
-    echo "ERR: Tests must run with debug mode off. Please set app.debug to false in your app config file" 1>&2
-    exit 1
+    echo "ERR: Tests must run with debug mode off. Please set app.debug to false in your app config file or use --force if you know what you are doing" 1>&2
+    if [ $force -ne 1 ]; then
+      exit 1
+    fi
   fi
 
   # ensures tmp dir
@@ -130,6 +135,9 @@ while [ $# -ne 0 ]; do
     --test|-t)
       shift
       run_test="$1"
+    ;;
+    --force)
+      force=1
     ;;
     --setup-margarita)
       setup_margarita
