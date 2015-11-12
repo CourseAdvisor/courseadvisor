@@ -10,7 +10,7 @@
 # An ajax call to the auth probe route should result in an unauthorized response
 test "Auth probe unauthorized AJAX"
 .on "/api/is_auth"
-.withAJAX
+.withAJAX()
 .is (rq) -> rq.expectStatus 401
 
 # A call to the auth probe route should result in a redirect to tequila

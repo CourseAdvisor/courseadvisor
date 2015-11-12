@@ -25,11 +25,33 @@ SessionStore =
   # TODO: cache sessions
   getSessionForTestCase: (test) ->
     params = test.getParams()
-    session = new Session()
-    Q.Promise (resolve) -> resolve(null)
-      .then => if params.user? then @_authenticate(session, params.user) else null
-      .then => if params.csrf then @_getCSRF(session) else null
-      .then -> session
+    if !params.user?
+      Q.Promise (resolve) => resolve(@getDefaultSession())
+    else if @hasUserSession(params.user)
+      Q.Promise (resolve) => resolve(@getUserSession(params.user))
+    else
+      session = new Session()
+      Q.Promise (resolve) -> resolve(null)
+      .then => @_authenticate(session, params.user) if params.user?
+      .then => @_getCSRF(session)
+      .then => @_store[params.user] = session
+
+
+  getDefaultSession: ->
+    Q.Promise (resolve) => resolve(@_defaultSession)
+    .then (session) =>
+      if !session?
+        session = new Session()
+        @_getCSRF(session).then -> session
+      else
+        session
+    .then (session) => @_defaultSession = session
+
+  hasUserSession: (user) -> @_store[user]?
+  getUserSession: (user) -> @_store[user]
+
+  _defaultSession: null
+  _store: {}
 
   _getCSRF: (session) ->
     session.get url: utils.url('/api/csrf_token')
@@ -97,12 +119,10 @@ class TestCase
 
 
 class TestCaseBuilder
-  constructor: ({@_useAJAX, @_user, @_url, @_desc, @_reqParams, @_useCSRF}, @_parent) ->
-    utils.extend(@, @_parent)
-    @_reqParams = {}
-    @withCSRF = if @_useCSRF then @ else new TestCaseBuilder({_useCSRF: true}, @)
-    @withAJAX = if @_useAJAX then @ else new TestCaseBuilder({_useAJAX: true}, @)
+  constructor: ({@_useAJAX, @_user, @_url, @_desc, @_reqParams = {}, @_useCSRF}, @_parent) ->
   withUser: (@_user) -> @
+  withAJAX: -> new TestCaseBuilder({_useAJAX: true}, @)
+  withCSRF: -> new TestCaseBuilder({_useCSRF: true}, @)
   on: (@_url, @_reqParams = {}) -> @
   build: ->
     @_inheritProperties()
