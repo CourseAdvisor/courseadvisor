@@ -43,7 +43,6 @@ do_api_test() {
 
 setup_margarita() {
   git clone https://github.com/CourseAdvisor/margarita.git
-  cp tests/profiles.json margarita/
   cd margarita
   npm install
 }
@@ -86,6 +85,8 @@ do_test() {
       exit 1
     fi
   fi
+  # ensures profiles are up to date
+  cp tests/profiles.json margarita/
 
   # ensures tmp dir
   if [ ! -d tmp ]; then
