@@ -9,35 +9,54 @@
 
 # Normal usage
 
-test "Authorized vote on own review"
-.on "/api/vote", method: "post", data: { type: "up", review: 485 }
-.withCSRF().withAJAX().withUser 'snow'
-.is (rq) -> rq.expectStatus 200
-
 test "Vote up on own review"
 .on "/api/vote", method: "post", data: {type: "up", review: 485 }
 .withCSRF().withAJAX().withUser 'snow'
-.is (rq) -> rq.expectStatus 200
+.is (rq) ->
+  rq.expectStatus 200
+    .expectJSON {score: 1, cancelled: false}
 
-test "Vote down on own review"
+test "Change vote up on own review"
 .on "/api/vote", method: "post", data: {type: "down", review: 485 }
 .withCSRF().withAJAX().withUser 'snow'
-.is (rq) -> rq.expectStatus 200
+.is (rq) ->
+  rq.expectStatus 200
+    .expectJSON {score: -1, cancelled: false}
+
+test "Cancel vote on own review"
+.on "/api/vote", method: "post", data: {type: "down", review: 485 }
+.withCSRF().withAJAX().withUser 'snow'
+.is (rq) ->
+  rq.expectStatus 200
+    .expectJSON {score: 0, cancelled: true}
 
 test "Vote on own comment"
 .on "/api/vote", method: "post", data: { type: "up", comment: 5 }
 .withCSRF().withAJAX().withUser 'snow'
-.is (rq) -> rq.expectStatus 200
+.is (rq) ->
+  rq.expectStatus 200
+    .expectJSON {score: 1, cancelled: false}
+
+test "Cancel vote on own comment"
+.on "/api/vote", method: "post", data: { type: "up", comment: 5 }
+.withCSRF().withAJAX().withUser 'snow'
+.is (rq) ->
+  rq.expectStatus 200
+    .expectJSON {score: 0, cancelled: true}
 
 test "Vote on foreign comment"
-.on "/api/vote", method: "post", data: { type: "up", comment: 5 }
+.on "/api/vote", method: "post", data: { type: "down", comment: 5 }
 .withCSRF().withAJAX().withUser 'cersei'
-.is (rq) -> rq.expectStatus 200
+.is (rq) ->
+  rq.expectStatus 200
+    .expectJSON {score: -1, cancelled: false}
 
-test "Vote up on foreign review"
-.on "/api/vote", method: "post", data: { type: "up", review: 485 }
-.withCSRF().withAJAX().withUser 'snow'
-.is (rq) -> rq.expectStatus 200
+test "Cancel vote on foreign comment"
+.on "/api/vote", method: "post", data: { type: "down", comment: 5 }
+.withCSRF().withAJAX().withUser 'cersei'
+.is (rq) ->
+  rq.expectStatus 200
+    .expectJSON {score: 0, cancelled: true}
 
 
 # Bad usage

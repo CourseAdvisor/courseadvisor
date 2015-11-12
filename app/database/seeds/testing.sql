@@ -4658,7 +4658,3 @@ INSERT INTO `comments` (`id`, `review_id`, `parent_id`, `student_id`, `body`, `s
 
 INSERT INTO `reviews` (`id`, `course_id`, `student_id`, `title`, `lectures_grade`, `exercises_grade`, `content_grade`, `avg_grade`, `difficulty`, `comment`, `is_anonymous`, `status`, `created_at`, `updated_at`, `score`) VALUES
 (485, 921, 411, 'Still more interesting than a game of bridge', 3, 1, 3, 2.3333333333333, 2, 'This course bridges the gap between plans and their concrete implementation.', '0', 'published', '2015-11-11 22:34:03', '2015-11-11 22:43:14', -1);
-
-INSERT INTO `votes` (`review_id`, `comment_id`, `student_id`, `type`, `created_at`, `updated_at`, `id`) VALUES
-(NULL, 5, 411, 'up', '2015-11-11 22:43:12', '2015-11-11 22:43:12', 144),
-(485, NULL, 411, 'down', '2015-11-11 22:43:14', '2015-11-11 22:43:14', 145);
