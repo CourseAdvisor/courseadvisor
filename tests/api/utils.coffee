@@ -1,8 +1,9 @@
 frisby = require 'frisby'
 request = require 'request'
-Promise = require 'promise'
+Q = require 'q'
 shared = require '../utils-shared.coffee'
 
+Q.longStackSupport = true
 
 {fail} = utils = module.exports =
   fail: (reason) -> expect("Test aborted. Reason: #{reason}").toBeUndefined()
@@ -14,8 +15,8 @@ shared.extend(utils, shared)
 class Session
   constructor: ->
     @request = request.defaults jar: request.jar()
-    @get = Promise.denodeify @request
-    @post = Promise.denodeify @request.post
+    @get = Q.denodeify @request
+    @post = Q.denodeify @request.post
     @csrf = null
 
 
@@ -25,22 +26,21 @@ SessionStore =
   getSessionForTestCase: (test) ->
     params = test.getParams()
     session = new Session()
-    Promise.all([
-        if params.csrf then @_getCSRF(session) else null,
-        if params.user? then @_authenticate(session, params.user) else null
-      ])
+    Q.Promise (resolve) -> resolve(null)
+      .then => if params.user? then @_authenticate(session, params.user) else null
+      .then => if params.csrf then @_getCSRF(session) else null
       .then -> session
 
   _getCSRF: (session) ->
     session.get url: utils.url('/api/csrf_token')
-      .then (res) ->
+      .then ([res]) ->
         if res.statusCode != 200 then throw Error("Bad response from /api/csrf_token. Status: #{res.statusCode}")
         if !(matches = res.body.match(/TOKEN = (\w+)/i))? then throw Error("Bad response from /api/csrf_token. Body: #{res.body}")
         session.csrf = matches[1]
 
   _authenticate: (session, user) ->
     session.get url: utils.url('/en/login'), followRedirect: false
-      .then (res) ->
+      .then ([res]) ->
         if (res.statusCode == 307 || res.statusCode == 302)
           location = res.headers['location']
           requestKey = location.split('=')[1];
@@ -51,7 +51,7 @@ SessionStore =
             password: user
         else
           throw Error("Error while requesting login page. Status is #{res.statusCode}")
-      .then (res) ->
+      .then ([res]) ->
         if (res.statusCode == 307 || res.statusCode == 302)
           session.get url: res.headers['location']
         else

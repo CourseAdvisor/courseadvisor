@@ -96,7 +96,12 @@ class ReviewController extends BaseController {
 
     $review_id = Input::get('review', null);
     $comment_id = Input::get('comment', null);
+    $type = Input::get('type');
     $student_id = Session::get('student_id');
+
+    if ($type != 'up' && $type != 'down') {
+      return Response::make('bad request', 400);
+    }
 
     // Determines target (review or comment)
     $target = 'review';
@@ -111,6 +116,10 @@ class ReviewController extends BaseController {
         ? Review::find($review_id)
         : Comment::find($comment_id);
 
+    if ($commentable == null) {
+      return Response::make('bad request', 400);
+    }
+
     $vote = Vote::where([
           'student_id' => $student_id,
           'review_id' => $review_id,
@@ -120,19 +129,19 @@ class ReviewController extends BaseController {
 
     $cancelled = false;
     if ($vote != null) {
-      if ($vote->type == Input::get('type')) {
+      if ($vote->type == $type) {
         // Cancel vote
         $vote->delete();
         $cancelled = true;
       } else {
         // Just need to update
-        $vote->type = Input::get('type');
+        $vote->type = $type;
         $vote->save();
       }
     } else {
       // Create a new one
       $vote = new Vote([
-        'type' => Input::get('type'),
+        'type' => $type,
         'review_id' => $review_id,
         'comment_id' => $comment_id,
         'student_id' => $student_id

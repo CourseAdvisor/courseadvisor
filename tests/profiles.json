@@ -8,5 +8,15 @@
     "firstname": "John",
     "where": "IN-BA6/IN-S/ETU/EPFL/CH",
     "unit":"IN-BA6,Section d'informatique - Bachelor semestre 6"
+  },
+  "cersei": {
+    "email": "cersei.lannister@epfl.ch",
+    "group": "lannisters,mothers,westeros",
+    "uniqueid": "325471",
+    "unitid": "15423",
+    "name": "Lannister",
+    "firstname": "Cersei",
+    "where": "GC-E/GC-S/ETU/EPFL/CH",
+    "unit":"GC-E,Section de génie civil - Echange"
   }
 }
