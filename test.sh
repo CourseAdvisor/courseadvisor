@@ -78,13 +78,22 @@ _do_test() {
 
 do_test() {
   # ensures app is not in debug mode
-  echo 'Config::get("app.debug");' | php artisan tinker | grep -q false
-  if [ $? -ne 0 ]; then
+  os=$(expr substr $(uname -s) 1 10)
+  if [ "$os" == "MINGW32_NT" ] || [ "$os" == "MINGW64_NT" ]; then #window
+    grep "['\"]debug[\"']" app/config/app.php | grep -iqw "0\|false"
+    status=$?
+  else
+    echo 'Config::get("app.debug");' | php artisan tinker | grep -q false
+    status=$?
+  fi
+
+  if [ $status -ne 0 ]; then
     echo "ERR: Tests must run with debug mode off. Please set app.debug to false in your app config file or use --force if you know what you are doing" 1>&2
     if [ $force -ne 1 ]; then
       exit 1
     fi
   fi
+
   # ensures profiles are up to date
   cp tests/profiles.json margarita/
 
