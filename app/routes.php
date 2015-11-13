@@ -65,7 +65,9 @@ Route::group([
 
   // Public
 
-  // nothing so far
+  Route::get('/csrf_token', function() {
+    return "TOKEN = ".Session::token();
+  });
 
 
   // Restricted

@@ -151,7 +151,7 @@
     @yield('content')
 
     </div> <!-- main -->
-    
+
     @include('footer')
 
     @yield('dialogs')
@@ -189,7 +189,6 @@
 
     <script type="text/javascript">
     var TOKEN = "{{{ Session::token() }}}";
-    console.error("Loaded page: "+document.location.href);
     </script>
 
     {{ HTML::script("//code.jquery.com/jquery-1.10.2.min.js") }}

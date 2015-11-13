@@ -1,3 +1,4 @@
+.margarita.pid
 margarita
 composer.phar
 .env.*.php

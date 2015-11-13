@@ -34,5 +34,9 @@
     "q": "^1.2.0",
     "vinyl-buffer": "~1.0.0",
     "vinyl-source-stream": "~1.1.0"
+  },
+  "devDependencies": {
+    "q": "^1.4.1",
+    "request": "^2.65.0"
   }
 }
