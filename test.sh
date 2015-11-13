@@ -58,7 +58,7 @@ start_margarita() {
 }
 
 cleanup() {
-  margarita_pid=`cat .margarita.pid`
+  margarita_pid=`cat .margarita.pid 2>/dev/null`
   if [ $? -eq 0 ] && [ ! $margarita_pid -eq "0" ]; then
     kill $margarita_pid
   fi
@@ -80,7 +80,7 @@ do_test() {
   # ensures app is not in debug mode
   os=$(expr substr $(uname -s) 1 10)
   if [ "$os" == "MINGW32_NT" ] || [ "$os" == "MINGW64_NT" ]; then #window
-    grep "['\"]debug[\"']" app/config/app.php | grep -iqw "0\|false"
+    grep "['\"]debug[\"']" app/config/production/app.php | grep -iqw "0\|false"
     status=$?
   else
     echo 'Config::get("app.debug");' | php artisan tinker | grep -q false
