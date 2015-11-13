@@ -158,6 +158,7 @@ while [ $# -ne 0 ]; do
     --seed)
       echo "Seeding database. Requires to enter sql root password twice"
       mysql -e "drop database IF EXISTS courseadvisor; create database IF NOT EXISTS courseadvisor;" -uroot -p
+      cat ./app/database/database.sql | mysql -uroot -p
       cat ./app/database/seeds/testing.sql | mysql -uroot -p
     ;;
     *)
