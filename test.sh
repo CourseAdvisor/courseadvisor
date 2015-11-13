@@ -47,7 +47,18 @@ setup_margarita() {
   npm install
 }
 
+stop_margarita() {
+  margarita_pid=`cat .margarita.pid 2>/dev/null`
+  if [ $? -eq 0 ] && [ ! $margarita_pid -eq "0" ]; then
+    kill $margarita_pid
+  fi
+  rm .margarita.pid
+}
+
 start_margarita() {
+  if [ -e .margarita.pid ]; then
+    stop_margarita
+  fi
   cd margarita
   node bin/www &
   margarita_pid=$!
@@ -58,10 +69,7 @@ start_margarita() {
 }
 
 cleanup() {
-  margarita_pid=`cat .margarita.pid 2>/dev/null`
-  if [ $? -eq 0 ] && [ ! $margarita_pid -eq "0" ]; then
-    kill $margarita_pid
-  fi
+  stop_margarita
 }
 
 _do_test() {
@@ -79,7 +87,7 @@ _do_test() {
 do_test() {
   # ensures app is not in debug mode
   os=$(expr substr $(uname -s) 1 10)
-  if [ "$os" == "MINGW32_NT" ] || [ "$os" == "MINGW64_NT" ]; then #window
+  if [ "$os" = "MINGW32_NT" ] || [ "$os" = "MINGW64_NT" ]; then #window
     grep "['\"]debug[\"']" app/config/production/app.php | grep -iqw "0\|false"
     status=$?
   else
