@@ -20,7 +20,7 @@ options:
   -f, --file name   : Runs this test file only (use with -t, works only with integration tests).
                       Loaded file is "integration/test-{name}.coffee"
   --force           : Run test even if sanity checks failed
-  --seed            : Prepares the database with fresh test data
+  --seed [prompt]   : Prepares the database with fresh test data (prompts for password if prompt parameter present)
   --precompile      : Precompiles coffee integration test files (try this if first test hangs)
   --setup-margarita : Downloads the margarita server, installs the profile and dependencies and exits
 EOF
@@ -156,10 +156,14 @@ while [ $# -ne 0 ]; do
       file="$1"
     ;;
     --seed)
-      echo "Seeding database. Requires to enter sql root password twice"
-      mysql -e "drop database IF EXISTS courseadvisor; create database IF NOT EXISTS courseadvisor;" -uroot -p
-      cat ./app/database/database.sql | mysql -uroot -p
-      cat ./app/database/seeds/testing.sql | mysql -uroot -p
+      mysql_args=""
+      if [ "$2" = "prompt" ]; then
+        shift
+        mysql_args="-p"
+      fi
+      echo "Seeding database. Requires to enter sql root password"
+      echo "drop database IF EXISTS courseadvisor; create database courseadvisor;" |
+        cat - ./app/database/database.sql ./app/database/seeds/testing.sql | mysql -uroot $mysql_args
     ;;
     *)
       echo "Unknown parameter: $1"

@@ -5,16 +5,12 @@ php:
 addons:
   hosts:
     - local.courseadvisor.ch
-before_install:
-  - mysql -e "create database IF NOT EXISTS courseadvisor;" -uroot
-  - cat ./app/database/database.sql | mysql -uroot
-  - cat ./app/database/seeds/testing.sql | mysql -uroot
 install:
   - npm install
   - npm install -g casperjs jasmine-node
 before_script:
   - gulp publish
   - php artisan serve --port=8080 --host 0.0.0.0 &
-  - ./test.sh --setup-margarita
+  - ./test.sh --seed --setup-margarita
 script:
   - ./test.sh -m -p 8080
