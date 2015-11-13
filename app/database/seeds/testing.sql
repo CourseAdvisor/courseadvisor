@@ -1,3 +1,5 @@
+USE `courseadvisor`;
+
 INSERT INTO `students` (`id`, `sciper`, `email`, `firstname`, `lastname`, `semester`, `is_admin`, `section_id`, `created_at`, `updated_at`) VALUES
 (411, '115687', 'john.snow@thewa.cz', 'John', 'Snow', 'BA6', 0, 6, '2015-11-11 22:29:10', '2015-11-11 22:29:10'),
 (412, '325471', 'cersei.lannister@epfl.ch', 'Cersei', 'Lannister', 'E', 0, 4, '2015-11-11 22:42:02', '2015-11-11 22:42:02');

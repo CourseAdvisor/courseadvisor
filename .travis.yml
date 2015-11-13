@@ -8,7 +8,7 @@ addons:
 before_install:
   - mysql -e "create database IF NOT EXISTS courseadvisor;" -uroot
   - cat ./app/database/database.sql | mysql -uroot
-  - cat ./app/database/seeds/testing.sql | mysql -uroot -D courseadvisor
+  - cat ./app/database/seeds/testing.sql | mysql -uroot
 install:
   - npm install
   - npm install -g casperjs jasmine-node
