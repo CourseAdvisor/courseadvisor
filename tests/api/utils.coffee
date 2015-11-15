@@ -123,7 +123,17 @@ class TestCaseBuilder
   withUser: (@_user) -> @
   withAJAX: -> new TestCaseBuilder({_useAJAX: true}, @)
   withCSRF: -> new TestCaseBuilder({_useCSRF: true}, @)
-  on: (@_url, @_reqParams = {}) -> @
+  on: (url, reqParams) ->
+    if typeof url != 'string'
+      reqParams = url
+      for verb in ['post', 'get', 'update', 'delete', 'patch', 'put']
+        if reqParams[verb]?
+          url = reqParams[verb]
+          reqParams.method = verb
+          delete reqParams[verb]
+    @_url = url
+    @_reqParams = reqParams || {}
+    @
   build: ->
     @_inheritProperties()
     new TestCase(@)

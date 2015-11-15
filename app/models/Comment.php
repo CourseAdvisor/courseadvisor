@@ -29,7 +29,7 @@ class Comment extends Commentable {
 
   public static function rules() {
     return [
-      'body' => 'max:2048',
+      'body' => ['max:2048', 'required'],
       'review_id' => 'required'
     ];
   }
