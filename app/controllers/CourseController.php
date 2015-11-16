@@ -162,6 +162,7 @@ class CourseController extends BaseController {
     ]);
   }
 
+  // TODO: move this in ReviewController
   public function createReview() {
     $validator = Review::getValidator(Input::all());
     if ($validator->fails()) {

@@ -52,5 +52,12 @@ test "Comment body is required"
 .on post: "/api/comment", followAllRedirects: true, data: { review_id: 2 }
 .withCSRF().withUser "snow"
 .is (rq) ->
-  rq.addHeader "referer", url("/en/course/chemistry-of-food-processes-899")
+  rq.addHeader "referer", url("/api/errors")
     .expectBodyContains "body field is required"
+
+test "Cannot post orphean comment"
+.on post: "/api/comment", followAllRedirects: true, data: { body: "Valar dohaeris" }
+.withCSRF().withUser "snow"
+.is (rq) ->
+  rq.addHeader "referer", url("/api/errors")
+    .expectBodyContains "review id field is required"

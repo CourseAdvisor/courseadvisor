@@ -69,6 +69,10 @@ Route::group([
     return "TOKEN = ".Session::token();
   });
 
+  Route::get('/errors', function() {
+    return Session::get('errors', new Illuminate\Support\MessageBag)->getMessages();
+  });
+
 
   // Restricted
   Route::group(['before' => 'auth'], function() {

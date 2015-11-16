@@ -70,7 +70,7 @@ return array(
 
   'review-posted-message' => 'Your review was successfully posted. Thank you!',
   'review-posted-anonymous-message' => 'Thank you! Your review has been submitted for moderation. It will appear on this page anytime soon.',
-  'review-create-not-allowed' => 'You can\'t review a course twice. Nice try!',
+  'review-create-not-allowed' => 'You\'ve already reviewed this course.',
   'review-updated-message' => 'Your review has been successfully edited.',
   'review-updated-anonymous-message' => 'Your review has been edited. It will now be reviewed by an administrator.',
   'review-update-not-allowed' => 'You are not allowed to edit this review.',
