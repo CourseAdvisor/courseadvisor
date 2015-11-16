@@ -20,6 +20,9 @@ utils = module.exports =
 
   waitForPage: (cb) -> casper.waitFor( ( -> @evaluate -> @_loaded ), cb)
 
+  # Performs an XMLHttpRequest in the context of the page.
+  # sets global flags on the window object `window.TEST_XHR_DONE` and `window.TEST_XHR_RESULT`
+  # enableing the user to poll for XHR status using casper.evaluate.
   doXHR: (url) ->
     casper.evaluate ((url) ->
       window.TEST_XHR_DONE = false
@@ -33,5 +36,4 @@ utils = module.exports =
     ), url
 
 # extend shared utilities
-for i in Object.keys(shared)
-  utils[i] = shared[i]
+shared.extend(utils, shared)

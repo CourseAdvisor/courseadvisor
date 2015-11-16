@@ -57,10 +57,13 @@ Documentation for the entire framework can be found on the [Laravel website](htt
 The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
 ### Testing
-Testing is done with casperjs. Install phantomjs v1.8.x (not 2.x !!!), install casperjs and make sure both are available in the path.
 
 To tests authenticated features, we are using [margarita](https://github.com/CourseAdvisor/margarita). Run `./test.sh --setup-margarita`
 to install a local copy of margarita, then in app/config/production/tequila.php, add `'server_url' => 'http://localhost:3000/'`
+
+Integration tests are run with [casperjs](http://casperjs.readthedocs.org/). Install [phantomjs](http://phantomjs.org/) v1.8.x (not 2.x !!!), install casperjs and make sure both are available in the path.
+API tests use [frisbyjs](http://frisbyjs.com/).
+Both kind of tests use a few utilities to hide some of the boilerplate. More information can be found in tests/(api|integration)/utils.coffee
 
 You can then run the tests with `./test.sh -m -s`.
 For a full list of available test options, run `./test.sh --help`.
