@@ -65,7 +65,13 @@ Route::group([
 
   // Public
 
-  // nothing so far
+  Route::get('/csrf_token', function() {
+    return "TOKEN = ".Session::token();
+  });
+
+  Route::get('/errors', function() {
+    return Session::get('errors', new Illuminate\Support\MessageBag)->getMessages();
+  });
 
 
   // Restricted

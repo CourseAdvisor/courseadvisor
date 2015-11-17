@@ -4,7 +4,7 @@
   Tests search features
 ###
 
-{url, screenshot, login, randomStr} = require("../utils.coffee")
+{url, screenshot, login, randomStr} = require './utils.coffee'
 
 casper.test.begin "Search for a teacher", 2, (test) ->
   casper.start url('/search?q=rené+beuchat')

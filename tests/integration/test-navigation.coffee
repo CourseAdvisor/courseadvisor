@@ -4,7 +4,7 @@
   Tests site navigation
 ###
 
-{url, screenshot, login} = require("../utils.coffee")
+{url, screenshot, login} = require './utils.coffee'
 
 # Tests basic en course browsing
 casper.test.begin "Browse courses (en)", 4, (test) ->

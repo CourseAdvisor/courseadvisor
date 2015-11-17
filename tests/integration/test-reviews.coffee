@@ -4,7 +4,7 @@
   Tests review features
 ###
 
-{url, screenshot, login, randomStr} = require("../utils.coffee")
+{url, screenshot, login, randomStr, waitForPage} = require './utils.coffee'
 
 # Tests basic review workflow:
 # - post a Review
@@ -12,18 +12,21 @@
 #   - mandatory title if content set
 # - edit a review (with error on title)
 # - delete a Review
-casper.test.begin "Full review workflow", 16, (test) ->
+casper.test.begin "Full review workflow", 19, (test) ->
   content = randomStr(128)
   title = randomStr(32)
 
+  getFirstReviewVotes = -> parseInt($('.review:first-child [data-vote-score]').first().text())
+  votes = 0
+
   casper.start url("/")
   login profile: "snow", next: "/fr/course/psychologie-sociale-d-524"
-  casper.waitForSelector "#reviews", ->
+  waitForPage ->
     @fill("form#create-review-form",
       comment: content
       difficulty: "2"
     , true) # submit form
-  casper.waitForSelector "[data-starbar*=content_grade]>.fa-stack:nth-child(5)", ->
+  waitForPage ->
     # Title is mandatory if content is set
     test.assertExists(".form-group.has-error>input[name=title]+.help-block", "Title field has error")
     # Grade at least one criteria
@@ -39,7 +42,7 @@ casper.test.begin "Full review workflow", 16, (test) ->
     @fill("form#create-review-form",
       title: title
     , true) # submit form
-  casper.waitForSelector ".review", ->
+  waitForPage ->
     # Review is now posted
     test.assertTextExists(title, "Title is shown on course page")
     test.assertTextExists(content, "Content is shown on course page")
@@ -63,17 +66,36 @@ casper.test.begin "Full review workflow", 16, (test) ->
     @fill("form#edit-review-form",
       title: "#{title}_edited"
     , true ) # submit form
-  casper.waitForSelector ".review", ->
+  waitForPage ->
     # Review is now edited
     test.assertTextExists("#{title}_edited", "Edited title is shown on course page")
     test.assertTextExists("#{content}_edited", "Edited content is shown on course page")
-    @click("a.edit-review")
+
+    # test votes
+    votes = @evaluate getFirstReviewVotes
+    @evaluate -> @events.clear('vote.completed')
+    @click('.review:first-child [data-vote-btn^="up"]')
+    lastTime = new Date()
+  casper.waitFor( ( -> @evaluate -> @events.poll('vote.completed') ), ->
+      test.assertEvalEquals(getFirstReviewVotes, votes + 1, "Vote up increases the review mark")
+      @evaluate -> @events.clear('vote.completed')
+      @click('.review:first-child [data-vote-btn^="down"]')
+  )
+  casper.waitFor( ( -> @evaluate -> @events.poll('vote.completed') ), ->
+      test.assertEvalEquals(getFirstReviewVotes, votes - 1, "Vote down decreases the review mark")
+      @evaluate -> @events.clear('vote.completed')
+      @click('.review:first-child [data-vote-btn^="down"]')
+  )
+  casper.waitFor( ( -> @evaluate -> @events.poll('vote.completed') ), ->
+      test.assertEvalEquals(getFirstReviewVotes, votes, "Re-clicking the same vote button discards the vote")
+      # remove the review
+      @click("a.edit-review")
+  )
   casper.waitForSelector ".modal-open", ->
     # Edit review modal is open
     @click('[data-action="delete-review"]')
-  casper.waitForSelector "#reviews", ->
+  waitForPage ->
     # Review has been deleted
-    screenshot("debug")
     test.assertTextDoesntExist(title, "Title is gone")
     test.assertTextDoesntExist(content, "Content is gone")
     test.assertDoesntExist("a.edit-review", "Edit review action is not shown")
