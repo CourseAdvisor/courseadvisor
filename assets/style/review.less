@@ -1,0 +1,66 @@
+.review {
+
+    .comments {
+        padding-left: 20px;
+        border-left: 1px #eee solid;
+    }
+
+    .review-body {
+        margin-left: 10px;
+        display: inline-block;
+        width: 90%;
+    }
+    .review-author {
+        padding-left: 15px;
+        margin-bottom: 5px;
+        font-family: @font-family-sans-serif;
+    }
+
+    margin-bottom: 10px;
+}
+
+.review-vote, .comment-vote {
+    float: left;
+
+    @vote-up-color: #3D9B38;
+    @vote-down-color: #BF1B1B;
+
+    .vote-btn {
+        color: initial;
+        transition-property: color;
+        transition-duration: 300ms;
+
+        &.downvote {
+            &:hover {
+                color: darken(@vote-down-color, 20%);
+            }
+
+            &.voted, &.voted:hover {
+                color: @vote-down-color;
+            }
+        }
+
+        &.upvote {
+            &:hover {
+                color: darken(@vote-up-color, 20%);
+            }
+
+            &.voted, &.voted:hover {
+                color: @vote-up-color;
+            }
+        }
+    }
+
+    .review-score {
+        text-align: center;
+        font-weight: bold;
+    }
+}
+
+.review-comments {
+    margin-left: 20px;
+}
+
+a.edit-review>i {
+    color: black;
+}

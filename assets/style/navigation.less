@@ -1,0 +1,88 @@
+.navbar-brand {
+    font-family: @font-family-sans-serif;
+    font-size: 22px;
+
+    .epfl-logo {
+        display: inline;
+        height: 28px;
+        width: auto;
+        margin-right: 10px;
+    }
+
+    &, &:hover {
+        color: @text-color;
+    }
+}
+.navbar {
+
+    margin-bottom: 0;
+
+    .nav.navbar-nav {
+
+        &.main-nav {
+            @media (min-width: @screen-sm-min) {
+                li.active {
+                    border-bottom: 3px @brand-primary solid;
+                    & > * {
+                        padding-bottom: (@navbar-padding-vertical - 3);
+                    }
+
+                    &:hover {
+                        border-bottom: 3px darken(@brand-primary, 8%) solid;
+                    }
+                }
+                li:hover {
+                    border-bottom: 3px @gray-lighter solid;
+                    & > * {
+                        padding-bottom: (@navbar-padding-vertical - 3);
+                    }
+                }
+            }
+        }
+
+        .sep {
+            width: 1px;
+            background-color: #999;
+            height: 12px;
+            margin: 19px 10px;
+
+            @media (max-width: @screen-sm-min) {
+                display: none;
+            }
+        }
+    }
+
+    .mobile-search {
+        position: absolute;
+        width: 20%;
+        top: 0;
+        margin-top: 0;
+        background-color: white;
+        left: 16px;
+        opacity: 0;
+        z-index: 100;
+        transition: width 500ms, opacity 100ms;
+    }
+
+    .desktop-search.navbar-form .input-group>.form-control {
+        width: 200px;
+        transition: width 500ms;
+
+        &:focus {
+            width: 300px;
+        }
+    }
+
+}
+
+.navbar-search:extend(.navbar-toggle) {
+    float: left;
+}
+
+nav {
+    text-align: center;
+}
+
+ul.locale-dropdown {
+    min-width: 0;
+}
