@@ -49,7 +49,7 @@
         <hr>
 
         <h2>{{{ trans('student.dashboard-courses-heading') }}}</h2>
-        <a class="btn btn-large btn-default" href="{{{ action("CourseController@studyCycles") }}}">
+        <a href="{{{ action("CourseController@studyCycles") }}}">
           {{{ trans('student.browse-courses-action') }}}
         </a>
         <br/><br/>
