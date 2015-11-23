@@ -1,0 +1,118 @@
+html {
+    height: 100%;
+}
+
+body {
+    padding-bottom: @footer-height + 50px !important; /* important: prevents debugbar from overriding */
+    @media (max-width: @screen-sm-min) {
+        padding-bottom: @footer-height-xs + 30px !important;
+    }
+    min-height: 100%;
+    position: relative;
+
+    #main {
+        transition:filter .3s;
+        -webkit-transition:-webkit-filter .3s;
+        -webkit-filter:blur(0);
+        filter:blur(0);
+    }
+    &.modal-open #main {
+        -webkit-filter:blur(2px);
+        filter: blur(2px);
+    }
+}
+
+.page {
+    background-color: white;
+    margin: 0;
+    margin-top: 15px;
+    box-shadow: 0px 0px 3px rgba(211, 209, 209, 0.94);
+    padding: 15px 45px;
+    border-radius: 0;
+
+    @media (max-width: @screen-sm-min) {
+        padding: 5px 10px;
+        margin: 10px -10px;
+
+        .form-horizontal .form-group {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    }
+}
+
+footer {
+    background-color: #b7b7b7;
+    padding-top: 15px;
+    margin-top: 35px;
+    height: @footer-height;
+    @media (max-width: @screen-sm-min) {
+        height: @footer-height-xs;
+    }
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+
+    ul {
+        list-style-type: none;
+        padding-left: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        font-family: @font-family-sans-serif;
+        margin-bottom: 20px;
+
+        & > li {
+            display: inline-block;
+            margin-right: 30px;
+            & > a {
+                color: @text-color;
+                font-size: 15px;
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+
+
+    h4 {
+        margin-top: 0;
+    }
+
+    .copyright {
+        a {
+            font-size: 15px;
+            color: @text-color;
+        }
+    }
+
+    .footnote {
+        margin-top: 50px;
+        line-height: 30px;
+        color: @hint-color;
+    }
+
+    .social-stuff {
+        float: right;
+        li {
+            float: right;
+        }
+
+        @media (max-width: @screen-sm-min) {
+            float: none;
+            li {
+                float: left;
+            }
+        }
+    }
+}
+
+.breadcrumb:extend(.page) {
+    padding: 10px;
+    padding-left: 15px;
+}
+
+.alert {
+    margin-top: 20px;
+    margin-bottom: 0px;
+}

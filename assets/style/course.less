@@ -1,0 +1,73 @@
+.difficulty-bar {
+    width: 50px;
+    height: 10px;
+    border-radius: 6px;
+    border: 1px black solid;
+    overflow: hidden;
+
+    & > .fill {
+        height: 100%;
+    }
+    &.difficulty-hard > .fill {
+        background-color: #ed1f1f;
+        width: 90%;
+    }
+
+    &.difficulty-medium > .fill {
+        background-color: #eda21f;
+        width: 50%;
+    }
+
+    &.difficulty-easy > .fill {
+        background-color: #47a025;
+        width: 20%;
+    }
+
+    &.disabled {
+        background-color: @gray-lighter;
+        border-color: @gray;
+
+        & > .fill {
+            width: 0;
+        }
+    }
+}
+
+dd > .difficulty-bar {
+    margin-top: 8px;
+}
+
+dl.course-stats {
+    color: @brand-primary;
+    dt, dd {
+        color: @brand-primary;
+        font-size: @font-size-base;
+    }
+    .progress {
+        width: 120px;
+        height: 10px;
+        margin: 5px 8px 0 0;
+    }
+}
+
+.course-attrs {
+    margin-top: 10px;
+    dt {
+        text-align: left;
+        width: 120px;
+    }
+}
+
+.formula {
+    font-family: Georgia, serif;
+    color: @gray-light;
+    margin-left: 40px;
+}
+
+.reviews {
+    padding-top: 20px;
+}
+
+#edit-review-modal .modal-content{
+    padding: 20px;
+}
