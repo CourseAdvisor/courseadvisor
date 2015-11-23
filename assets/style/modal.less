@@ -1,0 +1,13 @@
+// Blur effect. Disabled on mobile
+@media (min-width: @screen-md-min) {
+    #main {
+        transition:filter .3s;
+        -webkit-transition:-webkit-filter .3s;
+        -webkit-filter:blur(0);
+        filter:blur(0);
+    }
+    body.modal-open #main {
+        -webkit-filter:blur(2px);
+        filter: blur(2px);
+    }
+}
