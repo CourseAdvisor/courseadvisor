@@ -7,7 +7,7 @@ class Course extends Eloquent {
   private $_reviewsCount = null;
 
   protected $fillable = [
-    'name_fr', 'name_en', 'string_id', 'teacher_id', 'url_fr', 'url_en', 'description', 'section_id'
+    'name_fr', 'name_en', 'string_id', 'url_fr', 'url_en', 'description', 'section_id'
   ];
 
   protected $appends = ['reviewsCount'];
@@ -24,8 +24,8 @@ class Course extends Eloquent {
     return $this->hasMany('Review');
   }
 
-  public function teacher() {
-    return $this->belongsTo('Teacher');
+  public function instances() {
+    return $this->hasMany('CourseInstance');
   }
 
   public function getNameAttribute() {
