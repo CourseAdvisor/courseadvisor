@@ -1,7 +1,7 @@
 CourseAdvisor
 =============
 
-[![Build Status](https://travis-ci.org/CourseAdvisor/courseadvisor.svg)](https://travis-ci.org/CourseAdvisor/courseadvisor)
+[![Build Status](https://travis-ci.org/CourseAdvisor/courseadvisor.svg?branch=master)](https://travis-ci.org/CourseAdvisor/courseadvisor)
 
 ## Setup
 
