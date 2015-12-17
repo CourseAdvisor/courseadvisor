@@ -1,5 +1,5 @@
 <?php
-class Course extends Eloquent {
+class CourseInstance extends Eloquent {
   protected $table = 'course_instances';
   public $timestamps = false;
 
@@ -16,5 +16,9 @@ class Course extends Eloquent {
 
   public function teacher() {
     return $this->belongsTo('Teacher');
+  }
+
+  public function reviews() {
+    return $this->hasMany('Review');
   }
 }

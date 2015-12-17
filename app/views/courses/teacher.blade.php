@@ -17,7 +17,10 @@
         <h3>{{{ trans('courses.teacher-courses-heading', [
           'teacher' => $teacher->firstname ])
         }}}</h3>
-        @include('components.course_list', ['courses' => $courses])
+        @include('components.course_list', [
+          'courses' => $courses,
+          'paginate' => false
+        ])
       </div>
     </div>
   </section>

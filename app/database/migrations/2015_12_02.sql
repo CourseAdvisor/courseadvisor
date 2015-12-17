@@ -48,7 +48,9 @@ ORDER BY `id`;
 
 -- Remove old structure
 
-ALTER TABLE `courses` DROP COLUMN teacher_id;
+ALTER TABLE `courses`
+DROP COLUMN `teacher_id`,
+ADD COLUMN `credits` INT NOT NULL DEFAULT '0';
 
 
 -- ------------------- --

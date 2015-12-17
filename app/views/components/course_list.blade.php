@@ -45,7 +45,7 @@
 
     <!-- all platforms -->
     <h2>{{{ $course['name'] }}}</h2>
-    <h3>{{{ $course['teacher']['fullname'] }}}&nbsp;</h3>
+    <h3>{{{ $course['currentInstance']['teacher']['fullname'] }}}&nbsp;</h3>
     <!-- except this -->
     <h4 class="sections visible-xs visible-sm">
       @foreach($course['plans'] as $plan)

@@ -180,7 +180,8 @@ while [ $# -ne 0 ]; do
       fi
       echo "Seeding database. Requires to enter sql root password"
       echo "drop database IF EXISTS courseadvisor; create database courseadvisor;" |
-        cat - ./app/database/database.sql ./app/database/seeds/testing.sql | mysql -uroot $mysql_args
+        cat - ./app/database/database.sql ./app/database/seeds/testing.sql ./app/database/migrations/*.sql | mysql -uroot $mysql_args
+
     ;;
     *)
       echo "Unknown parameter: $1"

@@ -12,7 +12,8 @@
 		"mcamara/laravel-localization": "~0.15",
 		"jpgraph/jpgraph": "dev-master",
 		"guzzlehttp/guzzle": "~4.0",
-		"mixpanel/mixpanel-php" : "2.*"
+		"mixpanel/mixpanel-php" : "2.*",
+		"znck/belongs-to-through": "~2.0"
 	},
 	"autoload": {
 		"classmap": [

@@ -2,8 +2,14 @@
 class Teacher extends Eloquent {
   protected $fillable = ['lastname', 'firstname', 'sciper'];
 
-  public function courses() {
-    return $this->hasMany('Course');
+  public function courseInstances() {
+    return $this->hasMany('CourseInstance');
+  }
+
+  public function getCoursesAttribute() {
+    return $this->courseInstances->map(function($inst) {
+      return $inst->course;
+    })->unique();
   }
 
   public function getFullnameAttribute() {
