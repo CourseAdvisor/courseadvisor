@@ -22,7 +22,6 @@ class StudentController extends BaseController {
     $student = Student::findOrFail(Session::get('student_id'));
 
     $studentCourses = $student->inscriptions()
-                      ->with('course.teacher', 'course.reviews')
                       ->orderBy('year', 'DESC')
                       ->get();
     $studentCourses = $studentCourses->map(function($inscription) {
