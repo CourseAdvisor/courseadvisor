@@ -26,7 +26,7 @@ $app = new Illuminate\Foundation\Application;
 $env = $app->detectEnvironment(array(
 
 	//'local' => array('local.courseadvisor.com')
-    'ci' => ['testing-worker-linux*'] // travis-ci environment
+    'ci' => ['testing-*'] // travis-ci environment
 
 ));
 

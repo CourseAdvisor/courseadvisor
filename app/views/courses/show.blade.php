@@ -35,9 +35,9 @@
           @include('components.difficulty_bar', ['difficulty' => $course->avg_difficulty])
         </dd>
         <dt>{{{ trans('courses.teacher-label') }}}</dt><dd><a href="{{{ action('CourseController@showTeacher', [
-                'id' => $course->teacher['id'],
-                'slug' => Str::slug($course->teacher->fullname)
-                ]) }}}">{{{ $course->teacher->fullname }}}</a></dd>
+                'id' => $course->currentInstance->teacher['id'],
+                'slug' => Str::slug($course->currentInstance->teacher->fullname)
+                ]) }}}">{{{ $course->currentInstance->teacher->fullname }}}</a></dd>
         <dt>{{{ trans('courses.studyplans-label') }}}</dt>
         <dd>
           @foreach($course->plans as $plan)

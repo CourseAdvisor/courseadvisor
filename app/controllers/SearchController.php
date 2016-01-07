@@ -55,7 +55,8 @@ class SearchController extends BaseController {
           ->leftJoin('sections', 'sections.id', '=', 'courses.section_id')
           ->leftJoin('course_study_plan', 'course_study_plan.course_id', '=', 'courses.id')
           ->leftJoin('study_plans', 'course_study_plan.study_plan_id', '=', 'study_plans.id')
-          ->leftJoin('teachers', 'teachers.id', '=', 'courses.teacher_id');
+          ->join('course_instances', 'courses.id', '=', 'course_instances.course_id')
+          ->leftJoin('teachers', 'teachers.id', '=', 'course_instances.teacher_id');
 
     $query->where(function($q) use($cleaned) {
       $q->whereRaw("MATCH(courses.name_en, courses.name_fr) AGAINST($cleaned IN NATURAL LANGUAGE MODE)");

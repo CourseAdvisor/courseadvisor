@@ -10,7 +10,7 @@
   'id' => isset($id) ? $id : ''
   ]) }}
 
-<input type="hidden" name="course_id" value="{{{ $course->id }}}" />
+<input type="hidden" name="course_instance_id" value="{{{ $course->currentInstance->id }}}" />
 
 @if ($is_modal)
 <div class="modal-header">

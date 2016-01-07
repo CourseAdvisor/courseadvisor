@@ -1,5 +1,7 @@
 <?php
 class Review extends Commentable {
+  use \Znck\Eloquent\Traits\BelongsToThrough;
+
   protected $table = 'reviews';
   protected $comment_key = 'review_id';
 
@@ -14,7 +16,7 @@ class Review extends Commentable {
   }
 
   public function course() {
-    return $this->belongsTo('Course');
+    return $this->belongsToThrough('Course', 'CourseInstance');
   }
 
   public function isReview() {
@@ -75,7 +77,7 @@ class Review extends Commentable {
       'content_grade' =>'integer|between:0,5',
       'difficulty' => 'integer|between:0,5',
       'title' => 'max:100',
-      'course_id' => 'required'
+      'course_instance_id' => 'required'
     ];
   }
 

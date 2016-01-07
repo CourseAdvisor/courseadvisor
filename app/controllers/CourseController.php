@@ -33,8 +33,6 @@ class CourseController extends BaseController {
     ]);
 
     $courses = $plan->courses()
-      ->with('teacher', 'plans')
-      ->withPivot('semester')
       ->orderBy('pivot_semester')
       ->get()
       ->groupBy(function($course) {
@@ -77,10 +75,10 @@ class CourseController extends BaseController {
 
   public function show($slug, $id) {
     $course = Course::with([
-      'teacher',
+      'instances',
       'plans',
       'plans.studyCycle',
-      'reviews' => function($q) {
+      'instances.reviews' => function($q) {
         $q->published();
       }
     ])->findOrFail($id);
@@ -151,14 +149,13 @@ class CourseController extends BaseController {
    */
   public function showTeacher($slug, $id) {
 
-    $coursesPerPage = Config::get('app.nbCoursesPerPage');
     $teacher = Teacher::findOrFail($id);
 
     return View::make('courses.teacher', [
       'page_title' => $teacher->fullname,
       'slug' => $slug,
       'teacher' => $teacher,
-      'courses' => $teacher->courses()->paginate($coursesPerPage)
+      'courses' => $teacher->courses
     ]);
   }
 
@@ -172,20 +169,18 @@ class CourseController extends BaseController {
     }
 
     // Get course and student info
-    $course = Course::findOrFail(Input::get('course_id')); // Fails if the course doesn't exist
+    $courseInstance = CourseInstance::with('course')->findOrFail(Input::get('course_instance_id')); // Fails if the course doesn't exist
     $studentId = Session::get('student_id');
-    $goToCourse = Redirect::action('CourseController@show', [$course->slug, $course->id]);
+    $goToCourse = Redirect::action('CourseController@show', [$courseInstance->course->slug, $courseInstance->course->id]);
 
     // Check if the course was not already reviewed by the student
-    if($course->alreadyReviewedBy($studentId)) {
+    if($courseInstance->course->alreadyReviewedBy($studentId)) {
       return $goToCourse->with('message', ['danger', trans('courses.review-create-not-allowed')]);
     }
 
     // Create the review
-    $data = ['course_id' => intval($course->id), 'student_id' => $studentId];
-
     $newReview = new Review(Input::all());
-    $newReview->course_id = $course->id;
+    $newReview->course_instance_id = $courseInstance->id;
     $newReview->student_id = $studentId;
     $newReview->updateAverage();
 
@@ -205,7 +200,7 @@ class CourseController extends BaseController {
 
     // Update averages only if the review is not anonymous
     if (!$newReview->is_anonymous) {
-      $course->updateAverages();
+      $courseInstance->course->updateAverages();
       $msg = trans('courses.review-posted-message');
     }
     else {
@@ -214,7 +209,7 @@ class CourseController extends BaseController {
 
     $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
     $mp->track('Posted a review', [
-        'Course name' => $course->name,
+        'Course name' => $courseInstance->course->name,
         'Average grade' => $newReview->avg_grade,
         'Exercises grade' => $newReview->exercises_grade,
         'Lectures grade' => $newReview->lectures_grade,
@@ -235,7 +230,7 @@ class CourseController extends BaseController {
 
     // Retrieve review
     $review = Review::findOrFail(Input::get('review_id'));
-    $courseRedirect = Redirect::action('CourseController@show', [$review->course->slug, $review->course_id]);
+    $courseRedirect = Redirect::action('CourseController@show', [$review->course->slug, $review->course->id]);
 
     // Check authorized
     if ($review->student_id != StudentInfo::getId()) {
@@ -248,7 +243,7 @@ class CourseController extends BaseController {
     if ($validator->fails()) {
       return Redirect::to(LaravelLocalization::getLocalizedURL(
             LaravelLocalization::getCurrentLocale(),
-            action('CourseController@show', [$review->course->slug, $review->course_id])) . '#!xedit-' . $review->id)
+            action('CourseController@show', [$review->course->slug, $review->course->id])) . '#!xedit-' . $review->id)
         ->withInput()
         ->withErrors($validator);
     }
@@ -299,7 +294,7 @@ class CourseController extends BaseController {
   public function deleteReview() {
     $review = Review::findOrFail(Input::get('review_id'));
 
-    $courseRedirect = Redirect::action('CourseController@show', [$review->course->slug, $review->course_id]);
+    $courseRedirect = Redirect::action('CourseController@show', [$review->course->slug, $review->course->id]);
 
     // Check authorized
     if ($review->student_id != StudentInfo::getId()) {

@@ -9,6 +9,7 @@ install:
   - npm install
   - npm install -g casperjs jasmine-node
 before_script:
+  - hostname
   - gulp publish
   - php artisan serve --port=8080 --host 0.0.0.0 &
   - ./test.sh --seed --setup-margarita

@@ -7,7 +7,7 @@ class Course extends Eloquent {
   private $_reviewsCount = null;
 
   protected $fillable = [
-    'name_fr', 'name_en', 'string_id', 'teacher_id', 'url_fr', 'url_en', 'description', 'section_id'
+    'name_fr', 'name_en', 'string_id', 'url_fr', 'url_en', 'description', 'section_id'
   ];
 
   protected $appends = ['reviewsCount'];
@@ -20,12 +20,12 @@ class Course extends Eloquent {
     return $this->belongsToMany('StudyPlan')->withPivot('semester');
   }
 
-  public function reviews() {
-    return $this->hasMany('Review');
+  public function instances() {
+    return $this->hasMany('CourseInstance');
   }
 
-  public function teacher() {
-    return $this->belongsTo('Teacher');
+  public function reviews() {
+    return $this->hasManyThrough('Review', 'CourseInstance');
   }
 
   public function getNameAttribute() {
@@ -42,10 +42,16 @@ class Course extends Eloquent {
       return $this->url_en;
   }
 
+  public function getCurrentInstanceAttribute() {
+    return $this->instances()->first();
+  }
+
   public function alreadyReviewedBy($student_id) {
-    $review = $this->reviews->first(function($num, $review) use($student_id) {
+    $review = $this->instances->first(function($num, $inst) use ($student_id) {
+      return $inst->reviews->first(function($num, $review) use($student_id) {
         return $review->student_id == $student_id;
-    }, false);
+      }, false);
+    });
 
     return $review;
   }
@@ -55,8 +61,11 @@ class Course extends Eloquent {
   }
 
   public function getReviewsCountAttribute() {
-    if ($this->_reviewsCount == null)
-      $this->_reviewsCount = $this->reviews()->published()->count();
+    if ($this->_reviewsCount == null) {
+      $this->_reviewsCount = $this->instances()->get()->reduce( function($acc, $inst) {
+        return $acc + $inst->reviews()->published()->count();
+      });
+    }
 
     return $this->_reviewsCount;
   }
@@ -79,8 +88,9 @@ class Course extends Eloquent {
 
     $averages = DB::table('reviews')
           ->select(DB::raw($sql))
+          ->join('course_instances', 'course_instances.id', '=', 'reviews.course_instance_id')
           ->whereIn('status', ['accepted', 'published'])
-          ->where('course_id', $this->id)->first();
+          ->where('course_instances.course_id', $this->id)->first();
 
     $this->avg_overall_grade = $averages->total;
     $this->avg_lectures_grade = $averages->lectures;
