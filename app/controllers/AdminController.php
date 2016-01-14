@@ -96,14 +96,16 @@ class AdminController extends BaseController {
       ->whereExists(function($query) {
         $query->select(DB::raw(1))
               ->from('reviews')
-              ->whereRaw('reviews.course_id = courses.id');
+              ->leftJoin('course_instances', 'course_instances.id', '=', 'reviews.course_instance_id')
+              ->whereRaw('course_instances.course_id = courses.id');
       })->first()->covered;
     $coveredWithText = Db::table('courses')
       ->select(DB::raw('COUNT(*) AS covered'))
       ->whereExists(function($query) {
         $query->select(DB::raw(1))
               ->from('reviews')
-              ->whereRaw('reviews.course_id = courses.id')
+              ->leftJoin('course_instances', 'course_instances.id', '=', 'reviews.course_instance_id')
+              ->whereRaw('course_instances.course_id = courses.id')
               ->where('reviews.comment', '!=', '');
       })->first()->covered;
 
@@ -172,9 +174,11 @@ class AdminController extends BaseController {
     $date = new DateTime("2015-05-04");
     $now = new DateTime();
     $step = new DateInterval('P1D');
+
+    $odd = 1;
     while($date < $now) {
-      // Only write mondays in legend
-      $keys[] = ($date->format("D") == "Mon") ? $date->format("d/m") : "";
+      // Only write every two mondays in legend
+      $keys[] = ($date->format("D") == "Mon" && ($odd++ % 2 == 0)) ? $date->format("d/m") : "";
       // If we have some data for this day
       if (isset($byDate[$i]) && $byDate[$i]->date == $date->format("Y-m-d")) {
         // accumulate
