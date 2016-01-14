@@ -31,6 +31,7 @@ class AdminController extends BaseController {
 
 
     return View::make('admin.index')->with([
+      'page_title' => 'Admin &ndash; CourseAdvisor',
       'nbWaiting' => $nbWaiting,
       'nbRejected' => $nbRejected,
       'nbAccepted' => $nbAccepted,
