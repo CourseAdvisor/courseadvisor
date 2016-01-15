@@ -6,6 +6,8 @@
   - boolean $paginate : if the list should be paginated or not (default: yes)
   - array $pagination_links_appendings : An array to be passed to the 'appends' method.
     See http://laravel.com/docs/4.2/pagination#appending-to-pagination-links
+  - $pagination_fragment_appending : A fragment to be passed to the 'fragment' method.
+    See link above.
 --}}
 <div class="list-group" id="course_list"> {{-- TODO: why id ? id is unique thus cannot use list at multiple places --}}
 @foreach($courses as $course)
@@ -59,9 +61,16 @@
 
 @if(!isset($paginate) || $paginate)
 <nav>
-  <?php $paginator = isset($paginator) ? $paginator : $courses ?>
+  <?php 
+  $paginator = isset($paginator) ? $paginator : $courses;
+  $links_appendings = isset($pagination_links_appendings) ? $pagination_links_appendings : [];
+  $fragment_appending = isset($pagination_fragment_appending) ? $pagination_fragment_appending : '';
+  ?>
   @if(isset($pagination_links_appendings))
-    {{ $paginator->appends($pagination_links_appendings)->links() }}
+    {{ $paginator
+      ->appends($links_appendings)
+      ->fragment($fragment_appending)
+      ->links() }}
   @else
     {{ $paginator->links() }}
   @endif

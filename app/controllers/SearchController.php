@@ -41,7 +41,7 @@ class SearchController extends BaseController {
     }
 
     // TODO : name en / fr
-    $cleaned = DB::getPDO()->quote(preg_replace("/[^A-Za-z0-9èàé ]/", '', $term));
+    $cleaned = DB::getPDO()->quote(preg_replace("/[^A-Za-z0-9èàéô ]/", '', $term));
     $query = DB::table('courses')
           ->select(DB::raw('courses.id as course_id'))
           ->addSelect(DB::raw("
@@ -78,24 +78,35 @@ class SearchController extends BaseController {
       $query->whereIn('course_study_plan.semester', $selected_semesters);
     }
 
-    $allowedSortingFields = ['courses.name', 'teachers.lastname', 'reviewsCount'];
+    $allowedSortingFields = ['courses.name_fr', 'courses.name_en', 'teachers.lastname', 'reviewsCount'];
     $order = Input::has('desc') ? 'desc' : 'asc';
+    $inverseOrder = $order == 'desc' ? 'asc' : 'desc';
     if (Input::has('sortby') && in_array($field = Input::get('sortby'), $allowedSortingFields)) {
-      $query->orderBy(DB::raw($field), $order);
+      if ($field == 'reviewsCount') {
+        $query->orderBy(DB::raw('(select count(*) from reviews R where R.course_id = courses.id)'), $inverseOrder);
+      }
+      else {
+        $query->orderBy(DB::raw($field), $order);
+      }
     }
     else {
-      $query->orderBy(DB::raw('course_relevance + teacher_relevance'), 'desc' /*$order*/);
+      $query->orderBy(DB::raw('course_relevance + teacher_relevance'), $inverseOrder);
     }
 
     $query->groupBy('course_id');
-
-
     $paginated = $query->paginate($nbPerPage);
-    $course_ids = array_map(function($c) { return $c->course_id;}, $paginated->getItems());
-    $courses = Course::findMany($course_ids);
 
+    $course_ids = array_map(function($c) { return $c->course_id; }, $paginated->getItems());
+    if (empty($course_ids)) {
+      $courses = [];
+    }
+    else {
+      $courses = Course::whereIn('id', $course_ids)
+        ->orderBy(DB::raw('FIELD(`id`, '. implode(', ', $course_ids) . ')'))
+        ->get();
+    }
+    
     $mp = Mixpanel::getInstance(Config::get('app.mixpanel_key'));
-
     $mp->track('Searched a course', [
       'keywords' => Input::get('q'),
       'number of results' => sizeof($courses)

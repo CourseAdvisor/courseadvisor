@@ -34,7 +34,7 @@
       The 'advanced filters' panel is expanded only if a filter has been applied
     --}}
     <div class="well well-lg collapse {{{ $was_filtered ? 'in' : '' }}}" id="advancedFilters">
-      <form id="filters-form" action="{{{ Request::URL() }}}" method="GET">
+      <form id="filters-form" action="{{{ Request::URL() }}}#advancedFilters" method="GET">
         <input type="hidden" name="q" value="{{{ Input::get('q') }}}" />
           <div class="form-group">
             <div class="checkbox">
@@ -79,15 +79,15 @@
             Sort by :
             <select class="form-control" name="sortby">
                 <option value="relevance" {{{ Input::get('sortby') == 'relevance' ? 'selected' : '' }}} >Relevance</option>
-                <option value="courses.name" {{{ Input::get('sortby') == 'courses.name' ? 'selected' : '' }}}>Course name</option>
-                <option value="teachers.lastname" {{{ Input::get('sortby') == 'teachers.lastname' ? 'selected' : '' }}}>Teacher's name</option>
+                <option value="courses.name_{{{ $Locale }}}" {{{ Input::get('sortby') == 'courses.name_' . $Locale ? 'selected' : '' }}}>Course name</option>
+                <option value="teachers.lastname" {{{ Input::get('sortby') == 'teachers.lastname' ? 'selected' : '' }}}>Teacher's lastname</option>
                 <option value="reviewsCount" {{{ Input::get('sortby') == 'reviewsCount' ? 'selected' : '' }}}>Number of reviews</option>
               </select>
               </label>
             </div>
             <div class="row">
               <label class="col-lg-3 col-md-3">
-                      <input type="checkbox" value="true" name="desc" {{{ Input::get('desc') == true ? 'checked' : '' }}} /> Descending order
+                      <input type="checkbox" value="true" name="desc" {{{ Input::get('desc') == true ? 'checked' : '' }}} /> Reverse order
                   </label>
             </div>
           </fieldset>
@@ -101,7 +101,8 @@
     @include('components.course_list', [
       'courses' => $courses,
       'paginator' => $paginator,
-      'pagination_links_appendings' => Input::all()
+      'pagination_links_appendings' => Input::all(), 
+      'pagination_fragment_appending' => 'course_list'
     ])
 
     @if(sizeof($courses) == 0)
