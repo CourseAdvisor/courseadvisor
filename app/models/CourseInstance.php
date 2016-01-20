@@ -7,7 +7,7 @@ class CourseInstance extends Eloquent {
   private $_reviewsCount = null;
 
   protected $fillable = [
-    'teacher_id', 'course_id', 'year', 'term', 'credits'
+    'teacher_id', 'course_id', 'year', 'credits', 'lang'
   ];
 
   public function course() {
