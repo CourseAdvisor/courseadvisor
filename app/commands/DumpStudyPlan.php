@@ -27,20 +27,6 @@ class DumpStudyPlan extends Command {
     'PDM Printemps' => 'MA2'
   ];
 
-  // Maps semesters to terms
-  private $TERMS = [
-    'BA1' => 'FALL',
-    'BA3' => 'FALL',
-    'BA5' => 'FALL',
-    'MA1' => 'FALL',
-    'MA3' => 'FALL',
-    'BA2' => 'SPRING',
-    'BA4' => 'SPRING',
-    'BA6' => 'SPRING',
-    'MA2' => 'SPRING',
-    'MA4' => 'SPRING'
-  ];
-
   // Maps course language strings as found in the page's HTML to actual locales
   private $LANGUAGES = [
     'francais' => 'fr',
@@ -166,20 +152,23 @@ class DumpStudyPlan extends Command {
             $existing = new Course($course_attrs); // new course
             $existing->save();
           } else if ($confirm == 'o') {
-            Course::where('string_id', $string_id)->update($course_attrs); // overwrite
+            Course::where('id', $existing->id)->update($course_attrs); // overwrite
           }
         } else {
-          Course::where('string_id', $string_id)->update($course_attrs); // overwrite
+          Course::where('id', $existing->id)->update($course_attrs); // overwrite
         }
       } else {
         $existing = new Course($course_attrs); // new course
         $existing->save();
       }
 
-      // Saving course instance
-      $instance = CourseInstance::where('course_id', $existing->id)->first();
+      // Saving course instance. If it's the same, update
+      $instance = CourseInstance::where(array(
+        'course_id' => $existing->id,
+        'year' => date('Y')
+      ))->first();
       if($instance) {
-        CourseInstance::where('course_id', $existing->id)->update($instance_attrs);
+        CourseInstance::where('id', $instance->id)->update($instance_attrs);
       } else {
         $instance = new CourseInstance($instance_attrs);
         $instance->course_id = $existing->id;
