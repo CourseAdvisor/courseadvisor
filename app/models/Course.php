@@ -43,7 +43,7 @@ class Course extends Eloquent {
   }
 
   public function getCurrentInstanceAttribute() {
-    return $this->instances()->first();
+    return $this->instances()->orderBy('year', 'desc')->first();
   }
 
   public function alreadyReviewedBy($student_id) {
