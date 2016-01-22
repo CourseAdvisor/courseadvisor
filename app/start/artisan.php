@@ -15,3 +15,4 @@ Artisan::add(new DumpStudyPlan());
 Artisan::add(new CreateSections());
 Artisan::add(new CreatePlans());
 Artisan::add(new DumpInscriptions());
+Artisan::add(new UpdateAverages());

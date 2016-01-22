@@ -27,6 +27,13 @@ class DumpStudyPlan extends Command {
     'PDM Printemps' => 'MA2'
   ];
 
+  // Maps course language strings as found in the page's HTML to actual locales
+  private $LANGUAGES = [
+    'francais' => 'fr',
+    'anglais' => 'en',
+    'allemand' => 'de'
+  ];
+
   /**
    * The console command name.
    *
@@ -63,7 +70,7 @@ class DumpStudyPlan extends Command {
     print "=============================\n\n";
 
 
-    $plans = StudyPlan::where('study_cycle_id', '>', 3)->get();
+    $plans = StudyPlan::get();
 
     foreach($plans as $plan) {
       $this->dumpPlan($plan);
@@ -71,6 +78,11 @@ class DumpStudyPlan extends Command {
     echo "Done :)\n";
   }
 
+  /**
+   * Dump a StudyPlan $plan.
+   * Parses the plan page at edu.epfl.ch/studyplan in english and in french,
+   * then merges the two and saves everything.
+   */
   private function dumpPlan($plan)
   {
     print "[Info] Dumping plan: ".$plan->name."\n";
@@ -83,7 +95,10 @@ class DumpStudyPlan extends Command {
     $this->savePlan($plan, $courses);
   }
 
-  private function saveplan($plan, $courses)
+  /**
+   * Saves the php array of raw courses $courses to the StudyPlan $plan
+   */
+  private function savePlan($plan, $courses)
   {
     foreach($courses as $string_id => $course) {
 
@@ -101,7 +116,7 @@ class DumpStudyPlan extends Command {
       // Ensures section
       if(!$section = Section::where('string_id', $course['section'])->first()) {
         echo "[WARNING]: No section with id: ".$course['section']."\n";
-        echo "           Creating one, consider updating it\'s name manually\n";
+        echo "           Creating one, consider updating its name manually\n";
 
         $section = new Section(['string_id' => $course['section']]);
         $section->save();
@@ -119,16 +134,47 @@ class DumpStudyPlan extends Command {
         }
       }
 
+      $course_attrs = $this->filterCourseAttributes($course);
+      $instance_attrs = $this->filterCourseInstanceAttributes($course);
 
+      // Saving course
       $existing = Course::where('string_id', $string_id)->first();
-
       if ($existing) {
-        Course::where('string_id', $string_id)->update($course);
+        // check if its actually the same course or it has just taken the string_id
+        if (strcmp($existing->name_en, $course_attrs['name_en'])) {
+          echo "[Need help] The course ".$existing->string_id." has changed: ";
+          echo " ".$existing->name_en."\n -> ".$course_attrs['name_en']."\n";
+          $confirm = "???";
+          while ($confirm != 'c' && $confirm != 'o') {
+            $confirm = $this->ask('What do we do? [c]reate a new course, [o]verwrite existing course (when in doubt, choose "o")');
+          }
+          if($confirm == 'c') {
+            $existing = new Course($course_attrs); // new course
+            $existing->save();
+          } else if ($confirm == 'o') {
+            Course::where('id', $existing->id)->update($course_attrs); // overwrite
+          }
+        } else {
+          Course::where('id', $existing->id)->update($course_attrs); // overwrite
+        }
       } else {
-        $existing = new Course($course);
-
+        $existing = new Course($course_attrs); // new course
         $existing->save();
       }
+
+      // Saving course instance. If it's the same, update
+      $instance = CourseInstance::where(array(
+        'course_id' => $existing->id,
+        'year' => date('Y')
+      ))->first();
+      if($instance) {
+        CourseInstance::where('id', $instance->id)->update($instance_attrs);
+      } else {
+        $instance = new CourseInstance($instance_attrs);
+        $instance->course_id = $existing->id;
+        $instance->save();
+      }
+
 
       // update studyplan relations
       foreach($semesters as $semester) {
@@ -141,15 +187,48 @@ class DumpStudyPlan extends Command {
     }
   }
 
-  private function ensureTeacher($teacher) {
-    if ($teacher == NULL) return;
+  /**
+   * Takes a raw php array representing a course and returns the attributes bound
+   * to a Course model (ie. not a CourseInstance)
+   */
+  private function filterCourseAttributes($course) {
+    return array(
+      'description' => $course['description'],
+      'name_en' => $course['name_en'],
+      'name_fr' => $course['name_fr'],
+      'section_id' => $course['section_id'],
+      'string_id' => $course['string_id'],
+      'url_en' => $course['url_en'],
+      'url_fr' => $course['url_fr']
+    );
+  }
 
-    $existing = Teacher::where('sciper', $teacher)->first();
+  /**
+   * Takes a raw php array representing a course and returns the attributes bound
+   * to a CourseInstance model (ie. not a Course)
+   */
+  private function filterCourseInstanceAttributes($course) {
+    return array(
+      'credits' => $course['credits'],
+      'teacher_id' => $course['teacher_id'],
+      'year' => date('Y'),
+      'lang' => $course['lang']
+    );
+  }
+
+  /**
+   *  Makes sure a Teacher with sciper $sciper exists. If not, tries to create one.
+   *  Returns the teacher model id or NULL if teacher could not be fetched.
+   */
+  private function ensureTeacher($sciper) {
+    if ($sciper == NULL) return;
+
+    $existing = Teacher::where('sciper', $sciper)->first();
 
     if ($existing) return $existing->id;
     else {
       // Need to create teacher
-      if (!$instance = $this->getTeacher($teacher)) {
+      if (!$instance = $this->getTeacher($sciper)) {
         return NULL;
       }
 
@@ -160,6 +239,11 @@ class DumpStudyPlan extends Command {
     }
   }
 
+  /**
+   * Crawls a teacher with sciper $sciper.
+   *
+   * Returns a Teacher model instance (not saved in DB) or NULL if an error occured
+   */
   private function getTeacher($sciper)
   {
     if (!$teacherStr = $this->curlGet(strtr(self::PEOPLE_URL, ['%sciper%' => $sciper]))) {
@@ -178,6 +262,9 @@ class DumpStudyPlan extends Command {
     return new Teacher($teacher);
   }
 
+  /**
+   * Merges a study plan's english and french version to create a consistent polyglot whole.
+   */
   private function mergePlans($plan_en, $plan_fr)
   {
     $plan = [];
@@ -203,12 +290,19 @@ class DumpStudyPlan extends Command {
         'string_id' => $string_id,
         'semesters' => $course_en['semesters'],
         'section' => $course_en['section'],
-        'teacher' => $teacher
+        'teacher' => $teacher,
+        'credits' => $course_en['credits'],
+        'lang' => $course_en['lang']
       ];
     }
     return $plan;
   }
 
+  /**
+   * Parses a raw html study plan $planStr.
+   * returns an associative array of `string_id => course` where
+   * courses are also php arrays, not laravel models.
+   */
   private function parsePlan($planStr)
   {
     $plan = array();
@@ -247,7 +341,12 @@ class DumpStudyPlan extends Command {
     return $plan;
   }
 
-
+  /**
+   * Parses information on the structure of the page.
+   *
+   * Study plan pages are based on an array structure. This function gets the array
+   * headers.
+   */
   private function parseMeta($metaStr)
   {
     $meta = ['semesters' => []];
@@ -265,6 +364,10 @@ class DumpStudyPlan extends Command {
     return $meta;
   }
 
+  /**
+   * Parses a course's raw HTML from the study plan page using the studyplan's meta data.
+   * returns a php array containing key-value pairs for one course.
+   */
   private function parseCourse($courseStr, $meta)
   {
     $course = array();
@@ -303,6 +406,19 @@ class DumpStudyPlan extends Command {
       $course['teacher'] = trim($matches[1]);
     }
 
+    if(preg_match('#<div class="credit-time">([0-9]{1,2})</div>#', $courseStr, $matches)) {
+      $course['credits'] = $matches[1];
+    } else {
+      echo "[Warning] Course credits not found (course=\"".$course['name']."\")\n\n";
+      $course['credits'] = null;
+    }
+
+    if(!preg_match('#<div class="langue (anglais|allemand|francais)">#', $courseStr, $matches)) {
+      echo "[Warning] Course language not found (course=\"".$course['name']."\")\n\n";
+      return;
+    }
+    $course['lang'] = $this->LANGUAGES[$matches[1]];
+
 
     $course['semesters'] = [];
 
@@ -327,6 +443,9 @@ class DumpStudyPlan extends Command {
     return $course;
   }
 
+  /**
+   * Gets a course description using the coursebook $url for that course.
+   */
   private function fetchCourseDescription($url)
   {
     $raw = $this->curlGet($url);
@@ -338,6 +457,9 @@ class DumpStudyPlan extends Command {
   }
 
 
+  /**
+   * Curl wrapper. Returns the raw content located at $url or exits with an error message.
+   */
   private function curlGet($url) {
     print "[Info] curl: GET $url\n";
 

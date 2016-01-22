@@ -6,6 +6,14 @@ use Symfony\Component\Console\Input\InputOption;
 
 class DumpInscriptions extends Command {
 
+  # Use courseadvsior server as a proxy to avoid DoSing isacademia.
+  # You must download enrolment on the server.
+  #
+  # Example for fall_15 enrolments:
+  # cd /var/www/resources
+  # wget https://isa.epfl.ch/services/courses/2015-2016/HIVER
+  # mv HIVER FALL_15.xml
+  #
   const SOURCE_DOMAIN = "http://res.courseadvisor.ch/";
 
 
@@ -43,10 +51,17 @@ class DumpInscriptions extends Command {
     print "===== DUMP INSCRIPTIONS =====\n";
     print "=============================\n\n";
 
-    // Dump 6 semesters starting from FALL 2012
-    $year = 2012;
+    // ===================
+    //
+    //
+    // MAINTAINANCE NOTE: CHANGE THE VALUES HERE TO CHOSE WHAT TO DUMP
+    //
+    //
+    // ===================
+    $year = 2015;
     $term = "FALL";
-    $semesters = 6;
+    $semesters = 1;
+    // ===================
 
     for ($i = 0 ; $i < $semesters ; $i++) {
       $this->dumpTerm($year, $term);
