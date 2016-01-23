@@ -97,5 +97,7 @@ return array(
 
   'login-required-heading' => 'Login required',
   'login-to-vote-body' => 'You must be logged-in in order to vote.',
-  'login-to-comment-body' => 'You must be logged-in in order to comment.'
+  'login-to-comment-body' => 'You must be logged-in in order to comment.',
+
+  'language-hint' => 'This course is taught in :lang'
 );

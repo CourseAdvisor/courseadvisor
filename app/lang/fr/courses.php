@@ -98,5 +98,7 @@ return array(
 
   'login-required-heading' => 'Connexion requise',
   'login-to-vote-body' => 'Tu dois être connecté pour pouvoir voter.',
-  'login-to-comment-body' => 'Tu dois être connecté pour pouvoir commenter.'
+  'login-to-comment-body' => 'Tu dois être connecté pour pouvoir commenter.',
+
+  'language-hint' => 'Ce cours est donné en :lang'
 );

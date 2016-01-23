@@ -17,4 +17,8 @@ return array(
   'welcome-back-message' => 'Content de te revoir, :name !',
 
   'social-invite' => 'Tu aimes CourseAdvisor ? Soutiens nous !',
+
+  'lang-en' => 'anglais',
+  'lang-fr' => 'français',
+  'lang-de' => 'allemand'
 );
