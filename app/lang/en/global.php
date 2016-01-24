@@ -16,5 +16,9 @@ return array(
   'welcome-message' => 'Welcome on CourseAdvisor!',
   'welcome-back-message' => 'Welcome back :name!',
 
-  'social-invite' => 'Like this site? Help us spread the world!'
+  'social-invite' => 'Like this site? Help us spread the world!',
+
+  'lang-en' => 'English',
+  'lang-fr' => 'French',
+  'lang-de' => 'German'
 );

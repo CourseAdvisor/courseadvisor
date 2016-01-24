@@ -13,7 +13,10 @@
   <section class="row">
     <div class="col-xs-12">
       <div class="page">
-      <h1>{{{ $course->name }}}</h1>
+      <h1>
+        <i class="flag-icon flag-icon-{{ $course->currentInstance->lang }} default-size"
+           title="{{{trans('courses.language-hint', ['lang' => trans('global.lang-'.$course->currentInstance->lang)])}}}" ></i>
+        {{{ $course->name }}}</h1>
 
       @if($nbVotes > 0)
         @include('components.starbar', [
