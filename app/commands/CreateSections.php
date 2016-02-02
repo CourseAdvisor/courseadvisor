@@ -68,6 +68,7 @@ class CreateSections extends Command {
     $this->makeSection('IF', 'Ingénierie financière','Financial engineering');
     $this->makeSection('HPLANS', '???','???');
     $this->makeSection('MATH', '???','???');
+    $this->makeSection('EDOC', 'Ecole doctorante', 'Doctoral school');
   }
 
 
