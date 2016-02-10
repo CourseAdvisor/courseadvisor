@@ -28,7 +28,7 @@
         <div class="social-stuff">
           <h4>{{{ trans('global.social-invite') }}}</h4>
           <ul>
-            <li><iframe src="https://ghbtns.com/github-btn.html?user=courseadvisor&repo=courseadvisor&type=star&count=true" frameborder="0" scrolling="0" width="90px" height="20px"></iframe></li>
+            <li><iframe src="https://ghbtns.com/github-btn.html?user=courseadvisor&repo=courseadvisor&type=star&count=true" frameborder="0" scrolling="0" width="90" height="20"></iframe></li>
             <li>
               <div class="fb-like" data-href="https://www.facebook.com/courseadvisor.epfl" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>
             </li>
