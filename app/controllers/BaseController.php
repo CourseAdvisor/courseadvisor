@@ -33,7 +33,7 @@ class BaseController extends Controller {
    * @return void
    */
   public function addCrumb($action, $name, $params = null) {
-    Breadcrumbs::addCrumb($name, action($action, $params));
+    Breadcrumbs::addCrumb(e($name), action($action, $params));
   }
 
 }
