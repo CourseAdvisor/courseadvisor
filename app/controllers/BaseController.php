@@ -7,6 +7,8 @@ class BaseController extends Controller {
     Breadcrumbs::addCrumb('Home', '/');
     Breadcrumbs::setCssClasses('breadcrumb');
     Breadcrumbs::setDivider('');
+
+    Date::setLocale(LaravelLocalization::getCurrentLocale());
   }
 
   /**

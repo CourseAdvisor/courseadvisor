@@ -46,8 +46,8 @@ return array(
   'review-this-action' => 'Donne ton avis',
   'no-reviews-message' => 'Ce cours n\'a pas encore reçu d\'avis. Sois le premier à donner ton avis !',
   'edit-review-action' => 'Modifier cet avis',
-  'review-anonymous-author' => 'par un étudiant en :section',
-  'review-author' => 'par :author (:section)',
+  'review-anonymous-author' => ':date par un étudiant en :section',
+  'review-author' => ':date par :author (:section)',
 
   'edit-review-heading' => 'Modifier un avis',
   'create-review-heading' => 'Ton avis',

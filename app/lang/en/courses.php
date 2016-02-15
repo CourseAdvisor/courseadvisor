@@ -46,8 +46,8 @@ return array(
   'review-this-action' => 'Review this course',
   'no-reviews-message' => 'This course hasn\'t been reviewed yet. Maybe you can help?',
   'edit-review-action' => 'Edit this review',
-  'review-anonymous-author' => 'by Anonymous :section student',
-  'review-author' => 'by :author (:section)',
+  'review-anonymous-author' => ':date by Anonymous :section student',
+  'review-author' => ':date by :author (:section)',
 
   'edit-review-heading' => 'Edit your review',
   'create-review-heading' => 'Your review',

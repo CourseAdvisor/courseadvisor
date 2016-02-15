@@ -215,7 +215,8 @@
                     {{
                       trans('courses.review-author', [
                         'author' => '<a target="_blank" href="'.e($review->student->pageURL).'">'.e($review->student->fullname).'</a>',
-                        'section' => $review->student->section->name
+                        'section' => $review->student->section->name,
+                        'date' => Date::parse($review->created_at)->ago()
                         ])
                     }}
                     @endif
