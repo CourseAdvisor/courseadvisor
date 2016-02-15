@@ -12,8 +12,8 @@
   {{ Breadcrumbs::render() }}
   <section class="row">
     <div class="col-xs-12">
-      <div class="page">
-      <h1>
+      <div itemscope itemType="http://schema.org/Thing" class="page">
+      <h1 itemprop="name">
         <i class="flag-icon flag-icon-{{ $course->currentInstance->lang }} default-size"
            title="{{{trans('courses.language-hint', ['lang' => trans('global.lang-'.$course->currentInstance->lang)])}}}" ></i>
         {{{ $course->name }}}</h1>
@@ -26,6 +26,12 @@
             ' ('.Lang::choice('courses.votes-counter', $nbVotes, ['count' => $nbVotes]).') '.
             '</a>'
         ])
+        <div class="hidden" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+          <span itemprop="ratingValue">{{{ $course->avg_overall_grade }}}</span>
+          <span itemprop="bestRating">5</span>
+          <span itemprop="worstRating">1</span>
+          <span itemprop="ratingCount">{{{ $nbVotes }}}</span>
+        </div>
       @else
         @include('components.starbar', [
           'disabled' => TRUE,
@@ -54,7 +60,7 @@
         </dd>
       </dl>
       <h2>{{{ trans('courses.summary-heading') }}}</h2>
-      <p>{{ nl2br(e($course->description)) }}<br />
+      <p itemprop="description" >{{ nl2br(e($course->description)) }}<br />
       <a target="_blank" href="{{{ $course->url }}}" title="coursebook page"><i class="fa fa-external-link"></i> {{{ trans('courses.read-more-action') }}}</a></p>
 
       @if($nbVotes > 0)
