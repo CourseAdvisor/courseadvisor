@@ -134,6 +134,7 @@ return array(
     'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
     'Creitive\Breadcrumbs\BreadcrumbsServiceProvider',
     'Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider',
+    'Jenssegers\Date\DateServiceProvider',
   ),
 
   /*
@@ -207,6 +208,7 @@ return array(
     'View'              => 'Illuminate\Support\Facades\View',
     'Breadcrumbs'     => 'Creitive\Breadcrumbs\Facades\Breadcrumbs',
     'LaravelLocalization'   => 'Mcamara\LaravelLocalization\Facades\LaravelLocalization',
+    'Date' => 'Jenssegers\Date\Date',
   ),
 
 );

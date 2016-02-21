@@ -6,7 +6,7 @@
 
 {{ Form::open([
   'class' => 'row form-horizontal',
-  'action' => ['CourseController@' . ($is_editing ? 'update' : 'create') . 'Review'],
+  'action' => ['ReviewController@' . ($is_editing ? 'update' : 'create') . 'Review'],
   'id' => isset($id) ? $id : ''
   ]) }}
 
@@ -156,7 +156,7 @@
   <div class="col-sm-12">
     @if ($is_editing)
       <button
-          formaction="{{{ action("CourseController@deleteReview") }}}"
+          formaction="{{{ action("ReviewController@deleteReview") }}}"
           data-action="delete-review"
           onclick="return confirm('{{{ trans('courses.delete-reviews-confirm') }}}');"
           class="btn btn-link pull-left"
@@ -183,7 +183,7 @@
 <div class="modal-footer">
   @if ($is_editing)
     <button
-        formaction="{{{ action("CourseController@deleteReview") }}}"
+        formaction="{{{ action("ReviewController@deleteReview") }}}"
         data-action="delete-review"
         onclick="return confirm('{{{ trans('courses.delete-reviews-confirm') }}}');"
         class="btn btn-link pull-left"

@@ -80,9 +80,9 @@ Route::group([
     // --- Regular API ---
 
     // reviews
-    Route::post('/review', 'CourseController@createReview');
-    Route::post('/review/edit', 'CourseController@updateReview');
-    Route::post('/review/delete', 'CourseController@deleteReview');
+    Route::post('/review', 'ReviewController@createReview');
+    Route::post('/review/edit', 'ReviewController@updateReview');
+    Route::post('/review/delete', 'ReviewController@deleteReview');
 
     // comments
     Route::post('/comment', 'ReviewController@createComment');
