@@ -216,7 +216,10 @@
                   <div class="clearfix"></div>
                   <div class="review-author">
                     @if($review->is_anonymous)
-                      {{{ trans('courses.review-anonymous-author', ['section' => $review->student->section->name])}}}
+                      {{{ trans('courses.review-anonymous-author', [
+                        'section' => $review->student->section->name,
+                        'date' => Date::parse($review->created_at)->ago()
+                      ])}}}
                     @else
                     {{
                       trans('courses.review-author', [
