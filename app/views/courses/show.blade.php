@@ -12,8 +12,44 @@
   {{ Breadcrumbs::render() }}
   <section class="row">
     <div class="col-xs-12">
-      <div itemscope itemType="http://schema.org/Thing" class="page">
-      <h1 itemprop="name">
+      <div class="page">
+
+        {{--
+          This piece of code should allow google to recognize that this page contains
+          a rating and hopefully show it in the SERP.
+          I could not find a schema for a course and EducationEvent is the closest I could get.
+          I had to add lots of useless information to pass the google validator. If someone finds
+          a better suited shcema I'm all ears.
+        --}}
+        <script type="application/ld+json">
+        {
+          "@context": "http://schema.org/",
+          "@type": "EducationEvent",
+          "name": {{ json_encode($course->name) }},
+          "description": {{ json_encode($course->description) }},
+          "location": {
+            "@type": "Place",
+            "address": "Route Cantonale, 1015 Lausanne",
+            "name": "EPFL"
+          },
+          "startDate": "{{{ $course->currentInstance->year }}}-02-01",
+          "offers": [{
+            "@type": "Offer",
+            "name": "course page",
+            "url": {{ json_encode($course->url) }},
+            "price": 0
+          }],
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": {{ json_encode($course->avg_overall_grade) }},
+            "bestRating": "5",
+            "worstRating": "1",
+            "ratingCount": {{ json_encode($nbVotes) }}
+          }
+        }
+        </script>
+
+      <h1>
         <i class="flag-icon flag-icon-{{ $course->currentInstance->lang }} default-size"
            title="{{{trans('courses.language-hint', ['lang' => trans('global.lang-'.$course->currentInstance->lang)])}}}" ></i>
         {{{ $course->name }}}</h1>
@@ -26,12 +62,6 @@
             ' ('.Lang::choice('courses.votes-counter', $nbVotes, ['count' => $nbVotes]).') '.
             '</a>'
         ])
-        <div class="hidden" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
-          <span itemprop="ratingValue">{{{ $course->avg_overall_grade }}}</span>
-          <span itemprop="bestRating">5</span>
-          <span itemprop="worstRating">1</span>
-          <span itemprop="ratingCount">{{{ $nbVotes }}}</span>
-        </div>
       @else
         @include('components.starbar', [
           'disabled' => TRUE,
@@ -60,7 +90,7 @@
         </dd>
       </dl>
       <h2>{{{ trans('courses.summary-heading') }}}</h2>
-      <p itemprop="description" >{{ nl2br(e($course->description)) }}<br />
+      <p>{{ nl2br(e($course->description)) }}<br />
       <a target="_blank" href="{{{ $course->url }}}" title="coursebook page"><i class="fa fa-external-link"></i> {{{ trans('courses.read-more-action') }}}</a></p>
 
       @if($nbVotes > 0)
