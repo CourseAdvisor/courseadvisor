@@ -1,16 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-
-    <title>{{{ trans('homepage.title') }}}</title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-
-    {{ HTML::style("css/".asset_path("courseadvisor.css")) }}
-    {{ HTML::style("css/font-awesome.min.css") }}
+    @include('header', ['title' => trans('homepage.title')])
   </head>
   <body>
     <div class="container">
