@@ -15,6 +15,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <link rel="icon" type="image/png" href="/favicon.png" />
 
+<link rel="alternate" href="{{{ LaravelLocalization::getNonLocalizedURL() }}}" hreflang="x-default" />
+@foreach(LaravelLocalization::getSupportedLanguagesKeys() as $localeCode)
+<link rel="alternate" href="{{{ LaravelLocalization::getLocalizedURL($localeCode) }}}" hreflang="{{{ $localeCode }}}" />
+@endforeach
+
 {{ HTML::style("css/".asset_path("courseadvisor.css")) }}
 {{ HTML::style("css/font-awesome.min.css") }}
 
