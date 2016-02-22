@@ -10,7 +10,7 @@ class CourseController extends BaseController {
     $plan = StudyPlan::find(Input::get('plan-id'));
 
     if(is_null($plan)) {
-      return Response::view('errors.missing', array('url' => Request::url()), 404);
+      return App::abort(404);
     }
 
     return Redirect::action('CourseController@studyPlanCourses', ['plan_slug' => $plan->slug, 'cycle' => $plan->studyCycle->name]);

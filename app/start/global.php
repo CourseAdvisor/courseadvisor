@@ -47,9 +47,20 @@ Log::useFiles(storage_path().'/logs/laravel.log');
 |
 */
 
-App::error(function(Exception $exception, $code)
+App::error(function($exception)
 {
   Log::error($exception);
+  return Response::view('errors.fatal', array(), 500);
+});
+
+App::missing(function($exception) {
+  Log::error($exception);
+  return Response::view('errors.missing', array(), 404);
+});
+
+App::fatal(function($exception) {
+  Log::error($exception);
+  return Response::view('errors.fatal', array(), 500);
 });
 
 /*
