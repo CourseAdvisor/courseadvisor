@@ -4,7 +4,7 @@
   Tests global stuff like homepage, header, footer...
 ###
 
-{url, screenshot, doXHR} = require './utils.coffee'
+{url, screenshot, doXHR, runWithSoftMode} = require './utils.coffee'
 
 # Tests that the homepage loads
 casper.test.begin "Loads homepage", 1, (test) ->
@@ -39,3 +39,11 @@ casper.test.begin "CSRF token access point is secured", 2, (test) ->
   casper.then ->
     test.assertTrue((@evaluate -> window.TEST_XHR_RESULT == 'failure'), "Cannot load csrf token from foreign origin")
   casper.run -> test.done()
+
+# Tests 404 error page
+casper.test.begin "404 error page is shown correctly", 2, (test) ->
+  casper.start url('/does_not_exist'), ->
+    # test.assertHttpStatus(404) # cannot do this due to casper/phantom limitations
+    test.assertTextExists "not found", "Error page describes the error"
+    test.assertTextExists "404", "Error code is shown on page"
+  runWithSoftMode(test)

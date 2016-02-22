@@ -7,6 +7,11 @@
 
 {test} = require './utils'
 
+# Call to wrong routes result in 404 error code
+test "Call to an incorrect route yields a 404"
+.on "/api/does_not_exist"
+.is (rq) -> rq.expectStatus 404
+
 # An ajax call to the auth probe route should result in an unauthorized response
 test "Auth probe unauthorized AJAX"
 .on "/api/is_auth"

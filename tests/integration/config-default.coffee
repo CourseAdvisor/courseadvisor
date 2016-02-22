@@ -12,7 +12,7 @@ casper.on 'remote.error', (message) ->
 #
 
 casper.on "resource.received", (request) ->
-  casper.test.fail "Resource Not Found: #{request.url}" if (request.status == 404)
+  casper.test.fail "Resource Not Found: #{request.url}" if (request.status == 404 && !casper.softMode)
 
 # Cookies are cleared between each run
 casper.on "run.complete", -> phantom.clearCookies()

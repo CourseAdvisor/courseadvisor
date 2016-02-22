@@ -35,5 +35,12 @@ utils = module.exports =
       xhr.send()
     ), url
 
+  # Runs the current test without checking for 404
+  runWithSoftMode: (test) ->
+    casper.softMode = true
+    casper.run ->
+      casper.softMode = false
+      test.done()
+
 # extend shared utilities
 shared.extend(utils, shared)
