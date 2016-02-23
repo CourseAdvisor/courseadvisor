@@ -101,3 +101,25 @@ casper.test.begin "Full review workflow", 19, (test) ->
     test.assertDoesntExist("a.edit-review", "Edit review action is not shown")
   casper.run ->
     test.done()
+
+casper.test.begin "Test my review edit link", 4, (test) ->
+  casper.start url("/")
+  login profile: "snow", next: "/en/course/concrete-bridges-921"
+  waitForPage ->
+    test.assertExists('[data-review-id="1"]', "'My review' edit link exists")
+    @click('[data-review-id="1"]')
+  casper.waitForSelector ".modal-open", ->
+    test.assertField("title", "Still more interesting than a game of bridge")
+    test.assertField("comment", "This course bridges the gap between plans and their concrete implementation.")
+    @fill("form#edit-review-form",
+      title: "Still more interesting than two games of bridge"
+    , true ) # submit form
+  waitForPage ->
+    test.assertTextExist("Still more interesting than two games of bridge", "Title has been updated")
+    @click('[data-review-id="1"]')
+  casper.waitForSelector ".modal-open", ->
+    # Restore state to original to allow reiterable tests
+    @fill("form#edit-review-form",
+      title: "Still more interesting than a game of bridge"
+    , true ) # submit form
+  casper.run -> test.done()

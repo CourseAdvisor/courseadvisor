@@ -46,14 +46,24 @@ class Course extends Eloquent {
     return $this->instances()->orderBy('year', 'desc')->first();
   }
 
+  /**
+   * Checks wether this course was reviewed by student with id student_id.
+   * Returns the review if one was found,
+   * returns null otherwise.
+   */
   public function alreadyReviewedBy($student_id) {
-    $review = $this->instances->first(function($num, $inst) use ($student_id) {
-      return $inst->reviews->first(function($num, $review) use($student_id) {
-        return $review->student_id == $student_id;
-      }, false);
-    });
+    $userReview = null;
+    foreach ($this->instances as $instance) {
+      $currentReview = $instance->reviews->first(function($num, $review) use($student_id, $userReview) {
+        return ($review->student_id == $student_id);
+      });
+      if ($currentReview != null) {
+        $userReview = $currentReview;
+        break;
+      }
+    }
 
-    return $review;
+    return $userReview;
   }
 
   public function getSlugAttribute() {
