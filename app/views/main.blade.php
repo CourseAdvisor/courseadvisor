@@ -16,7 +16,7 @@
           {{-- mobile-only search --}}
           <form class="navbar-form navbar-right visible-xs mobile-search" role="search" action="{{{ action('SearchController@search') }}}" method="GET">
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="Search" name="q" value="{{{ Input::get('q') }}}">
+              <input type="text" class="form-control" placeholder="{{{ trans('global.navbar-search')}}}" name="q" value="{{{ Input::get('q') }}}">
             </div>
           </form>
           <button class="navbar-search visible-xs" type="button">
@@ -83,7 +83,7 @@
           {{-- desktop search --}}
           <form id="navbar-search" class="navbar-form navbar-right hidden-xs desktop-search" role="search" action="{{{ action('SearchController@search') }}}" method="GET">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search" name="q" value="{{{ Input::get('q') }}}">
+              <input type="text" class="form-control" placeholder="{{{ trans('global.navbar-search')}}}" name="q" value="{{{ Input::get('q') }}}">
               <span class="input-group-btn">
                 <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
               </span>

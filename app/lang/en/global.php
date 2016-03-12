@@ -20,5 +20,7 @@ return array(
 
   'lang-en' => 'English',
   'lang-fr' => 'French',
-  'lang-de' => 'German'
+  'lang-de' => 'German',
+
+  'navbar-search' => 'Search EPFL courses'
 );

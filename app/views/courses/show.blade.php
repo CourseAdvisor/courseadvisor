@@ -308,10 +308,10 @@
                     data-review-lectures-grade="'.$studentReview->lectures_grade.'"
                     data-review-exercises-grade="'.$studentReview->exercises_grade.'"
                     data-review-content-grade="'.$studentReview->content_grade.'"
-                    data-review-title="'.htmlspecialchars($studentReview->title).'"
+                    data-review-title="'.e($studentReview->title).'"
                     data-review-difficulty="'.$studentReview->difficulty.'"
                     data-review-anonymous="'.$studentReview->is_anonymous.'"
-                    class="edit-review" title="courses.edit-reviews-action">',
+                    class="edit-review" title="'.e(trans('courses.edit-review-action')).'">',
                   'link-end' => '</a>'
                   ]) }}
               </p>
