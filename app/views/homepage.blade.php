@@ -5,7 +5,7 @@
   </head>
   <body>
     <div class="container">
-      <a href="/" class="navbar-brand pull-left"><img src="//www.epfl.ch/img/epfl_small.png" class="epfl-logo" alt=""> <span class="logo-course">Course</span>Advisor</a>
+      <a href="/" class="navbar-brand pull-left"><span class="logo-course">Course</span>Advisor</a>
 
       <ul class="homepage-header pull-right">
         <li><a href="{{{ action('AuthController@login', ['next' => Request::url()]) }}}">{{{ trans('global.login-action') }}}</a></li>
