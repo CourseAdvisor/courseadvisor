@@ -319,11 +319,10 @@
           </div>
         @else
 
-        @include('forms.create-review', [
-          'data' => Input::old(),
-          'errors' => $errors,
-          'id' => 'create-review-form'
-        ])
+        <div class="alert alert-info" role="alert">
+          <strong>{{{ trans('censorship.create-review-header') }}}</strong>
+          {{ trans('censorship.create-review-body', ['facebook' => '<a href="https://www.facebook.com/courseadvisor.epfl/">facebook</a>']) }}
+        </div>
 
         @endif
       </div> {{-- page --}}

@@ -26,6 +26,15 @@
         </ul>
       </div>
     </div>
+    <div class="container">
+      <section class="row">
+        <div class="col-sm-12">
+          <div class="alert alert-warning" role="alert">
+            {{ trans('censorship.global-banner', ['facebook' => '<a href="https://www.facebook.com/courseadvisor.epfl/">facebook</a>']) }}
+          </div>
+        </div>
+      </section>
+    </div>
     <section id="splash">
       <div class="container">
         <div class="page">
