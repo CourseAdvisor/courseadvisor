@@ -321,7 +321,7 @@
 
         <div class="alert alert-info" role="alert">
           <strong>{{{ trans('censorship.create-review-header') }}}</strong>
-          {{ trans('censorship.create-review-body', ['facebook' => '<a href="https://www.facebook.com/courseadvisor.epfl/">facebook</a>']) }}
+          {{ trans('censorship.create-review-body', ['facebook' => '<a href="https://www.facebook.com/courseadvisor.epfl/posts/577490865787962">facebook</a>']) }}
         </div>
 
         @endif
