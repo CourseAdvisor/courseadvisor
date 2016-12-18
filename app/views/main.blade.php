@@ -125,6 +125,13 @@
     </div>
 
     <div class="container">
+      <section class="row">
+        <div class="col-sm-12">
+          <div class="alert alert-warning" role="alert">
+            {{ trans('censorship.global-banner', ['facebook' => '<a href="https://www.facebook.com/courseadvisor.epfl/posts/577490865787962">facebook</a>']) }}
+          </div>
+        </div>
+      </section>
       @if(Session::has('message'))
       <section class="row">
         <div class="col-sm-12">
